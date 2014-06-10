@@ -1,0 +1,61 @@
+<div class="headbar">
+	<div class="position">订单<span>></span><span>快递单管理</span><span>></span><span>发货信息管理</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)"><button class="operating_btn" type="button" onclick="location.href='{url:/order/ship_info_edit}'"><span class="addition">添加发货信息</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button>
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="location.href='{url:/order/recycle_list}'"><span class="recycle">回收站</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="30px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>发货点名称</th>
+					<th>地址</th>
+					<th>邮编</th>
+					<th>电话</th>
+					<th>发货人</th>
+					<th>默认</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+	<form action="{url:/order/ship_info_del}" method="post" name="ship_list">
+		<table class="list_table">
+			<col width="30px" />
+			<col />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=merch_ship_info page=$page where=is_del eq '1' order=id desc}
+				<tr>
+					<td class="t_c"><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+					<td>{$item['ship_name']}</td>
+					<td>{$item['address']}</td>
+					<td>{$item['postcode']}</td>
+					<td>{if:$item['mobile']!=""}{$item['mobile']}{else:}{$item['telphone']}{/if}</td>
+					<td>{$item['ship_user_name']}</td>
+					<td>
+						{if:$item['is_default']==1}
+						<a class='red2' href="{url:/order/ship_info_default/id/$item[id]/default/0}">取消默认</a>
+						{else:}
+						<a class="blue" href="{url:/order/ship_info_default/id/$item[id]/default/1}">设为默认</a>
+						{/if}
+					</td>
+					<td>
+						<a href="{url:/order/ship_info_edit/sid/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" /></a>
+						<a href="javascript:void(0)" onclick="delModel({link:'{url:/order/ship_info_del/id/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$query->getPageBar()}

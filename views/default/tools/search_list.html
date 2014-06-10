@@ -1,0 +1,60 @@
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>热门搜索</span><span>></span><span>搜索统计</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="search_del();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col width="100px" />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>搜索关键词</th>
+					<th>统计次数</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form action="{url:/tools/link_del}" method="post" name="srarch">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col width="100px" />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=search page=$page order=num desc}
+				<tr>
+					<td class="t_c"><input type="checkbox" name="id[]" value="{$item['id']}" /></td>
+					<td>{$item['keyword']}</td>
+					<td>{$item['num']}</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$query->getPageBar()}
+<script type="text/javascript">
+function search_del()
+{
+	var flag = 0;
+	$('input:checkbox[name="id[]"]:checked').each(
+		function(i)
+		{
+			flag = 1;
+		}
+	);
+	if(flag == 0 )
+	{
+		alert('请选择要删除的数据');
+		return false;
+	}
+	$("form[name='srarch']").attr('action','{url:/tools/search_del}');
+	confirm('确定要删除所选中的信息吗？','formSubmit(\'srarch\')');
+}
+</script>

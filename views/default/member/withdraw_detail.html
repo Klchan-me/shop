@@ -1,0 +1,69 @@
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>提现管理</span><span>></span><span>提现申请</span></div>
+</div>
+<div class="content_box">
+	<div class="content">
+		<div class='red_box'>修改前请确认财务人员已经把款打给了申请的用户</div>
+		<form action='{url:/member/withdraw_status}' method='post' name='withdraw_detail'>
+			<table class="form_table">
+				<input type='hidden' name='id' value='{$this->withdrawRow['id']}' />
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>收款人姓名：</th>
+					<td>{$this->withdrawRow['name']}</td>
+				</tr>
+				<tr>
+					<th>提现金额：</th>
+					<td>{$this->withdrawRow['amount']}</td>
+				</tr>
+				<tr>
+					<th>申请时间：</th>
+					<td>{$this->withdrawRow['time']}</td>
+				</tr>
+				<tr>
+					<th>备注：</th>
+					<td>{$this->withdrawRow['note']}</td>
+				</tr>
+				<tr>
+					<th>状态：</th>
+					<td>{echo:Ucenter::getWithdrawStatus($this->withdrawRow['status'])}</td>
+				</tr>
+
+				{if:$this->withdrawRow['status']==0}
+				<tr>
+					<th>修改状态：</th>
+					<td>
+						<label class='attr'><input type='radio' name='status' value='-1' />{echo:Ucenter::getWithdrawStatus(-1)}</label>
+						<label class='attr'><input type='radio' name='status' value='2' />{echo:Ucenter::getWithdrawStatus(2)}</label>
+						<label>状态只能修改一次</label>
+					</td>
+				</tr>
+				{/if}
+				<tr>
+					<th>回复用户：</th>
+					<td>
+						<textarea class='textarea' name='re_note' {if:$this->withdrawRow['status']!=0}disabled='disabled'{/if}></textarea>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						{if:$this->withdrawRow['status']==0}
+						<button class="submit" type="submit"><span>修 改</span></button>
+						{/if}
+						<button class="submit" type="button" onclick="event_link('{url:/member/withdraw_list}');"><span>返回列表</span></button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	var formObj = new Form('withdraw_detail');
+	formObj.init({
+		'status':'{$this->withdrawRow['status']}',
+		're_note':'{$this->withdrawRow['re_note']}'
+	});
+</script>

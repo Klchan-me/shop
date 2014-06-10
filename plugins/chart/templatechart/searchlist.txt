@@ -1,0 +1,27 @@
+{
+  
+  "elements" : [
+    {
+      "tip" : "#label#:#val#/#total#<br>比例:#percent#",
+      "colours" : ["#FF9400","#5FB700","#FE5D00","#FDE205","#4693B8","#5F3C0C","#989898"
+      ],
+      "alpha" : "0.8",
+      "start_angle" : 135,
+      "animate" : false,
+      "values" : [
+        (values)
+      ],
+      "type" : "pie",
+      "border" : "2"
+    }
+  ],
+  "bg_colour":"#000000",
+  "title" : {
+    "text" : "(title)",
+    "style" : "{font-size: 14px; color:#0000ff; font-family: Verdana; text-align: center;}"
+  },
+  "x_legend":{
+    "text":"WebZhu图表统计",
+    "style":"{font-size: 12px; color:#FF9400;}"
+  }
+}

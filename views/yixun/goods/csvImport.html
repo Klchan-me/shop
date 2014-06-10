@@ -1,0 +1,77 @@
+{set:$goods_class = new goods_class();$tb_category = new IModel('category');$category = $goods_class->sortdata($tb_category->query(false,'*','sort','asc'),0,'--');}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>管理后台</title>
+<link rel="stylesheet" href="{skin:css/admin.css}" />
+{js:jquery}
+{js:dialog}
+{js:form}
+{js:validate}
+{js:artTemplate}
+<script type='text/javascript' src="{theme:javascript/admin.js}"></script>
+</head>
+<body style="width:500px;min-height:450px;">
+	<div class="pop_win">
+		<ul class="red_box">
+			<li>1、此功能可以直接将CSV数据包里面的商品和图片导入到您的商城系统中</li>
+			<li>2、导入的商品必须插入到指定的一个或者多个商品分类中</li>
+			<li>3、导入的CSV数据包必须是小于 {echo:IUpload::getMaxSize()} 的.ZIP压缩包，您可以通过修改php.ini中的 &lt;post_max_size&gt;和&lt;upload_max_filesize&gt;选项来修改上传数据包的大小</li>
+			<li>4、数据包里面包括CSV文件和图片文件夹，且两者的名字必须相同对应起来，例如：&lt;夏季时装.csv&gt; 和 &lt;夏季时装&gt; 图片目录相对应</li>
+		</ul>
+		<form action='{url:/goods/importCsvFile}' method='post' enctype='multipart/form-data' callback='checkForm();'>
+			<table class="form_table" width="90%" cellspacing="0" cellpadding="0" border="0">
+				<col width="120px" />
+				<col />
+
+				<tbody>
+					<tr>
+						<td>CSV数据类型</td>
+						<td>
+							<select name='csvType' pattern='required' class='auto'>
+								<option value=''>请选择</option>
+								<option value='taobao'>淘宝csv数据包</option>
+							</select>
+							<label>选择要导入的CSV数据格式</label>
+						</td>
+					</tr>
+					<tr>
+						<td>添加到商品分类</td>
+						<td>
+							{if:$category}
+							<ul class="select">
+								{foreach:items=$category}
+								<li><label><input type="checkbox" value="{$item['id']}" name="category[]" />{$item['name']}</label></li>
+								{/foreach}
+							</ul>
+							{else:}
+							系统暂无商品分类，<a href='{url:/goods/category_edit}' class='orange' target='_blank'>请点击添加</a>
+							{/if}
+						</td>
+					</tr>
+					<tr>
+						<td>上传ZIP压缩包</td>
+						<td>
+							<input type="file" name="csvPacket" class="file" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+</body>
+
+<script type='text/javascript'>
+//检测form表单
+function checkForm()
+{
+	if($('[name="csvPacket"]').val() == '')
+	{
+		alert('请上传csv数据包');
+		return false;
+	}
+	document.forms[0].submit();
+}
+</script>
+</html>

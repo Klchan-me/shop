@@ -1,0 +1,26 @@
+<div class="groupon wrapper clearfix">
+	<div class="box">
+		<div class="cont">
+			<div class="gtitle"><h2>往期团购</h2><a class="return" href="{url:/site/groupon}">返回团购首页</a></div>
+			{if:$this->query}
+			<ul class="glist m_10 clearfix">
+				{foreach:items=$this->list}
+				<li>
+					<h2 class="m_10"><a class="f14 bold" href="{url:/site/products/id/$item[goods_id]/}">{$item['title']}</a></h2>
+					<dl>
+						<dt><a class="f_l" href="{url:/site/products/id/$item[goods_id]/}"><img width="178" height="178" src="{webroot:}{$item['img']}" alt="{$item['title']}"></a></dt>
+						<dd>
+							<p>团购价：<b class="orange">￥{$item['regiment_price']}</b></p>
+							<p>原&nbsp;&nbsp;价：<s class="bold">￥{$item['sell_price']}</s></p>
+							<p>购买人数：<span class="blue">{$item['user_num']}</span></p>
+							<p><a href="{url:/site/products/id/$item[goods_id]/}" class="g_btn_2">原价购买>></a></p>
+						</dd>
+					</dl>
+				</li>
+				{/foreach}
+			</ul>
+			{echo:$this->query->getPageBar()}
+			{/if}
+		</div>
+	</div>
+</div>

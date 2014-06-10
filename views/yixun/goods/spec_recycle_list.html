@@ -1,0 +1,74 @@
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>规格管理</span><span>></span><span>规格回收站</span></div>
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="window.location='{url:/goods/spec_list}'"><span class="return">返回列表</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="spec_recycle_del();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick="spec_recycle_restore();"><button class="operating_btn" type="button"><span class="recover">还原</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col width="150px" />
+			<col width="150px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>规格名称</th>
+					<th>显示方式</th>
+					<th>规格数据</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form action='{url:/goods/spec_del}' method='post' name='specForm'>
+		<table class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col width="150px" />
+			<col width="150px" />
+			<col />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query:name=spec where=is_del eq 1 page=$page pagesize=20}
+				<tr>
+					<td class="t_c"><input type="checkbox" name="id[]" value="{$item['id']}" /></td>
+					<td>{$item['name']}</td>
+					<td>{if:$item['type']==1}文字{else:}图片{/if}</td>
+					<td>
+						{foreach:items=JSON::decode($item['value']) item=$rs}
+							{if:$item['type']==1}
+							{$rs},
+							{else:}
+							<img class="spec_photo" src={$rs} />
+							{/if}
+						{/foreach}
+					</td>
+					<td>
+						<a href="{url:/goods/spec_edit/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/goods/spec_del/id/$item[id]}'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$query->getPageBar()}
+<script type="text/javascript">
+function spec_recycle_del()
+{
+	$("form[name='specForm']").attr('action','{url:/goods/spec_recycle_del}');
+	confirm('确定要彻底删除所选中的信息吗？','formSubmit(\'specForm\')');
+}
+function spec_recycle_restore()
+{
+	$("form[name='specForm']").attr('action','{url:/goods/spec_recycle_restore}');
+	confirm('确定要还原所选中的信息吗？','formSubmit(\'specForm\')');
+}
+</script>

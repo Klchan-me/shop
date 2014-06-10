@@ -1,0 +1,47 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>网站管理</span><span>></span><span>选择皮肤</span></div>
+	<div class="field">
+		<table class="list_table">
+			<thead>
+				<tr>
+					<th>[{$theme}]主题方案下的皮肤方案</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+	{set:$skinList = Common::getSitePlan('skin',$theme)}
+	{foreach:items = $skinList}
+		<table class='list_table th_right'>
+			<col width='125px' />
+			<col width='70px' />
+			<col />
+			<tbody>
+				<tr>
+					<th rowspan='7'>
+						<div class="thumbnail">
+							<img src="{webroot:$item[thumb]}" width='120px' />
+							{if:(($isLocal == true)&&($key == $this->skin))}
+							<div class="sel"><span>正在使用</span></div>
+							{/if}
+						</div>
+					</th>
+					<th>名字：</th><td>{$item['name']}</td>
+				</tr>
+				<tr><th>目录：</th><td>{$key}</td></tr>
+				<tr><th>作者：</th><td>{$item['author']}</td></tr>
+				<tr><th>版本：</th><td>{$item['version']}</td></tr>
+				<tr><th>时间：</th><td>{$item['time']}</td></tr>
+				<tr><th>简介：</th><td>{$item['info']}</td></tr>
+				<tr>
+					<th>操作：</th>
+					<td>
+						<a href='{url:/system/applySkin/skin/$key}' class='orange'>启用</a> &nbsp
+					</td>
+				</tr>
+			</tbody>
+		</table><br />
+	{/foreach}
+</div>

@@ -1,0 +1,43 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>多平台登录</span><span>></span><span>开发平台列表</span></div>
+	<div class="field">
+		<table class="list_table">
+			<col width="120px">
+			<col width="150px">
+			<col />
+			<col width="100px">
+			<col width="100px">
+			<thead>
+				<tr>
+					<th>图标</th>
+					<th>名称</th>
+					<th>描述</th>
+					<th>开启状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<table class="list_table">
+		<col width="120px">
+		<col width="150px">
+		<col />
+		<col width="100px">
+		<col width="100px">
+		<tbody>
+			{query:name=oauth}
+				<tr>
+					<td><img src="{webroot:}{$item['logo']}" width='20px' /></td>
+					<td>{$item['name']}</td>
+					<td>{$item['description']}</td>
+					<td>{echo:$item['is_close'] == 0 ? '开启' : '关闭'}</td>
+					<td>
+						<a href='{url:/system/oauth_edit/id/$item[id]}'><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" title="编辑" /></a>
+					</td>
+				</tr>
+			{/query}
+		</tbody>
+	</table>
+</div>

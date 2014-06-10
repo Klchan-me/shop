@@ -1,0 +1,65 @@
+<script type='text/javascript' src='{theme:javascript/event.js}' charset="UTF-8"></script>
+{js:my97date}
+<div class="headbar">
+	<div class="position"><span>统计</span><span>></span><span>基础数据统计</span><span>></span><span>后台操作记录列表</span></div>
+	<div class="operating">
+		<div class="search f_l">
+			<form name="serachuser" action="{url:/}" method="get">
+				<input type='hidden' name='controller' value='market' />
+				<input type='hidden' name='action' value='operation_list' />
+				从 <input type="text" name='startDate' value='{$this->startDate}' class="Wdate" pattern='date' alt='' onFocus="WdatePicker()" empty onblur="FireEvent(this,'onchange')" /> 到 <input type="text" name='endDate' value='{$this->endDate}' empty pattern='date' class="Wdate" onFocus="WdatePicker()" onblur="FireEvent(this,'onchange')" />
+				<button class="btn" type="submit"><span class="sch">搜 索</span></button>
+			</form>
+		</div>
+
+		<div class="search f_r">
+			<form action="{url:/market/clear_log/type/operation}" method="post" name='clear_log'>
+				<select name='month' class='auto' pattern='int' alt='请选择月份'>
+					<option value=''>选择要删除的时间段</option>
+					<option value='1'>一个月以前</option>
+					<option value='3'>三个月以前</option>
+					<option value='6'>六个月以前</option>
+				</select>
+				<button class="btn" type="button" onclick="delModel({form:'clear_log'});"><span class="sch">记录删除</span></button>
+			</form>
+		</div>
+	</div>
+
+	<div class="field">
+		<table class="list_table">
+			<col width="120px" />
+			<col width="200px" />
+			<col />
+			<col width="150px" />
+			<thead>
+				<tr>
+					<th>操作人</th>
+					<th>动作</th>
+					<th>内容</th>
+					<th>时间</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+	<table class="list_table">
+		<col width="120px" />
+		<col width="200px" />
+		<col />
+		<col width="150px" />
+		<tbody>
+
+			{foreach:items = $this->operationList}
+			<tr>
+				<td>{$item['author']}</td>
+				<td>{$item['action']}</td>
+				<td>{$item['content']}</td>
+				<td>{$item['datetime']}</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+</div>
+{$this->operationObj->getPageBar()}

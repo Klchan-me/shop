@@ -1,0 +1,77 @@
+<div class="main f_r">
+	<div class="uc_title m_10">
+		<label class="current"><span>个人积分</span></label>
+	</div>
+	<div class="box m_10">
+		<p class="text">您当前的积分：<b class="brown">{$this->memberRow['point']}</b>分</p>
+	</div>
+	<div class="form_content m_10">
+		<form action='{url:/ucenter/integral}' method='post' name='point_history'>
+			<div class="uc_title2 m_10">
+				<span class="f_r">查询时间：
+					<select name='history_time'>
+						<option value="3">3个月之外积分记录</option>
+						<option value="default" selected=selected>近3个月之内积分记录</option>
+					</select>
+					<input class="sbtn" type="submit" value="查询" />
+				</span>
+				<strong>积分明细查询</strong>
+			</div>
+		</form>
+		<div class="cont">
+			<table class="list_table" width="100%" cellpadding="0" cellspacing="0">
+			<col width="200px" />
+			<col width="200px" />
+			<col />
+			<thead><tr><th>积分日期</th><th>积分</th><th>说明</th></tr></thead>
+			<tbody>
+				{set:$user_id = $this->user['user_id']}
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+                {query: name=point_log where=user_id eq $user_id and $this->c_datetime id=$point_log page=$page}
+				<tr>
+					<td>{$item['datetime']}</td><td>{$item['value']}分</td><td><span class="blue">{$item['intro']}</span></td>
+				</tr>
+                {/query}
+                <tr><td colspan='3'>{$point_log->getPageBar()}</td></tr>
+			</tbody>
+		</table>
+		</div>
+	</div>
+	<div class="form_content m_10">
+		<div class="uc_title2 m_10"><strong>积分兑换</strong></div>
+		<div class="cont">
+			<form action='{url:/ucenter/trade_ticket}' method='post'>
+				<table class="form_table" width="100%" cellpadding="0" cellspacing="0">
+					<col width="10px" />
+					<col width="420px" />
+					<col />
+					{set:$nowtime = ITime::getDateTime();$isHasTicket = false;}
+					{query:name=ticket id=$point_log page=$page where=point g 0 and start_time le '$nowtime' and end_time g '$nowtime'}
+					{set:$isHasTicket = true;}
+					<tr>
+						<td></td>
+						<td><b class="gray"><label class='attr'><input class="radio" type="radio" name='ticket_id' value="{$item['id']}" />{$item['name']}：{$item['value']}元（需要{$item['point']}积分）</b></td><td><label>有效日期：{$item['start_time']}至{$item['end_time']}</label></label></td>
+					</tr>
+					{/query}
+					{if:$isHasTicket == false}
+					<tr><td></td><td colspan="2"><label>暂无代金券</label></td></tr>
+					{/if}
+					<tr><td></td><td colspan="2"><label class="btn"><input type="submit" value="兑换代金券" /></label></td></tr>
+				</table>
+			</form>
+		</div>
+	</div>
+	<div class="prompt m_10">
+		<p><strong>提示：</strong></p>
+		<p class="indent">1、您兑换的代金券为电子券，根据代金券的不同，会具有不同的有效期</p>
+		<p class="indent">2、电子代金券仅限本ID使用，不能折算为现金、也不能再次兑换为积分</p>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	var FromObj = new Form('point_history');
+	FromObj.init
+	({
+		'history_time':'{$this->historyTime}'
+	});
+</script>

@@ -1,0 +1,54 @@
+<form name="ModelForm" action="{url:/system/delivery_operate}" method="post">
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>配送管理</span><span>></span><span>配送方式</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="event_link('{url:/system/delivery_edit}')"><button class="operating_btn" type="button"><span class="addition">添加配送方式</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel()"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:;" onclick="event_link('{url:/system/delivery_recycle}')"><button class="operating_btn" type="button"><span class="recycle">回收站</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="250px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>配送方式</th>
+					<th>状态</th>
+					<th>物流保价</th>
+					<th>货到付款</th>
+					<th>排序</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<table class="list_table">
+		<col width="40px" />
+		<col width="250px" />
+		<col />
+		<tbody>
+			{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+			{query: name=delivery page=$page order=sort  where=is_delete eq 0}
+			<tr>
+				<td class="t_c"><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+				<td>{$item['name']}</td>
+				<td>{if:$item['status']==1}启用{else:}关闭{/if}</td>
+				<td>{if:$item['is_save_price']==1}是{else:}否{/if}</td>
+				<td>{if:$item['type']==1}是{else:}否{/if}</td>
+				<td>{$item['sort']}</td>
+				<td>
+					<a href="{url:/system/delivery_edit/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" /></a>
+					<a href="javascript:void(0)" onclick="delModel({link:'{url:/system/delivery_operate/id/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}"  alt="删除" /></a>
+				</td>
+			</tr>
+			{/query}
+		</tbody>
+	</table>
+</div>
+{$query->getPageBar()}
+</form>

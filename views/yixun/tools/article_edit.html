@@ -1,0 +1,166 @@
+{js:kindeditor}
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>文章管理</span><span>></span><span>{if:isset($this->articleRow['id'])}编辑{else:}添加{/if}文章</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action='{url:/tools/article_edit_act}' method='post' name='article'>
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<input type='hidden' name='id' value="" />
+				<input type='hidden' name='relation_goods' value='{$this->relationStr}' />
+				<tr>
+					<th>分类：</th>
+					<td>
+						<select class="auto" name="category_id" pattern="required" alt="请选择分类值">
+							<option value=''>选择文章分类</option>
+							{query:name=article_category order=id desc}
+							<option value='{$item['id']}'>{$item['name']}</option>
+							{/query}
+						</select>
+						<label>*选择文章所属分类（必填）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>标题：</th>
+					<td><input type='text' name='title' class='normal' value='' pattern='required' alt='标题不能为空' /></td>
+				</tr>
+				<tr>
+					<th>是否发布：</th>
+					<td>
+						<label class='attr'><input type='radio' name='visibility' value='1' checked=checked />是</label>
+						<label class='attr'><input type='radio' name='visibility' value='0' />否</label>
+					</td>
+				</tr>
+				<tr>
+					<th>首页推荐：</th>
+					<td>
+						<label class='attr'><input type='radio' name='top' value='1' checked=checked />是</label>
+						<label class='attr'><input type='radio' name='top' value='0' />否</label>
+					</td>
+				</tr>
+				<tr>
+					<th>标题字体：</th>
+					<td>
+						<label class='attr'><input type='radio' name='style' value='0' checked=checked />正常</label>
+						<label class='attr'><input type='radio' name='style' value='1' /><b>粗体</b></label>
+						<label class='attr'><input type='radio' name='style' value='2' /><span style="font-style:oblique;">斜体</span></label>
+					</td>
+				</tr>
+				<tr>
+					<th>标题颜色：</th>
+					<td>
+						<div class="color_sel">
+							{set:$color = ($this->articleRow['color']===null) ? '#000000' : $this->articleRow['color']}
+							<input type='hidden' name='color' value='' />
+							<a class="color_current" style='color:{$color};background-color:{$color};' href='javascript:void(0)' onclick='showColorBox();' id='titleColor'>{$color}</a>
+							<div id='colorBox' class="color_box" style='display:none'></div>
+						</div>
+					</td>
+				</tr>
+				<tr>
+					<th>排序：</th><td><input type='text' class='small' name='sort' value='' /></td>
+				</tr>
+				<tr>
+					<th>关联相关商品：</th>
+					<td>
+						<div id='goods_box' class='photo_list'>
+							{if:!empty($this->goodsList)}
+								{foreach:items = $this->goodsList}
+								<img src='{webroot:$item[img]}' alt='{$item['name']}' width='120px' />
+								{/foreach}
+							{/if}
+						</div>
+						<button class='btn' type='button' onclick="searchGoods('{url:/block/search_goods/type/radio}',searchGoodsCallback);"><span>选择商品</span></button>
+						<label>文章所要关联的商品（可选）</label>
+					</td>
+				</tr>
+
+				<tr>
+					<th valign="top">内容：</th><td><textarea id="content" name='content' style='width:700px;height:300px' pattern='required' alt='内容不能为空'>{echo:htmlspecialchars($this->articleRow['content'])}</textarea></td>
+				</tr>
+				<tr>
+					<th>KEYWORDS(SEO)：</th><td><input type='text' class='normal' name='keywords' value='' /></td>
+				</tr>
+				<tr>
+					<th>DESCRIPTION(SEO)：</th><td><input type='text' class='normal' name='description' value='' /></td>
+				</tr>
+				<tr>
+					<th></th><td><button class='submit' type='submit'><span>确 定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+jQuery(function(){
+	//调色板颜色
+	var colorBox = new Array('#000','#930','#330','#030','#036','#930','#000080','#339','#333','#800000','#f60','#808000','#808080','#008080','#00f','#669','#f00','#f90','#9c0','#396','#3cc','#36f','#800080','#999','#f0f','#fc0','#ff0','#0f0','#0ff','#0cf','#936','#c0c0c0','#f9c','#fc9','#ff9','#cfc','#cff','#9cf','#c9f','#fff');
+	for(color in colorBox)
+	{
+		var aHTML = '<a href="javascript:void(0)" onclick="changeColor(this);" style="background-color:'+colorBox[color]+';color:'+colorBox[color]+'">'+colorBox[color]+'</a> ';
+		$('#colorBox').html($('#colorBox').html() + aHTML);
+	}
+
+	var FromObj = new Form('article');
+	FromObj.init({echo:JSON::encode($this->articleRow)});
+
+	KindEditor.ready(function(K){
+		K.create('#content');
+	});
+});
+
+//弹出调色板
+function showColorBox()
+{
+	var layer = document.createElement('div');
+	layer.className = "poplayer";
+	$(document.body).append(layer);
+	var poplay = $('#colorBox');
+	$('.poplayer').bind("click",function(){if(poplay.css('display')=='block') poplay.fadeOut();$("div").remove('.poplayer');})
+	poplay.fadeIn();
+}
+
+//选择颜色
+function changeColor(obj)
+{
+	var color = $(obj).html();
+	$('#titleColor').css({color:color,'background-color':color});
+	$('input[type=hidden][name="color"]').val(color);
+	$('#colorBox').fadeOut();
+	$("div").remove('.poplayer');
+}
+//输入筛选商品的条件
+function searchGoodsCallback(goodsList)
+{
+	goodsList.each(function()
+	{
+		var temp = $.parseJSON($(this).attr('data'));
+		var content = {"data":[
+			{"img":temp.img,"name":temp.name,"id":temp.goods_id}
+		]};
+		relationCallBack(content);
+	});
+}
+
+//关联商品回调处理函数
+function relationCallBack(content)
+{
+	var goodsIdArray = [];
+	var dataHTML     = '';
+	$(content['data']).each(
+		function(i)
+		{
+			goodsIdArray.push(content['data'][i]['id']);
+			dataHTML+=' <img width="120px" src="{webroot:}'+content['data'][i]['img']+'" alt="'+content['data'][i]['name']+'" /> ';
+		}
+	);
+	//动态插入图片
+	$('#goods_box').html(dataHTML);
+
+	//把关联的商品id存放在隐藏域
+	$('input[name="relation_goods"]').val(goodsIdArray.join(','));
+}
+</script>

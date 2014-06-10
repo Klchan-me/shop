@@ -1,0 +1,47 @@
+{set:$msgObj = new Mess($this->user['user_id']);$msgIds = $msgObj->getAllMsgIds();$msgIds = $msgIds ? $msgIds : 0}
+<div class="main f_r">
+    <div class="uc_title m_10">
+        <label class="current"><span>短消息</span></label>
+    </div>
+    <table class="list_table m_10" width="100%" cellpadding="0" cellspacing="0">
+        <col />
+        <col width="160px" />
+        <col width="120px" />
+        <col width="120px" />
+        <thead><tr><th>标题</th><th>发送时间</th><th>状态</th><th>操作</th></tr></thead>
+		<tbody>
+        	{set:$page=(isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+            {query:name=message where=id in($msgIds) page=$page order=id desc}
+        	<tr>
+            	<td class="t_l"><label class="blue">{$item['title']}</label></td>
+            	<td>{$item['time']}</td>
+            	<td id="msg_id_{$item['id']}">{if:$msgObj->is_read($item['id'])}已读{else:}未读{/if}</td>
+            	<td class="blue">
+            		<a class='blue' href="{url:/ucenter/message_del/id/$item[id]}">删除</a>
+            		<a class="blue" href="javascript:void(0)" onclick="show_msg(this,'{$item['content']}',{$item['id']})">查看</a>
+            	</td>
+            </tr>
+			{/query}
+            <tr id='show_msg' class="show" style="display:none">
+            	<td colspan="4"><i class="close f_r" onclick='$(this).parent().parent().css("display","none")'></i><b class="orange">详细内容：</b><p class="gray indent mt_10" id='content'></p></td>
+            </tr>
+        </tbody>
+        <tfoot><tr><td colspan="4" class="t_l">{$query->getPageBar()}</td></tr></tfoot>
+    </table>
+</div>
+
+<script type="text/javascript">
+//阅读消息
+function show_msg(obj,content,id)
+{
+    $('#show_msg').css('display','').insertAfter($(obj).parent().parent());
+    $('#show_msg #content').text(content);
+    $.get("{url:/ucenter/message_read}",{"id":id},function(data){
+	    if(data == 1)
+	    {
+	    	$("#msg_id_"+id).parent().addClass('bold');
+	    	$("#msg_id_"+id).html('已读');
+	    }
+    });
+}
+</script>

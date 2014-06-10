@@ -1,0 +1,36 @@
+{set:$items=$this->suggestion;}
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>咨询管理</span><span>></span><span>查看建议</span></div>
+	<div class="operating">
+		<a onclick="location='{url:/comment/suggestion_del/check/$items[id]}'" href="javascript:void(0);"><button  class="operating_btn" type="button"><span class="delete">删除</span></button></a>
+
+		<a href="javascript:void(0)" onclick="history.go(-1)"><button class="operating_btn" type="button"><span class="return">返回</span></button></a>
+	</div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/comment/suggestion_edit_act/}" method="post" name="comment_edit">
+			<input type="hidden" name="id" value="{$items['id']}" />
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>建议人：</th><td>{if:isset($items['user_id'])}<a href="{url:/member/member_edit/uid/$items[user_id]}">{$items['username']}</a>{/if}
+					<input type="hidden" value="{$items['id']}" name="check[]" /></td>
+				</tr>
+				<tr>
+					<th>添加时间：</th><td>{$items['time']}</td>
+				</tr>
+				<tr>
+					<th>建议内容：</th><td>{$items['content']}</td>
+				</tr>
+				<tr>
+					<th valign="top">回复：</th><td><textarea name="re_content" rows="" cols="">{$items['re_content']}</textarea></td>
+				</tr>
+				<tr>
+					<th></th><td><button class="submit" type="submit"><span>回 复</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

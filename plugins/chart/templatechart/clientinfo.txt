@@ -1,0 +1,41 @@
+{
+
+  "title":{
+    "text":"(title)",
+    "style":"{color: #736AFF; font-size: 18;}"
+  },
+
+
+  "elements":[
+    {
+      "type":      "line",
+      "colour":    "#87421F",
+      "width":     3,
+      "dot-style": {
+				"type":"star", "dot-size": 6, "tip":"#val#<br>#x_label#" },
+      "values" :   [(listpv)]
+    }
+  ],
+
+  "y_axis":{
+    "max":   (ymax),
+    "min":   (ymin),
+    "colour":       "#FF0000",
+    "grid-colour":  "#FF0000"
+  },
+
+  "x_axis":{
+    "steps": 4,
+    "labels":{
+      "visible": true,
+      "ro--tate": "vertical",
+      "labels": [(xlabels)]
+    }
+  },
+
+  "bg_colour":  "#F8F8F8",
+  "x_legend":{
+    "text":"WebZhu图表统计",
+    "style":"{font-size: 12px; color:#FF9400;}"
+  }
+}

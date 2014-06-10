@@ -1,0 +1,33 @@
+{set:$goods_class = new goods_class();$tb_category = new IModel('category');$category = $goods_class->sortdata($tb_category->query(false,'*','sort','asc'),0,'--');}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>管理后台</title>
+<link rel="stylesheet" href="{skin:css/admin.css}" />
+{js:jquery}
+{js:dialog}
+{js:form}
+{js:validate}
+{js:artTemplate}
+<script type='text/javascript' src="{theme:javascript/admin.js}"></script>
+</head>
+<body>
+	<div class="pop_win" style="width:500px;height:220px;">
+		<ul class="red_box">
+			<li>1、此功能可以直接将SQL语句导入到您的商城系统中</li>
+			<li>2、导入的SQL语句必须按照MYSQL的语法编写</li>
+			<li>3、导入的SQL附件必须是小于 {echo:IUpload::getMaxSize()} 的文本文件，您可以通过修改php.ini中的 &lt;post_max_size&gt;和&lt;upload_max_filesize&gt;选项来修改上传SQL附件的大小</li>
+		</ul>
+		<form action="{url:/tools/localUpload}" method="post" enctype="multipart/form-data">
+			<table width="95%" class="border_table" style="margin:10px auto">
+				<tbody>
+					<tr>
+						<th>要导入的SQL文件：</th><td><input class="normal" name="attach" type="file" /></td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+</body>
+</html>

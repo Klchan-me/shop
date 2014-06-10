@@ -1,0 +1,36 @@
+{
+"title":
+  {
+	"text":"(title)",
+	"style":"{color:#FF0000;font-size:24px;}"
+  },
+  "y_legend":{
+    "text":   "iWebShop",
+    "style": "{color: #736AFF;font-size:16px;}"
+  },
+
+	"elements":[
+		{
+			"type":      "line",
+			"colour":    "#736AFF",
+			"text":      "注册用户量(人)",
+			"width":     1,
+			"dot-style": {
+				"type":"solid-dot", "colour":"#a44a80", "dot-size": 3,
+				"tip":"#val#人<br>#x_label#" },
+			"on-show":	{"type": "shrink-in", "cascade":1, "delay":0.5},
+			"values" :   [(numbers)]
+		}
+	],
+
+  "x_axis":{
+    "labels": {
+      "labels":[(dates)]
+    }
+  },
+
+  "y_axis":{
+  "steps": (steps),
+    "max":   (max)
+  }
+}

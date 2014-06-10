@@ -1,0 +1,83 @@
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>广告管理</span><span>></span><span>{if:isset($this->positionRow['id'])}编辑{else:}添加{/if}广告位</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action='{url:/tools/ad_position_edit_act}' method='post' name='ad_position'>
+			<table class="form_table">
+				<input type='hidden' name='id' />
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>名称：</th>
+					<td>
+						<input type='text' class='normal' pattern='required' alt="请填写名称" name='name' />
+						<label>*广告位名称（必填）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>宽×高：</th>
+					<td>
+						<input type='text' class='small' name='width' pattern='^\d+$' alt='填写宽度' />×
+						<input type='text' class='small' name='height' pattern='^\d+$' alt='填写高度' />
+						<label>*广告位在页面中所占宽高，如果为0则为不限制（必填)</label>
+					</td>
+				</tr>
+
+				<tr>
+					<th>播放方式：</th>
+					<td>
+						<label class='attr'><input type='radio' name='fashion' value='1' checked=checked />轮回显示</label>
+						<label class='attr'><input type='radio' name='fashion' value='2' />随机显示</label>
+						<label>*如果此广告位有多条有效时， 广告位中的广告的播放顺序（必填）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>是否开启：</th>
+					<td>
+						<label class='attr'><input type='radio' name='status' value='1' checked=checked />是 </label>
+						<label class='attr'><input type='radio' name='status' value='0' />否 </label>
+					</td>
+				</tr>
+				<tr>
+					<th>展示的广告数量：</th>
+					<td>
+						<input type='text' name='ad_nums' class='small' pattern='^\d+$' alt='填写广告数量' />
+						<label>*广告位中的广告展示的数量（必填）</label>
+					</td>
+				</tr>
+				<tr>
+					<th></th><td><button class='submit' type='submit'><span>确 定</span></button></td>
+				</tr>
+				{if:$this->positionRow}
+				<tr>
+					<th>代码：</th>
+					<td style="font-weight:bold;color:#000;font-size:14px;">
+					将以下代码Copy到你想放置广告的地方即可显示此广告位的广告<br />
+					你可以通过 #adHere_{$this->positionRow['id']} 来修改这个广告位的样式 <br />
+					<code style="font-weight:normal;font-family:'Courier New';font-size:16px;display:block;background:#333;color:#fff;padding:5px;margin-right:30px;">
+&lt;div id=&quot;adHere_{$this->positionRow['id']}&quot;&gt;&lt;/div&gt;<br />&lt;script language=&quot;javascript&quot;&gt;<br />(new adLoader()).load({$this->positionRow['id']},&#039;adHere_{$this->positionRow['id']}&#039;);<br />
+	&lt;/script&gt;
+					</code>
+					</td>
+				</tr>
+				{/if}
+
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	var FromObj = new Form('ad_position');
+	FromObj.init
+	({
+		'id':'{$this->positionRow['id']}',
+		'name':'{$this->positionRow['name']}',
+		'width':'{$this->positionRow['width']}',
+		'height':'{$this->positionRow['height']}',
+		'fashion':'{$this->positionRow['fashion']}',
+		'status':'{$this->positionRow['status']}',
+		'ad_nums':'{$this->positionRow['ad_nums']}'
+	});
+</script>

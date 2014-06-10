@@ -1,0 +1,522 @@
+<div class="headbar clearfix">
+	<div class="position">订单<span>></span><span>订单管理</span><span>></span><span>订单查看</span></div>
+	<ul class="tab" name="menu1">
+		<li id="li_1"><a href="javascript:selectTab('1');" hidefocus="true">基本信息</a></li>
+		<li id="li_2"><a href="javascript:selectTab('2');" hidefocus="true">收退款记录</a></li>
+		<li id="li_3"><a href="javascript:selectTab('3');" hidefocus="true">发货记录</a></li>
+		<li id="li_4"><a href="javascript:selectTab('4');" hidefocus="true">优惠方案</a></li>
+		<li id="li_5"><a href="javascript:selectTab('5');" hidefocus="true">订单备注</a></li>
+		<li id="li_6"><a href="javascript:selectTab('6');" hidefocus="true">订单日志</a></li>
+		<li id="li_7"><a href="javascript:selectTab('7');" hidefocus="true">订单附言</a></li>
+	</ul>
+</div>
+
+<div id="tab-1" name="table" style="display:none">
+	<div class="content">
+		<table class="list_table">
+			<col width="550px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col />
+			<thead>
+				<tr>
+					<th>商品名称</th>
+					<th>商品原价</th>
+					<th>实际价格</th>
+					<th>商品数量</th>
+					<th>小计</th>
+				</tr>
+			</thead>
+			<tbody>
+				{query:name=order_goods where=order_id eq $order_id}
+				<tr>
+					<td>
+						{set:$goodsRow = JSON::decode($item['goods_array'])}
+						{$goodsRow['name']} &nbsp;&nbsp; {$goodsRow['value']}
+					</td>
+					<td>{$item['goods_price']}</td>
+					<td>{$item['real_price']}</td>
+					<td>{$item['goods_nums']}</td>
+					<td>{echo:$item['real_price']*$item['goods_nums']}</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+
+		<table style="width:300px;margin-right:20px;" class="border_table f_l">
+			<col width="80px" />
+			<col />
+			<thead>
+				<tr><th colspan="2">订单金额明细</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>商品总额:</th><td>￥{$payable_amount}</td>
+				</tr>
+				<tr>
+					<th>配送费用:</th><td>￥{$payable_freight}</td>
+				</tr>
+				<tr>
+					<th>保价费用:</th><td>￥{$insured}</td>
+				</tr>
+				<tr>
+					<th>税金:</th><td>￥{$taxes}</td>
+				</tr>
+				<tr>
+					<th>优惠总额:</th><td>￥{$promotions}</td>
+				</tr>
+				<tr>
+					<th>增加或减少金额:</th><td>￥{$discount}</td>
+				</tr>
+				<tr>
+					<th>订单总额:</th><td>￥{$order_amount}</td>
+				</tr>
+				<tr>
+					<th>已支付金额:</th><td>{query:name=collection_doc where=order_id eq $order_id and if_del eq 0 fields=amount}￥{$item['amount']}{/query}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table style="width:300px;margin-right:20px;" class="border_table f_l">
+			<col width="80px" />
+			<col />
+			<thead>
+				<tr><th colspan="2">订单其他信息</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>配送方式:</th><td>{$delivery}</td>
+				</tr>
+				<tr>
+					<th>配送保价:</th><td>{if:$if_insured==0}不保价{else:}保价{/if}</td>
+				</tr>
+				<tr>
+					<th>商品重量:</th><td>{$goods_weight}</td>
+				</tr>
+				<tr>
+					<th>支付方式:</th><td>{$payment}</td>
+				</tr>
+				<tr>
+					<th>是否开票:</th><td>{if:$invoice==0}否{else:}是{/if}</td>
+				</tr>
+				<tr>
+					<th>发票抬头:</th><td>{$invoice_title}</td>
+				</tr>
+				<tr>
+					<th>可得积分:</th><td>{$point}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table style="width:300px;margin-right:20px;" class="border_table f_l">
+			<col width="80px" />
+			<col />
+			<thead>
+				<tr><th colspan="2">收货人信息</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>发货日期:</th><td>{$send_time}</td>
+				</tr>
+				<tr>
+					<th>姓名:</th><td>{$accept_name}</td>
+				</tr>
+				<tr>
+					<th>电话:</th><td>{$telphone}</td>
+				</tr>
+				<tr>
+					<th>手机 :</th><td>{$mobile}</td>
+				</tr>
+				<tr>
+					<th>地区:</th><td>{$area_addr}</td>
+				</tr>
+				<tr>
+					<th>地址:</th><td>{$address}</td>
+				</tr>
+				<tr>
+					<th>邮编:</th><td>{$postcode}</td>
+				</tr>
+				<tr>
+					<th>送货时间:</th><td>{$accept_time}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<table style="width:300px;margin-right:20px;" class="border_table f_l">
+			<col width="80px" />
+			<col />
+			<thead>
+				<tr><th colspan="2">商城用户信息</th></tr>
+			</thead>
+			<tbody>
+				<tr>
+					<th>用户名:</th><td>{$username}</td>
+				</tr>
+				<tr>
+					<th>姓名:</th><td>{$true_name}</td>
+				</tr>
+				<tr>
+					<th>电话:</th><td>{$u_mobile}</td>
+				</tr>
+				<tr>
+					<th>地区:</th><td>{$contact_addr}</td>
+				</tr>
+				<tr>
+					<th>Email:</th><td>{$email}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div id="tab-2" name="table" style="display:none">
+	<div class="content">
+		<table style="width:45%;margin-right:20px;" class="border_table f_l">
+			<col width="120px" />
+			<col />
+			<thead>
+				<tr><th colspan="2">收款单据</th></tr>
+			</thead>
+			<tbody>
+				{query: name=collection_doc as c join=left join payment as p on c.payment_id eq p.id where=c.order_id eq $order_id items=$collectionData}{/query}
+				{if:$collectionData}
+				<tr>
+					<th>时间：</th><td>{$item['time']}</td>
+				</tr>
+				<tr>
+					<th>金额：</th><td>{$item['amount']}</td>
+				</tr>
+				<tr>
+					<th>支付方式：</th><td>{$item['name']}</td>
+				</tr>
+				<tr>
+					<th>状态：</th><td>{if:$item['pay_status']==0}准备中{else:}支付完成{/if}</td>
+				</tr>
+				{else:}
+				<tr><td colspan='2'>暂无数据</td></tr>
+				{/if}
+			</tbody>
+		</table>
+
+		<table style="width:45%;margin-right:20px;" class="border_table f_l">
+			<col width="120px" />
+			<col />
+			<thead>
+				<tr><th colspan="2">退款单据列表</th></tr>
+			</thead>
+			<tbody>
+				{query: name=refundment_doc where=order_id eq $order_id items=$refundmentData}{/query}
+				{if:$refundmentData}
+				<tr>
+					<th>金额：</th><td>{$item['amount']}</td>
+				</tr>
+				<tr>
+					<th>申请时间：</th><td>{$item['time']}</td>
+				</tr>
+				<tr>
+					<th>状态：</th><td>{if:$item['pay_status']==0}准备中{else:}退款完成{/if}</td>
+				</tr>
+				<tr>
+					<th>退款理由：</th><td>{$item['content']}</td>
+				</tr>
+				{else:}
+				<tr><td colspan='2'>暂无数据</td></tr>
+				{/if}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div id="tab-3" name="table" style="display:none">
+	<div class="content">
+		<table style="width:98%" class="border_table">
+			<col width="200px" />
+			<col />
+			<thead>
+				<tr><th colspan="2">发货单据列表</th></tr>
+			</thead>
+			<tbody>
+				{query: name=delivery_doc as c join=left join delivery as p on c.delivery_type eq p.id fields=c.*,p.name as pname where=c.order_id eq $order_id items=$deliveryData}{/query}
+				{if:$deliveryData}
+				<tr><th>配送时间：</th><td>{$item['time']}</td></tr>
+				<tr><th>配送方式：</th><td>{$item['pname']}</td></tr>
+				<tr><th>物流单号：</th><td>{$item['delivery_code']}</td></tr>
+				<tr><th>收件人：</th><td>{$item['name']}</td></tr>
+				<tr><th>备注：</th><td>{$item['note']}</td></tr>
+				{else:}
+				<tr><td colspan="2">暂无数据</td></tr>
+				{/if}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div id="tab-4" name="table" style="display:none">
+	<div class="content">
+		<table width="98%" class="border_table">
+			<col width="250px" />
+			<col />
+			<thead>
+				<tr>
+					<th>方案</th>
+					<th>优惠内容</th>
+				</tr>
+			</thead>
+			<tbody>
+			{if:$this->result}
+			{foreach:items=$this->result}
+			<tr>
+				<td>{$item['plan']}</td>
+				<td>{$item['info']}</td>
+			</tr>
+			{/foreach}
+			{else:}
+			<tr><td colspan='2'>暂无数据</td></tr>
+			{/if}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div id="tab-5" name="table" style="display:none">
+	<div class="content">
+		<div class="content form_content">
+		<form name="ModelForm" action="{url:/order/order_note}" method="post">
+			<input type="hidden" name="order_id" value="{$order_id}"/>
+			<input type="hidden" name="tab" value="6"/>
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tbody>
+					<tr>
+						<th>订单备注:</th>
+						<td align="left"><textarea name="note" id="note" rows="8" cols="100">{$note}</textarea></td>
+					</tr>
+					<tr>
+						<td></td>
+						<td align="left"><button type="submit" class="submit"><span>保存</span></button></td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+		</div>
+	</div>
+</div>
+
+<div id="tab-6" name="table" style="display:none">
+	<div class="content">
+		<table class="border_table" style='width:98%'>
+			<colgroup>
+			<col width="200px">
+			<col width="150px">
+			<col width="150px">
+			<col width="100px">
+			<col />
+			</colgroup>
+			<thead>
+				<tr>
+					<th>时间</th>
+					<th>操作人</th>
+					<th>动作</th>
+					<th>结果</th>
+					<th>备注</th>
+				</tr>
+			</thead>
+			<tbody>
+				{query: name=order_log as ol where=ol.order_id eq $order_id}
+				<tr>
+					<td>{$item['addtime']}</td>
+					<td>{$item['user']}</td>
+					<td>{$item['action']}</td>
+					<td>{$item['result']}</td>
+					<td>{$item['note']}</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div id="tab-7" name="table" style="display:none">
+	<div class="content">
+		<div class="content form_content">
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tbody>
+					<tr>
+						<th>订单附言:</th>
+						<td align="left">{$postscript}</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="pages_bar">
+	<div class="t_c" id="ctrlButtonArea">
+		<button type="button" class="btn" id="to_pay" onclick="pay({$order_id});"><span>支付</span></button>
+		<button type="button" class="btn" id="to_deliver" onclick="deliver({$order_id});"><span>发货</span></button>
+		<button type="button" class="btn" id="to_refundment" onclick="refundment({$order_id});"><span>退款</span></button>
+		<button type="button" class="btn" onclick="complete({$order_id},5)"><span>完成</span></button>
+		<button type="button" class="btn" onclick="complete({$order_id},4)"><span>作废</span></button>
+	</div>
+</div>
+
+<script type='text/javascript'>
+
+var pay_status = '{$pay_status}';
+
+//DOM加载完毕后运行
+$(function()
+{
+	selectTab(1);
+	initButton();
+});
+
+/**
+ * 订单操作按钮初始化
+ */
+function initButton()
+{
+	//订单当前为活跃状态
+	{if:$status < 3}
+		//付款按钮锁定 已经付过款
+		{if:$pay_status != 0}
+			$('#to_pay').attr('disabled','disabled');
+			$('#to_pay').addClass('inactive');
+		{/if}
+
+		//发货按钮锁定 已经发过货
+		{if:$distribution_status != 0}
+			$('#to_deliver').attr('disabled','disabled');
+			$('#to_deliver').addClass('inactive');
+		{/if}
+
+		//退款按钮锁定 未付款或者已经退款
+		{if:$pay_status == 0 || $pay_status == 2}
+			$('#to_refundment').attr('disabled','disabled');
+			$('#to_refundment').addClass('inactive');
+		{/if}
+	//订单当前为非活跃状态
+	{else:}
+		//全部操作区域的按钮锁定
+		$('#ctrlButtonArea button').attr('disabled','disabled');
+		$('#ctrlButtonArea button').addClass('inactive');
+
+		//订单完成且付款 退款按钮可以点击
+		{if:$status == 5 && $pay_status == 1}
+			$('#to_refundment').removeAttr('disabled');
+			$('#to_refundment').removeClass('inactive');
+		{/if}
+	{/if}
+}
+
+//选择当前Tab
+function selectTab(curr_tab)
+{
+	$("div[name='table']").hide();
+	$("#tab-"+curr_tab).show();
+	$("ul[name=menu1] > li").removeClass('selected');
+	$('#li_'+curr_tab).addClass('selected');
+}
+
+//完成或作废订单
+function complete(id,statusVal)
+{
+	if(pay_status=='0' && statusVal == '5')
+	{
+		alert('请先支付订单金额，再完成订单!');
+		return false;
+	}
+
+	$.get("{url:/order/order_complete}",{'order_no':"{$order_no}",'type':statusVal,'id':id}, function(data)
+	{
+		if(data=='success')
+		{
+			actionCallback();
+		}
+		else
+		{
+			alert('发生错误');
+		}
+	});
+}
+
+//退款
+function refundment(id)
+{
+	var tempUrl = '{url:/order/order_refundment/id/@id@}';
+	tempUrl     = tempUrl.replace('@id@',id);
+	art.dialog.open(tempUrl,{
+		id:'refundment',
+		cancelVal:'关闭',
+		okVal:'退款',
+	    title: '订单号:{$order_no}【退款到余额账户】',
+	    ok:function(iframeWin, topWin){
+	    	iframeWin.document.forms[0].submit();
+	    	return false;
+	    },
+	    cancel:function(){
+	    	return true;
+		}
+	});
+}
+
+//付款
+function pay(id)
+{
+	var tempUrl = '{url:/order/order_collection/id/@id@}';
+	tempUrl     = tempUrl.replace('@id@',id);
+
+	art.dialog.open(tempUrl,{
+		id:'pay',
+	    title: '订单号:{$order_no}【付款】',
+	    cancelVal:'关闭',
+		okVal:'付款',
+	    ok:function(iframeWin, topWin){
+			iframeWin.document.forms[0].submit();
+			return false;
+	    },
+	    cancel:function (){
+	    	return true;
+		}
+	});
+}
+
+//发货
+function deliver(id)
+{
+	var tempUrl = '{url:/order/order_deliver/id/@id@}';
+	tempUrl     = tempUrl.replace('@id@',id);
+
+	var deliv = art.dialog.open(tempUrl,{
+		id:'deliver',
+	    title: '订单号:{$order_no}【发货】',
+	    cancelVal:'关闭',
+		okVal:'发货',
+	    ok:function(iframeWin, topWin){
+	    	iframeWin.document.forms[0].submit();
+	    	return false;
+	    },
+	    cancel:function (){
+	    	return true;
+		}
+	});
+}
+
+//执行回调处理
+function actionCallback()
+{
+	window.location.reload();
+}
+
+//操作失败回调
+function actionFailCallback(msg)
+{
+	var alertText = msg ? msg : '操作失败';
+	alert(alertText);
+}
+</script>

@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>管理后台</title>
+<link rel="stylesheet" href="{skin:css/admin.css}" />
+{js:jquery}
+{js:dialog}
+{js:form}
+{js:validate}
+{js:artTemplate}
+{js:kindeditor}
+<script type='text/javascript' src="{theme:javascript/admin.js}"></script>
+</head>
+<body>
+<div class="pop_win" style="width:790px;height:340px">
+<form action="{url:/comment/start_message}" method="post">
+	<input type='hidden' name='toUser' value='' />
+	<table class="form_table">
+		<col width="75px" />
+		<col />
+		<tbody>
+			<tr>
+				<td class="t_r">收件人：</td>
+				<td><input type='button' class='btn' value='筛选条件' onclick='searchUser();' /><label id='queryString'>默认为所有用户</label></td>
+			</tr>
+			<tr>
+				<td class="t_r">标题：</td>
+				<td><input class="middle" type="text" name="title" pattern="required" /></td>
+			</tr>
+			<tr>
+				<td valign="top" class="t_r">内容：</td>
+				<td><textarea name="content" id="content" style="width:670px;height:220px;" pattern="required"></textarea></td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+</div>
+<script type='text/javascript'>
+var kindEditorObj;
+
+$(function(){
+	//编辑器载入
+	KindEditor.ready(function(K){
+		kindEditorObj = K.create('#content');
+	});
+});
+
+//筛选用户
+function searchUser()
+{
+	art.dialog.open('{url:/block/search_user}',{
+		'id':'userCondition',
+		'title':'选择用户',
+		'ok':function(iframeWin, topWin)
+		{
+			var iframeObj = $(iframeWin.document);
+
+			//存储查询的条件
+			var queryString = '';
+			iframeObj.find('input[type="text"]').each(function()
+			{
+				var queryVal = this.value;
+				if(queryVal)
+				{
+					queryString += '+' + queryVal;
+				}
+			});
+
+			iframeObj.find('select').each(function()
+			{
+				var queryVal = this.value;
+				if(queryVal)
+				{
+					queryString += '+' + this.options[this.selectedIndex].label;
+				}
+			});
+
+			queryString ? $('#queryString').text(queryString) : $('#queryString').text('默认为所有用户');
+	    	iframeObj.find('form').submit();
+	    	return false;
+		}
+	});
+}
+</script>
+</body>
+</html>

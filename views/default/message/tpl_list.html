@@ -1,0 +1,34 @@
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>邮件短信设置</span><span>></span><span>模板管理</span></div>
+	<div class="field">
+		<table class="list_table">
+			<col width="20px" />
+			<col />
+			<col width="100px" />
+			<thead>
+				<tr>
+					<th></th>
+					<th>模板名称</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+	<table id="list_table" class="list_table">
+		<col width="20px" />
+		<col />
+		<col width="100px" />
+		<tbody>
+			{foreach:items=$tpl item=$item}
+			<tr>
+				<td></td>
+				<td>{$item['name']}</td>
+				<td><a href="{url:/message/tpl_edit/tid/$item[id]}"><img class='operator' src='{skin:images/admin/icon_edit.gif}' title='编辑模板' /></a></td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+</div>

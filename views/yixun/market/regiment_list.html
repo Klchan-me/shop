@@ -1,0 +1,100 @@
+<div class="headbar">
+	<div class="position"><span>营销</span><span>></span><span>营销活动管理</span><span>></span><span>团购</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="event_link('{url:/market/regiment_edit}');"><button class="operating_btn" type="button"><span class="addition">添加团购</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	{if:$this->list_without_goods}
+		<div style="background:#ccc;border-radius:10px;text-align:left;margin:5px;padding:10px;">列表中某些团购活动所关联的商品已经不存在了，我们用灰色背景把他们显著的表示了出来。建议您将这些团购活动删除掉或者及时更换产品。</div>
+	{/if}
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col width="290px" />
+			<col width="80px" />
+			<col width="80px" />
+			<col width="80px" />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>标题</th>
+					<th>团购时间</th>
+					<th>状态</th>
+					<th>销售情况</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+
+	<form method='post' action='{url:/market/regiment_del}'>
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col width="290px" />
+			<col width="80px" />
+			<col width="80px" />
+			<col width="80px" />
+			<tbody>
+			{set:$regimentUser = new IModel('regiment_user_relation')}
+ 			{set:$not_in_ids = array(-1);}
+			{if:$this->list_without_goods}
+				{foreach:items=$this->list_without_goods}
+				{set:$not_in_ids[]=$item['id'];}
+				{set:
+					$regUserRow=$regimentUser->getObj('is_over = 1 and regiment_id = '.$item['id'],'count(*) as sum_count');
+					$item['sum_count'] = isset($regUserRow['sum_count']) ? $regUserRow['sum_count'] : 0;
+				}
+				<tr style="background:#ccc;">
+					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
+					<td>{$item['title']}</td>
+					<td>{$item['start_time']} ～ {$item['end_time']}</td>
+					<td>{echo:($item['is_close']==1) ? '关闭':'开启'}</td>
+					<td>{$item['sum_count']}/{$item['store_nums']}</td>
+					<td>
+						<a href='{url:/market/regiment_edit/id/$item[id]}'>
+							<img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" title="修改" />
+						</a>
+
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/market/regiment_del/id/$item[id]}'});">
+							<img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" />
+						</a>
+					</td>
+				</tr>
+				{/foreach}
+			{/if}
+
+				{set:$not_in_ids = implode(",",$not_in_ids);}
+				{set:$page = (int)IReq::get('page');$page<1 && ($page=1);}
+				{query:name=regiment page=$page where=id not in ($not_in_ids) order = id DESC}
+				{set:
+					$regUserRow=$regimentUser->getObj('is_over = 1 and regiment_id = '.$item['id'],'count(*) as sum_count');
+					$item['sum_count'] = isset($regUserRow['sum_count']) ? $regUserRow['sum_count'] : 0;
+				}
+				<tr>
+					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
+					<td><a href='{url:/site/groupon/id/$item[id]}' target='_blank'>{$item['title']}</a></td>
+					<td>{$item['start_time']} ～ {$item['end_time']}</td>
+					<td>{echo:($item['is_close']==1) ? '关闭':'开启'}</td>
+					<td>{$item['sum_count']}/{$item['store_nums']}</td>
+					<td>
+						<a href='{url:/market/regiment_edit/id/$item[id]}'>
+							<img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" title="修改" />
+						</a>
+
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/market/regiment_del/id/$item[id]}'});">
+							<img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" />
+						</a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$query->getPageBar()}

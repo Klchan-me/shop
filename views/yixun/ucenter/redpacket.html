@@ -1,0 +1,28 @@
+<div class="main f_r">
+    <div class="uc_title m_10">
+        <label class="current"><span>我的代金券</span></label>
+    </div>
+    <table class="list_table m_10" width="100%" cellpadding="0" cellspacing="0">
+        <col width="120px" />
+        <col width="120px" />
+        <col width="240px" />
+        <col />
+        <thead><tr><th>编号</th><th>面值</th><th>有效时间</th><th>状况</th></tr></thead>
+        {set:$user_id = $this->user['user_id']}
+        {query:fields=prop name=member where=user_id eq $user_id /}
+        {if:$items[0]['prop']!=''}
+        {set:$ids=trim($items[0]['prop'],',')}
+        {/if}
+        {if:isset($ids) && $ids!=''}
+        <tbody>
+        {set:$page=(isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+        {query:name=prop where= id in($ids) and is_send eq 1 page=$page id=$prop}
+            <tr>
+                <td>{$item['card_name']}</td><td>{$item['value']}元</td><td>{echo:substr($item['end_time'],0,10)}</td><td class="blue">{if:$item['is_userd']==1}<span class="bold orange">已使用</span>{elseif:$item['is_close']==1}<span class="bold gray">已禁用</span>{elseif:$item['is_close']==2}<span class="bold gray">临时锁定</span>{elseif:(strtotime('now')-strtotime($item['end_time']))>0}<span class="bold light_gray">已过期</span>{else:}<span class="bold green">可使用</span>{/if}</td>
+            </tr>
+        {/query}
+        </tbody>
+        <tfoot><tr><td colspan="4" class="t_l">{$prop->getPageBar()}</td></tr></tfoot>
+        {/if}
+    </table>
+</div>

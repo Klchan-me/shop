@@ -1,0 +1,108 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>权限管理</span><span>></span><span>{if:isset($this->rightRow['id'])}编辑{else:}添加{/if}权限</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/system/right_edit_act}"  method="post" name='right_edit'>
+			<input type='hidden' name='id' />
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>权限名称：</th>
+					<td><input type='text' class='normal' name='name' pattern='required' alt='请填写权限名称' /><label>* 权限名称，如 [商品]商品管理，程序会根据中括号里面的字符进行权限分组</label></td>
+				</tr>
+
+				<tr>
+					<th>权限码集合：</th>
+					<td>
+						<table class='border_table' style='width:310px'>
+							<thead>
+								<tr><th>权限码</th><th>操作</th></tr>
+							</thead>
+							<tbody id='rightBox'>
+								{set:$rightArray = explode(',',trim($this->rightRow['right'],','))}
+								{if:$rightArray}
+									{foreach:items=$rightArray}
+									<tr><td><input type='text' class='middle' value='{$item}' name='right[]' pattern="^\w+@\w+$" /></td><td><img class="operator" onclick="$(this).parent().parent().remove();" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></td></tr>
+									{/foreach}
+								{else:}
+								<tr><td><input type='text' class='middle' value='' name='right[]' pattern="^\w+@\w+$" /></td><td><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></td></tr>
+								{/if}
+							</tbody>
+							<tfoot>
+								<tr><td colspan='2'><button type="button" class="btn" onclick='create_right();'><span class="add">添 加</span></button></td></tr>
+							</tfoot>
+						</table>
+						<label>* 此码是由 [ 控制器名称 ] @ [ 动作名称 ] 组成，例如 管理员列表的权限码：system@admin_list </label>
+					</td>
+				</tr>
+
+				<tr>
+					<th>添加权限码：</th>
+					<td>
+						<select class='auto' id='ctrl' name='ctrl' onchange="get_list_action(this.value);"><option value='' selected=selected>请选择</option></select> @ <select class='auto' name='action' id='action'></select>
+						<button type="button" class="btn" onclick='create_right_auto();'><span class="add">添 加</span></button>
+					</td>
+				</tr>
+				<tr><td></td><td><button class="submit" type='submit'><span>保 存</span></button></td></tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	//动态获取动作列表
+	function get_list_action(ctrlId)
+	{
+		$('#action').empty();
+		$.getJSON('{url:/system/list_action}',{ctrlId:ctrlId},function(content){
+			for(pro in content)
+			{
+				var optionStr = '<option value="'+content[pro]+'">'+content[pro]+'</option>';
+				$('#action').append(optionStr);
+			}
+		});
+	}
+
+	jQuery(function(){
+		//动态获取控制器文件列表
+		$.getJSON('{url:/system/list_controller}',function(content){
+			for(pro in content)
+			{
+				var optionStr = '<option value="'+content[pro]+'">'+content[pro]+'</option>';
+				$('#ctrl').append(optionStr);
+			}
+			get_list_action($('#ctrl').val());
+		});
+	});
+
+	//添加权限码
+	function create_right(val)
+	{
+		var val = (val == undefined) ? '':val;
+		var rightStr = '<tr><td><input type="text" class="middle" value="'+val+'" name="right[]" /></td><td><img class="operator" onclick="$(this).parent().parent().remove();" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></td></tr>';
+		$('#rightBox').prepend(rightStr);
+	}
+
+	//自动添加权限码
+	function create_right_auto()
+	{
+		var ctrlVal   = $('#ctrl').val();
+		var actionVal = $('#action').val();
+		if(ctrlVal && actionVal)
+		{
+			create_right(ctrlVal+'@'+actionVal);
+		}
+		else
+		{
+			alert('控制器或者动作不能为空');
+		}
+	}
+
+	var formObj = new Form('right_edit');
+	formObj.init({
+		'id':'{$this->rightRow['id']}',
+		'name':'{$this->rightRow['name']}'
+	});
+</script>

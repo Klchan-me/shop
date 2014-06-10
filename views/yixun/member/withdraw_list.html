@@ -1,0 +1,49 @@
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>提现管理</span><span>></span><span>提现申请列表</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel({msg:'确定把信息放到回收站内么？'});"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="{url:/member/withdraw_recycle/type/del}"><button onclick="location='{url:/member/withdraw_recycle/type/del}';" class="operating_btn" type="button"><span class="recycle">回收站</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>收款人姓名</th>
+					<th>金额</th>
+					<th>申请时间</th>
+					<th>状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form action="{url:/member/withdraw_update/type/del}" method="post">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=withdraw where=is_del eq 0 page=$page order=id desc}
+				<tr>
+					<td class="t_c"><input type="checkbox" name="id[]" value="{$item['id']}" /></td>
+					<td>{$item['name']}</td>
+					<td>{$item['amount']} 元</td>
+					<td>{$item['time']}</td>
+					<td>{echo:Ucenter::getWithdrawStatus($item['status'])}</td>
+					<td>
+						<a href='{url:/member/withdraw_detail/id/$item[id]}'><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="查看" title="查看" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/member/withdraw_update/type/del/id/$item[id]}',msg:'确定要把此信息放入到回收站么？'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$query->getPageBar()}

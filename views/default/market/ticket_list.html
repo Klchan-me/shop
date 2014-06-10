@@ -1,0 +1,98 @@
+<div class="headbar">
+	<div class="position"><span>营销</span><span>></span><span>代金券管理</span><span>></span><span>代金券列表</span></div>
+	<div class="operating">
+		<a href="javascript:;" onclick="event_link('{url:/market/ticket_edit}')"><button class="operating_btn" type="button"><span class="addition">添加代金券</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_excel}';delModel({msg:'是否要生成excel表格'});"><button class="operating_btn" type="button"><span class="export">生成EXCEL</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col width="80px" />
+			<col width="80px" />
+			<col width="80px" />
+			<col />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>名称</th>
+					<th>面值</th>
+					<th>数量</th>
+					<th>兑换积分</th>
+					<th>有效期</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form method='post' action='#'>
+		<table class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col width="80px" />
+			<col width="80px" />
+			<col width="80px" />
+			<col />
+			<tbody>
+				{set:$propObj = new IModel('prop')}
+				{query: name=ticket}
+				{set:$ticket_num = $this->getTicketCount($propObj,$item['id'])}
+				<tr>
+					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
+					<td>{$item['name']}</td>
+					<td>{$item['value']} 元</td>
+					<td>{$ticket_num} 张</td>
+					<td>{echo:($item['point']==0) ? '不可兑换':$item['point']}</td>
+					<td>{$item['start_time']} ～ {$item['end_time']}</td>
+					<td>
+						<a href='{url:/market/ticket_edit/id/$item[id]}'>
+							<img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" title="修改" />
+						</a>
+
+						<a href='{url:/market/ticket_more_list/ticket_id/$item[id]}'>
+							<img class="operator" src="{skin:images/admin/icon_check.gif}" alt="查看详情" title="查看详情" />
+						</a>
+
+						<a href='javascript:create_dialog("{$item['id']}");'>
+							<img class="operator" src="{skin:images/admin/icon_add.gif}" alt="生成实体代金券" title="生成实体优惠券" />
+						</a>
+
+						{if:$ticket_num > 0}
+						<a href='javascript:void(0)' onclick="delModel({msg:'是否要生成excel表格？',link:'{url:/market/ticket_excel/id/$item[id]}'});">
+							<img class="operator" src="{skin:images/admin/icon_down.gif}" alt="生成EXCEL" title="生成EXCEL" />
+						</a>
+						{/if}
+
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/market/ticket_del/id/$item[id]}'});">
+							<img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" />
+						</a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+
+<script type='text/javascript'>
+	//创建优惠券
+	function create_dialog(ticket_id)
+	{
+		art.dialog.prompt('请输入生成线下实体代金券数量：',function(num)
+		{
+			var num = parseInt(num);
+			if(isNaN(num) || num <= 0)
+			{
+				alert('请填写正确的数量');
+				return false;
+			}
+
+			var url = '{url:/market/ticket_create/ticket_id/@ticket_id@/num/@num@}';
+			    url = url.replace('@ticket_id@',ticket_id).replace('@num@',num);
+			window.location.href = url;
+		});
+	}
+</script>

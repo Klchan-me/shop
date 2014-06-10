@@ -1,0 +1,289 @@
+{set:$seo_data=array(); $site_config=new Config('site_config');}
+{set:$seo_data['title'] = $this->catRow['title']?$this->catRow['title']:$this->catRow['name']}
+{set:$seo_data['title'].="_".$site_config->name}
+{set:$seo_data['keywords']=$this->catRow['keywords']}
+{set:$seo_data['description']=$this->catRow['descript']}
+{set:seo::set($seo_data);}
+{set:$breadGuide = goods_class::catRecursion($this->catId)}
+
+<div class="position">
+	<span>您当前的位置：</span>
+	<a href="{url:}">首页</a>{foreach:items=$breadGuide} » <a href="{url:/site/pro_list/cat/$item[id]}">{$item['name']}</a>{/foreach}
+</div>
+
+<div class="wrapper clearfix container_2">
+
+	<div class="sidebar f_l">
+
+		<!--侧边栏分类-->
+		{set:$catSide = goods_class::catTree($this->catId)}
+		{if:$catSide}
+		<div class="box_2 m_10">
+			<div class="title">{$this->catRow['name']}</div>
+			<div class="content">
+				{foreach:items=$catSide item=$first}
+				<dl class="clearfix">
+					<dt><a href="{url:/site/pro_list/cat/$first[id]}">{$first['name']}</a></dt>
+
+					{query:name=category where=parent_id eq $first[id] order=sort asc item=$second items=$seconds}
+					<dd><a href="{url:/site/pro_list/cat/$second[id]}">{$second['name']}</a></dd>
+					{/query}
+				</dl>
+				{/foreach}
+			</div>
+		</div>
+		{/if}
+		<!--侧边栏分类-->
+
+		<!--销售排行-->
+	  	{query:name = category_extend as ca
+	  		join  = left join goods as go on ca.goods_id eq go.id left join order_goods as ord on ord.goods_id eq go.id
+	  		where = ca.category_id in ($this->childId) and go.is_del eq 0 and ord.goods_nums > 0
+	  		fields= go.id,go.name,go.img,go.sell_price,SUM(ord.goods_nums) as sum
+	  		order = sum desc
+	  		group = ord.goods_id
+	  		limit = 10
+	  		items = $sellList /}
+	  	{if:$sellList}
+		<div class="box m_10">
+			<div class="title">销售排行榜</div>
+			<div class="content">
+				<ul class="ranklist" id='ranklist'>
+					{foreach:items = $sellList}
+				  	<li>
+				  		<span>{echo:intval($key+1)}</span>
+				  		<a href="{url:/site/products/id/$item[id]}"><img src="{webroot:}{echo:Thumb::get($item['img'],60,60)}" width="60" height="60" alt="{$item['name']}" /></a>
+				  		<a title="{$item['name']}" class="p_name" href="{url:/site/products/id/$item[id]}">{$item['name']}</a><b>￥{$item['sell_price']}</b>
+				  	</li>
+				  	{/foreach}
+				</ul>
+			</div>
+		</div>
+		{/if}
+		<!--销售排行-->
+
+	</div>
+
+	<div class="main f_r">
+		<!--推荐商品-->
+	  	{query:name=category_extend as ca
+	  		join  = left join goods as go on ca.goods_id eq go.id left join commend_goods as co on co.goods_id eq go.id
+	  		where = ca.category_id in ($this->childId) and co.commend_id eq 4 and go.is_del eq 0
+	  		items = $pro_list
+	  		limit = 6
+	  		order = go.sort asc,go.id desc
+	  		fields= DISTINCT go.img,go.sell_price,go.name,go.id,go.market_price,go.description /}
+
+	  	{if:$pro_list}
+		<div class="brown_box m_10 clearfix">
+			<p class="caption"><span>推荐</span></p>
+
+			<ul class="prolist">
+				{foreach:items=$pro_list}
+				<li>
+					<a class="pic" href="{url:/site/products/id/$item[id]}"><img src="{webroot:}{echo:Thumb::get($item['img'],85,85)}" alt="{$item['name']}" height="85px" width="85px"></a>
+					<p class="pro_title"><a class="blue" href="{url:/site/products/id/$item[id]}">{$item['name']}</a><span class="gray">{$item['description']}</span></p>
+					<p><b>￥{$item['sell_price']}</b> <s>￥{$item['market_price']}</s></p>
+				</li>
+				{/foreach}
+			</ul>
+		</div>
+		{/if}
+		<!--推荐商品-->
+
+		<div class="box m_10">
+			<div class="title">{$this->catRow['name']}</div>
+			<div class="cont">
+
+				<!--品牌展示-->
+				{query:name= category_extend as ca
+					join   = left join goods as go on ca.goods_id eq go.id left join brand as b on b.id eq go.brand_id
+					where  = ca.category_id in ( $this->childId ) and go.is_del eq 0 and go.brand_id neq 0
+					fields = DISTINCT b.id,b.name
+					limit  = 10
+					items  = $brandList /}
+				{if:$brandList}
+				<dl class="sorting">
+					<dt>品牌：</dt>
+					<dd id='brand_dd'>
+						<a class="nolimit current" href="{echo:search_goods::searchUrl('brand','')}">不限</a>
+						{foreach:items = $brandList}
+						<a href="{echo:search_goods::searchUrl('brand',$item['id'])}" id='brand_{$item['id']}'>{$item['name']}</a>
+						{/foreach}
+					</dd>
+				</dl>
+				{/if}
+				<!--品牌展示-->
+
+				<!--商品属性-->
+				{query:name=category as ca join=left join attribute as attr on ca.model_id eq attr.model_id
+					where = ca.id eq $this->catId and attr.search eq 1
+					fields= distinct attr.name,attr.name as name,attr.id ,attr.value as value
+				}
+				<dl class="sorting">
+					<dt>{$item['name']}：</dt>
+					<dd id='attr_dd_{$item['id']}'>
+						<a class="nolimit current" href="{echo:search_goods::searchUrl('attr['.$item["id"].']','')}">不限</a>
+						{set:$attrVal = explode(',',$item['value']);}
+						{foreach:items=$attrVal item=$attr}
+						<a href="{echo:search_goods::searchUrl('attr['.$item["id"].']',$attr)}" id="attr_{$item['id']}_{echo:urlencode($attr)}">{$attr}</a>
+						{/foreach}
+					</dd>
+				</dl>
+				{/query}
+				<!--商品属性-->
+
+				<!--商品规格-->
+				{if:$this->spec}
+				{foreach:items = $this->spec}
+				<dl class="sorting">
+					<dt>{$item['name']}：</dt>
+					<dd id='spec_dd_{$item['id']}'>
+						<a class="nolimit current" href="{echo:search_goods::searchUrl('spec['.$item["id"].']','')}">不限</a>
+						{if:$item['type'] == 1}
+						{foreach:items=JSON::decode($item['value']) item = $spec}
+						<a href="{echo:search_goods::searchUrl('spec['.$item["id"].']',$spec)}" id='spec_{$item['id']}_{echo:urlencode($spec)}'>{$spec}</a>
+						{/foreach}
+
+						{else:}
+
+						{foreach:items=JSON::decode($item['value']) item = $spec}
+						<a href="{echo:search_goods::searchUrl('spec['.$item["id"].']',$spec)}" id='spec_{$item['id']}_{echo:urlencode($spec)}'><img src='{webroot:$spec}' style='width:20px;height:20px' /></a>
+						{/foreach}
+						{/if}
+					</dd>
+
+				</dl>
+				{/foreach}
+				{/if}
+				<!--商品规格-->
+
+				<!--商品价格-->
+				<dl class="sorting">
+					<dt>价格：</dt>
+					<dd id='price_dd'>
+						<p class="f_r"><input type="text" class="mini" name="min_price" value="{echo:IFilter::act(IReq::get('min_price'),'url')}" onchange="checkPrice(this);"> 至 <input type="text" class="mini" name="max_price" onchange="checkPrice(this);" value="{echo:IFilter::act(IReq::get('max_price'),'url')}"> 元
+						<label class="btn_gray_s"><input type="button" onclick="priceLink();" value="确定"></label></p>
+						<a class="nolimit current" href="{echo:search_goods::searchUrl(array('min_price','max_price'),'')}">不限</a>
+						{set:$goodsPrice = goods_class::getGoodsPrice($this->childId)}
+						{foreach:items=$goodsPrice}
+						{set:$priceZone = explode('-',$item)}
+						<a href="{echo:search_goods::searchUrl(array('min_price','max_price'),array($priceZone[0],$priceZone[1]))}" id="{$priceZone[0]}-{$priceZone[1]}">{$item}</a>
+						{/foreach}
+					</dd>
+				</dl>
+				<!--商品价格-->
+			</div>
+		</div>
+
+		<!--商品列表展示-->
+		<div class="display_title">
+			<span class="l"></span>
+			<span class="r"></span>
+			<span class="f_l">排序：</span>
+			<ul>
+				{foreach:items=search_goods::getOrderType()}
+				{set:$next = search_goods::getOrderValue($key)}
+				<li class="{echo:search_goods::isOrderCurrent($key) ? 'current':''}">
+					<span class="l"></span><span class="r"></span>
+					<a href="{echo:search_goods::searchUrl('order',$next)}">{$item}<span class="{echo:search_goods::isOrderDesc() ? 'desc':''}">&nbsp;</span></a>
+				</li>
+				{/foreach}
+			</ul>
+			<span class="f_l">显示方式：</span>
+			<a class="show_b" href="{echo:search_goods::searchUrl('show_type','win')}" title='橱窗展示' alt='橱窗展示'><span class='{echo:search_goods::getListShow(IReq::get('show_type')) == 'win' ? 'current':''}'></span></a>
+			<a class="show_s" href="{echo:search_goods::searchUrl('show_type','list')}" title='列表展示' alt='列表展示'><span class='{echo:search_goods::getListShow(IReq::get('show_type')) == 'list' ? 'current':''}'></span></a>
+		</div>
+
+		{set:$goodsObj = search_goods::find(array('category_extend' => $this->childId));$resultData = $goodsObj->find()}
+		{if:$resultData}
+		{set:$listSize = search_goods::getListSize(IFilter::act(IReq::get('show_type')))}
+		<ul class="display_list clearfix m_10">
+			{foreach:items=$resultData}
+			<li class="clearfix {echo:search_goods::getListShow(IFilter::act(IReq::get('show_type')))}">
+				<div class="pic">
+					<a title="{$item['name']}" href="{url:/site/products/id/$item[id]}"><img src="{webroot:}{echo:Thumb::get($item['img'],$listSize['width'],$listSize['height'])}" width="{$listSize['width']}" height="{$listSize['height']}" alt="{$item['name']}" title="{$item['name']}" /></a>
+				</div>
+				<h3 class="title"><a title="{$item['name']}" class="p_name" href="{url:/site/products/id/$item[id]}">{$item['name']}</a><span>总销量：{$item['sale']}<a class="blue" href="{url:/site/comments_list/id/$item[id]}">( {$item['comments']}人评论 )</a></span><span class='grade'><i style='width:{echo:Common::gradeWidth($item['grade'],$item['comments'])}px'></i></span></h3>
+				<div class="handle">
+					<label class="btn_gray_m"><img src="{skin:images/front/ucenter/shopping.gif}" width="15" height="15" /><input type="button" value="加入购物车" onclick="joinCart_list({$item['id']});"></label>
+					<label class="btn_gray_m"><img src="{skin:images/front/ucenter/favorites.gif}" width="15" height="14" /><input type="button" value="收藏" onclick="favorite_add_ajax('{url:/simple/favorite_add}','{$item['id']}',this);"></label>
+					<div class="msgbox" style="width:350px;display:none">
+						<div class="msg_t"><a class="close f_r" onclick="$(this).parents('.msgbox').hide();">关闭</a>请选择规格</div>
+						<div class="msg_c" id='product_box_{$item['id']}'></div>
+					</div>
+				</div>
+				<div class="price">￥{$item['sell_price']}<s>￥{$item['market_price']}</s></div>
+			</li>
+			{/foreach}
+		</ul>
+		{$goodsObj->getPageBar()}
+
+		{else:}
+		<p class="display_list mt_10" style='margin-top:50px;margin-bottom:50px'>
+			<strong class="gray f14">对不起，没有找到相关商品</strong>
+		</p>
+		{/if}
+		<!--商品列表展示-->
+
+	</div>
+</div>
+
+<script type='text/javascript'>
+//价格跳转
+function priceLink()
+{
+	var minVal = $('[name="min_price"]').val();
+	var maxVal = $('[name="max_price"]').val();
+	if(isNaN(minVal) || isNaN(maxVal))
+	{
+		alert('价格填写不正确');
+		return '';
+	}
+	var urlVal = "{echo:IFilter::act(preg_replace('|&min_price=\w*&max_price=\w*|','',search_goods::searchUrl(array('min_price','max_price'),'')),'text')}";
+	window.location.href=urlVal+'&min_price='+minVal+'&max_price='+maxVal;
+}
+
+//价格检查
+function checkPrice(obj)
+{
+	if(isNaN(obj.value))
+	{
+		obj.value = '';
+	}
+}
+
+//筛选条件按钮高亮
+$(document).ready(function(){
+	{set:
+		$attr_spec = Array('attr','spec');
+		$brand = IFilter::act(IReq::get('brand'),'int');
+	}
+
+	{if:!empty($brand)}
+	$('#brand_dd>a').removeClass('current');
+	$('#brand_{$brand}').addClass('current');
+	{/if}
+
+	{foreach:items = $attr_spec}
+	{set:$tempArray = IFilter::act(IReq::get($item),'url')}
+	{if:!empty($tempArray)}
+		{set:$json = JSON::encode(array_map('urlencode',$tempArray))}
+		var attrArray = {$json};
+		for(val in attrArray)
+		{
+			if(attrArray[val])
+			{
+				$('#{$item}_dd_'+val+'>a').removeClass('current');
+				document.getElementById('{$item}_'+val+'_'+attrArray[val]).className = 'current';
+			}
+		}
+	{/if}
+	{/foreach}
+
+	{if:IReq::get('min_price') != ''}
+	$('#price_dd>a').removeClass('current');
+	$('#{echo:IReq::get('min_price')}-{echo:IReq::get('max_price')}').addClass('current');
+	{/if}
+});
+</script>

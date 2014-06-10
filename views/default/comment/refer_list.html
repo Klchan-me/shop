@@ -1,0 +1,74 @@
+{js:my97date}
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>咨询管理</span><span>></span><span>咨询信息列表</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="selectAll('check[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel({form:'refer_list',msg:'确定要删除选中的记录吗？'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+
+	<form name="filter_form" method="get" action="{url:/}">
+		<input type='hidden' name='controller' value='comment' />
+		<input type='hidden' name='action' value='refer_list' />
+		<div class="searchbar">
+			咨询人：<input class="small" type="text" name="username" value="{$username}" />
+			咨询商品：<input class="small" type="text" name="goodsname" value="{$goodsname}" />
+			开始时间：<input class="small" type="text" name="beginTime" onfocus="WdatePicker()" value="{$beginTime}" />
+			截止时间：<input class="small" type="text" name="endTime" onfocus="WdatePicker()" value="{$endTime}" />
+			<button class="btn" type="submit"><span class="sel">筛 选</span></button>
+		</div>
+	</form>
+
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col width="100px" />
+			<col width="130px" />
+			<col width="130px" />
+			<col width="130px" />
+			<col width="110px" />
+			<thead>
+				<tr role="head">
+					<th class="t_c">选择</th>
+					<th>咨询商品</th>
+					<th>咨询人</th>
+					<th>咨询时间</th>
+					<th>最后回复人</th>
+					<th>回复时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<form action="{url:/comment/refer_del}" method="post" name="refer_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+	<div class="content">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col width="100px" />
+			<col width="130px" />
+			<col width="130px" />
+			<col width="130px" />
+			<col width="110px" />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=refer as r join=left join goods as goods on r.goods_id eq goods.id left join user as u on r.user_id eq u.id left join order as o on o.id eq r.order_id left join admin as admin on r.admin_id eq admin.id fields=r.*,u.username,goods.name as goods_name,goods.id as goods_id,admin.admin_name page=$page where=$where order=r.id desc}
+				<tr>
+					<td class="t_c"><input name="check[]" type="checkbox" value="{$item['id']}" /></td>
+					<td><a title="{$item['goods_name']}" href="{url:/site/products/id/$item[goods_id]}" target='_blank'>{$item['goods_name']}</a></td>
+					<td>{if:isset($item['username'])}{$item['username']}{else:}非会员{/if}</td>
+					<td><a href="javascript:void(0)">{echo:date("Y-m-d H:i",strtotime($item['time']))}</a></td>
+					<td><a href="javascript:void(0)">{$item['admin_name']}</a></td>
+					<td><a href="javascript:void(0)">{$item['reply_time']}</a></td>
+					<td><a href="{url:/comment/refer_edit/rid/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a>
+						<a href="javascript:void(0)" onclick="delModel({link:'{url:/comment/refer_del/check/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</div>
+	{$query->getPageBar()}
+</form>

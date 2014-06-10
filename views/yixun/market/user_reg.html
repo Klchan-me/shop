@@ -1,0 +1,31 @@
+<script type='text/javascript' src='{theme:javascript/event.js}' charset="UTF-8"></script>
+<div class="headbar">
+	<div class="position"><span>营销</span><span>></span><span>销售统计</span><span>></span><span>注册用户统计</span></div>
+	<form action='{url:/market/user_reg}' method='post'>
+	<div class="operating">
+		<div class="search f_l">
+			{js:my97date}
+			从 <input type="text" name='start' class="Wdate" id="date_start" pattern='date' alt='' onFocus="WdatePicker()" onblur="FireEvent(this,'onchange')" />到 <input type="text" name='end' pattern='date' class="Wdate" id="date_end" onFocus="WdatePicker()" onblur="FireEvent(this,'onchange')" />
+			<button class="btn"><span>查 询</span></button>
+		</div>
+	</div>
+    </form>
+</div>
+<div>
+<div class="content_box">
+	<h3>用户注册统计：</h3>
+	<div class='cont'>
+	<ul>
+	<li>用户注册统计，可以帮助更好的了解你的shop用户的注册情况，为你下一步的营销计划做出更好的判定！</li>
+	</ul>
+	</div>
+</div>
+<div class='content_box'><div id="myChart"></div></div>
+{if:$this->numbers!==null}
+{set:$fc=new FlashChart(IUrl::creatUrl("").'plugins/chart/',"100%",320);$info=array("title"=>'用户注册统计','numbers'=>$this->numbers,'dates'=>$this->dates,'steps'=>$this->steps,'max'=>$this->max);$fc->setChart("plugins/chart/templatechart/user-add.txt",$info);}
+{else:}
+<script type='text/javascript'>
+$('#myChart').css('color','red').text('没有你要查询的数据!');
+</script>
+{/if}
+</div>

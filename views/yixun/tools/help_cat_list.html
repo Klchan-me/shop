@@ -1,0 +1,62 @@
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>帮助管理</span><span>></span><span>分类列表</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="event_link('{url:/tools/help_cat_edit}');"><button class="operating_btn" type="button"><span class="addition">添加分类</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="450px" />
+			<col width="150px" />
+			<col width="150px" />
+			<col />
+			<thead>
+				<tr>
+					<th>分类名称</th>
+					<th>页面底部显示</th>
+					<th>帮助页左侧显示</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<table class="list_table">
+		<col width="450px" />
+		<col width="150px" />
+		<col width="150px" />
+		<col />
+		<tbody>
+			{set:$checked=array(0=>"",1=>" checked='checked' ");}
+			{query:name=help_category order=sort ASC,id DESC}
+			<tr id="{$item['id']}">
+				<td><img name="switch" class="operator" src="{skin:images/admin/close.gif}" alt="关闭" />{$item['name']}</td>
+				<td><input type="checkbox" value="foot" onclick="cat_position({$item['id']},this);" {echo:$checked[$item['position_foot']] } /></td>
+				<td><input type="checkbox" value="left" onclick="cat_position({$item['id']},this);" {echo:$checked[$item['position_left']] } /></td>
+				<td>
+					<a href='{url:/tools/help_cat_edit/id/$item[id]}'><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" title="编辑" /></a>
+					<a href='javascript:void(0)' onclick="cat_del({$item['id']});return false;"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+				</td>
+			</tr>
+			{/query}
+		</tbody>
+	</table>
+</div>
+<script language="javascript">
+function cat_del(id)
+{
+	var data={'id':id}
+	$.get("{url:/tools/help_cat_del/}",data,function(c){if(c!='success'){alert(c)}else{location.reload();};});
+}
+
+function cat_position(id,thiz)
+{
+	var flag;
+	if(thiz.checked)
+		flag=1;
+	else
+		flag=0;
+	var data={'value':flag,'position':thiz.value,'id':id};
+	$.get("{url:/tools/help_cat_position/}",data,function(c){alert(c);});
+}
+</script>

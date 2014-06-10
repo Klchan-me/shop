@@ -1,0 +1,109 @@
+{set:$backupObj = new DBBackup;$resList = $backupObj->getList();}
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>数据库管理</span><span>></span><span>恢复数据库</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="selectAll('name[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel()"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick="confirm('确定要还原么？','res_act()')"><button class="operating_btn" type="button"><span class="import">还原</span></button></a>
+		<a href="javascript:void(0)" onclick="confirm('确定要打包下载么？','res_pack()')"><button class="operating_btn" type="button"><span class="download">打包下载</span></button></a>
+		<a href="javascript:void(0)" onclick="localUpload();"><button class="operating_btn" type="button"><span class="import">本地导入</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="300px" />
+			<col width="120px" />
+			<col width="150px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>文件名</th>
+					<th>使用空间</th>
+					<th>备份时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form action='{url:/tools/backup_del}' method='post' name='resForm'>
+		<table class="list_table">
+			<col width="40px" />
+			<col width="300px" />
+			<col width="120px" />
+			<col width="150px" />
+			<col />
+			<tbody>
+				{foreach:items = $resList['system']}
+				<tr>
+					<td class="t_c"><input type="checkbox" name="name[]" value="{$item['name']}" /></td>
+					<td>{$item['name']}</td>
+					<td>{$item['size']}KB</td>
+					<td>{$item['time']}</td>
+					<td>
+						<a href="{url:/tools/download/file/$item[name]}"><img class="operator" src="{skin:images/admin/icon_down.gif}" alt="下载" title="下载" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/tools/backup_del/name/$item[name]}'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+					</td>
+				</tr>
+				{/foreach}
+			</tbody>
+		</table>
+	</form>
+</div>
+<script type='text/javascript'>
+//还原操作
+function res_act()
+{
+	loadding('正在还原请稍候......');
+	var dataJson = getArray('name[]','checkbox');
+	$.post('{url:/tools/res_act}',{name:dataJson},function(c)
+	{
+		if(c.isError == true)
+			alert(c.message);
+		else
+			window.location.href=c.redirect;
+
+		unloadding();
+	}
+	,'json');
+}
+
+//打包下载操作
+function res_pack()
+{
+	document.forms[0].action = '{url:/tools/download_pack}';
+	document.forms[0].submit();
+}
+
+//本地上传附件
+function localUpload()
+{
+	art.dialog.open('{url:/tools/upload_sql}',{
+		id:'uploadSql',
+		title:'上传SQL文件',
+		ok:function(iframeWin, topWin){
+	    	var formObject = iframeWin.document.forms[0];
+	    	formObject.submit();
+	    	loadding();
+	    	return false;
+		},
+		okVal:'上传'
+	});
+}
+
+//上传成功
+function uploadSuccess()
+{
+	window.location.href='{url:/tools/db_bak}';
+}
+
+//上传失败
+function uploadFail()
+{
+	unloadding();
+	alert('请上传正确的SQL文件');
+	art.dialog({id:'uploadSql'}).close();
+}
+</script>

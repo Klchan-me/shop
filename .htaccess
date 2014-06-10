@@ -1,0 +1,6 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine on
+	RewriteCond %{REQUEST_FILENAME} !-f
+	RewriteCond $1 !^(index\.php|robots\.txt|views|plugins|backup|upload|image|runtime|install)
+	RewriteRule ^(.*)$ index.php/$1 [L]
+ </IfModule>

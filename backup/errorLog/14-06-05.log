@@ -1,0 +1,24 @@
+<ERROR_INFO>
+errID:2
+errStr:file_get_contents() [<a href='function.file-get-contents'>function.file-get-contents</a>]: php_network_getaddresses: getaddrinfo failed: 这是在主机名解析时通常出现的暂时错误，它意味着本地服务器没有从权威服务器上收到响应。 
+errFile:E:\open\php\iwebshop\classes\proxy.php
+errLine:23
+errTime:14-06-05 09:14:57
+##鍑洪敊鏃跺彉閲忕殑鍊硷細##
+array (
+  'query' => '_c=system&_a=authorize&host=http://localhost',
+  'url' => 'http://product.aircheng.com/index.php?_c=system&_a=authorize&host=http://localhost',
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:2
+errStr:file_get_contents(http://product.aircheng.com/index.php?_c=system&amp;_a=authorize&amp;host=http://localhost) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: php_network_getaddresses: getaddrinfo failed: 这是在主机名解析时通常出现的暂时错误，它意味着本地服务器没有从权威服务器上收到响应。 
+errFile:E:\open\php\iwebshop\classes\proxy.php
+errLine:23
+errTime:14-06-05 09:14:57
+##鍑洪敊鏃跺彉閲忕殑鍊硷細##
+array (
+  'query' => '_c=system&_a=authorize&host=http://localhost',
+  'url' => 'http://product.aircheng.com/index.php?_c=system&_a=authorize&host=http://localhost',
+)
+<\ERROR_INFO>

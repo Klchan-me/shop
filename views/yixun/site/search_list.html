@@ -1,0 +1,107 @@
+{set:$seo_data=array();$site_config=new Config('site_config');$site_config=$site_config->getInfo();}
+{set:$seo_data['title']="商品搜索_".$site_config['name']}
+{set:seo::set($seo_data);}
+
+<div class="position"> <span>全部结果：</span> <a href="javascript:void(0)">{$this->word}</a> </div>
+<div class="wrapper clearfix container_2">
+<div class="sidebar f_l">
+	<div class="box_2 m_10">
+		<div class="title">分类筛选</div>
+		<div class="content">
+			<dl class="w clearfix">
+				{query:name=goods as go join=left join category_extend as ca on go.id eq ca.goods_id left join category as c on c.id eq ca.category_id
+				where  = go.name like '%$this->word%'
+				fields = c.name,c.id,count(*) as num
+				group  = ca.category_id
+				}
+				{set:$tmpWord=urlencode($this->word);}
+				<dd class='{if:IReq::get('cat') == $item['id']}current{/if}'><a href="{url:/site/search_list/word/$tmpWord/cat/$item[id]}">{$item['name']}({$item['num']})</a></dd>
+				{/query}
+			</dl>
+		</div>
+	</div>
+	<div class="box m_10">
+		<div id="adHere_8"></div>
+		<script language="javascript">
+		(new adLoader()).load(8,'adHere_8');
+		</script>
+	</div>
+	<div class="box m_10">
+		<div class="title">销售排行榜</div>
+		<div class="content">
+			<ul class="ranklist" id='ranklist'>
+				{set:$whereCat = $this->cat_id ? " and ca.category_id in ($this->cat_id)" : ''}
+			  	{query:name=goods as go join=left join category_extend as ca on ca.goods_id eq go.id left join order_goods as ord on ord.goods_id eq go.id
+			  		where = go.name like '%$this->word%' and ord.goods_nums > 0 $whereCat
+			  		fields= go.id,go.name,go.img,go.sell_price,SUM(ord.goods_nums) as sum
+			  		order = sum desc
+			  		group = ord.goods_id
+			  		limit = 10
+			  	}
+			  	<li>
+			  		<span>{echo:intval($key+1)}</span>
+			  		<a href="{url:/site/products/id/$item[id]}"><img src="{webroot:}{echo:Thumb::get($item['img'],60,60)}" width="60" height="60" alt="{$item['name']}" /></a>
+			  		<a title="{$item['name']}" class="p_name" href="{url:/site/products/id/$item[id]}">{$item['name']}</a><b>￥{$item['sell_price']}</b>
+			  	</li>
+			  	{/query}
+			</ul>
+		</div>
+	</div>
+</div>
+<div class="search_list main f_r">
+	<strong class="result">"<span class="red">{$this->word}</span>"搜索结果（{$this->findSum}）</strong>
+	<p class="t_l gray m_10">你是不是想找：
+		{query:name=keyword where=word like '$this->word%' and word neq '$this->word' limit=10}
+		{set:$tmpWord=urlencode($item['word']);}
+		<a href="{url:/site/search_list/word/$tmpWord}" class='orange'>{$item['word']}</a>
+		{/query}
+	</p>
+	<div class="display_title m_10">
+		<span class="l"></span>
+		<span class="r"></span>
+		<span class="f_l">排序：</span>
+		<ul>
+			{foreach:items=search_goods::getOrderType()}
+			{set:$next = search_goods::getOrderValue($key)}
+			<li class="{echo:search_goods::isOrderCurrent($key) ? 'current':''}">
+				<span class="l"></span><span class="r"></span>
+				<a href="{echo:search_goods::searchUrl('order',$next)}">{$item}<span class="{echo:search_goods::isOrderDesc() ? 'desc':''}">&nbsp;</span></a>
+			</li>
+			{/foreach}
+		</ul>
+		<span class="f_l">显示方式：</span>
+		<a class="show_b" href="{echo:search_goods::searchUrl('show_type','win')}" title='橱窗展示' alt='橱窗展示'><span class='{echo:search_goods::getListShow(IReq::get('show_type')) == 'win' ? 'current':''}'></span></a>
+		<a class="show_s" href="{echo:search_goods::searchUrl('show_type','list')}" title='列表展示' alt='列表展示'><span class='{echo:search_goods::getListShow(IReq::get('show_type')) == 'list' ? 'current':''}'></span></a>
+	</div>
+
+	{set:$defaultWhere = array('goods' => ' go.name like "%'.$this->word.'%"' , 'category_extend' => $this->cat_id)}
+	{set:$goodsObj = search_goods::find($defaultWhere);$resultData = $goodsObj->find();}
+	{if:$resultData}
+	{set:$listSize = search_goods::getListSize(IFilter::act(IReq::get('show_type')))}
+	<ul class="display_list clearfix m_10">
+		{foreach:items=$resultData}
+		<li class="clearfix {echo:search_goods::getListShow(IFilter::act(IReq::get('show_type')))}">
+			<div class="pic">
+				<a title="{$item['name']}" href="{url:/site/products/id/$item[id]}"><img src="{webroot:}{echo:Thumb::get($item['img'],$listSize['width'],$listSize['height'])}" width="{$listSize['width']}" height="{$listSize['height']}" alt="{$item['name']}" title="{$item['name']}" /></a>
+			</div>
+			<h3 class="title"><a title="{$item['name']}" class="p_name" href="{url:/site/products/id/$item[id]}">{echo:str_replace($this->word,'<b class="red">'.$this->word.'</b>',$item['name'])}</a><span>总销量：{$item['sale']}<a class="blue" href="{url:/site/comments_list/id/$item[id]}">( {$item['comments']}人评论 )</a></span><span class='grade'><i style='width:{echo:Common::gradeWidth($item['grade'],$item['comments'])}px'></i></span></h3>
+			<div class="handle">
+				<label class="btn_gray_m"><img src="{skin:images/front/ucenter/shopping.gif}" width="15" height="15" /><input type="button" value="加入购物车" onclick="joinCart_list({$item['id']});"></label>
+				<label class="btn_gray_m"><img src="{skin:images/front/ucenter/favorites.gif}" width="15" height="14" /><input type="button" value="收藏" onclick="favorite_add_ajax('{url:/simple/favorite_add}','{$item['id']}',this);"></label>
+				<div class="msgbox" style="width:350px;display:none">
+					<div class="msg_t"><a class="close f_r" onclick="$(this).parents('.msgbox').hide();">关闭</a>请选择规格</div>
+					<div class="msg_c" id='product_box_{$item['id']}'></div>
+				</div>
+			</div>
+			<div class="price">￥{$item['sell_price']}<s>￥{$item['market_price']}</s></div>
+		</li>
+		{/foreach}
+	</ul>
+	{$goodsObj->getPageBar()}
+	{else:}
+	<p class="display_list mt_10" style='margin-top:50px;margin-bottom:50px'>
+		<strong class="gray f14">对不起，没有找到相关商品</strong>
+	</p>
+	{/if}
+</div>
+</div>

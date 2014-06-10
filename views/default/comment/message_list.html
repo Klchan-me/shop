@@ -1,0 +1,101 @@
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>信息处理</span><span>></span><span>站内消息</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="selectAll('check[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel({form:'message_list',msg:'确定要删除选中的记录吗？'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick="sendMessage();"><button class="operating_btn" type="button"><span class="send">发信</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="250px" />
+			<col />
+			<col width="150px" />
+			<col width="50px" />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>标题</th>
+					<th>内容</th>
+					<th>时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<form action="{url:/comment/message_del}" method="post" name="message_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+<div class="content">
+	<table id="list_table" class="list_table">
+		<col width="40px" />
+		<col width="250px" />
+		<col />
+		<col width="150px" />
+		<col width="50px" />
+		<tbody>
+			{set:$page=(isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+			{query: name=message page=$page}
+			<tr>
+				<td><input name="check[]" type="checkbox" value="{$item['id']}" /></td>
+				<td>{$item['title']}</td>
+				<td>{$item['content']}</td>
+				<td>{$item['time']}</td>
+				<td>
+					<a href="javascript:void(0)" onclick="delModel({link:'{url:/comment/message_del/check/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+				</td>
+			</tr>
+			{/query}
+		</tbody>
+	</table>
+</div>
+{$query->getPageBar()}
+</form>
+
+<script language="javascript">
+//发送短消息
+function sendMessage()
+{
+	art.dialog.open('{url:/comment/message_send}',{
+		'id':'sendWindow',
+		'title':'站内消息',
+		'width':'790px',
+		'ok':function(iframeWin, topWin)
+		{
+			var iframeObj = $(iframeWin.document);
+			var toUser    = art.dialog.data('toUser');
+			if(toUser)
+			{
+				iframeObj.find('[name="toUser"]').val(toUser);
+			}
+			iframeWin.kindEditorObj.sync();
+			iframeObj.find('form').submit();
+	    	return false;
+		}
+	});
+}
+
+//发送短消息后回调
+function startMessageCallback(isSuccess)
+{
+	if(isSuccess == 1)
+	{
+		tips('发送短信成功');
+		setTimeout(function(){
+			window.location.reload();
+		},1200);
+	}
+	else
+	{
+		alert('请填写标题和内容');
+	}
+	art.dialog({'id':'sendWindow'}).close();
+}
+
+//筛选用户回调函数
+function searchUserCallback(userIds)
+{
+	art.dialog.data('toUser',userIds);
+	art.dialog({'id':'userCondition'}).close();
+}
+</script>

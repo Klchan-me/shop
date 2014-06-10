@@ -1,0 +1,92 @@
+<div class="main f_r">
+    <div class='tabs'>
+        <div class="uc_title m_10 tabs_menu">
+            <label class="current node"><span>我的退款</span></label>
+            <label class="node" onclick="form_add()"><span>申请退款</span></label>
+        </div>
+        <div class="tabs_content">
+        	<!--退款申请列表 开始-->
+            <div class='node' id="refunds_list" >
+                <table class="list_table m_10" width="100%" cellpadding="0" cellspacing="0">
+                    <col width="200px" />
+                    <col width="200px" />
+                    <col width="200px" />
+                    <col />
+                    <thead>
+                    	<tr><th>退款订单</th><th>申请时间</th><th>处理状态</th><th>操作</th></tr>
+                    </thead>
+					<tbody>
+					{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+					{set:$user_id = $this->user['user_id']}
+                    {query:name=refundment_doc where=user_id eq $user_id order=id desc page=$page}
+                        <tr>
+                        	<td>{$item['order_no']}</td>
+                        	<td>{$item['time']}</td>
+                        	<td>{if:$item['pay_status']==0}<span class="orange bold">等待处理</span>{elseif:$item['pay_status']==1}<span class="gray bold">退款失败</span>{elseif:$item['pay_status']==2}<span class="green bold">退款成功</span>{/if}</td>
+                        	<td>{if:$item['pay_status']==0}<a class="blue" href="javascript:void(0)" onclick='delModel({link:"{url:/ucenter/refunds_del/id/$item[id]}"})'>取消</a>|<a class="blue" href="javascript:void(0)" onclick='form_back({echo:JSON::encode($item)})'>修改</a>|{/if}<a class="blue" href="{url:/ucenter/refund_detail/id/$item[id]}">查看</a></td>
+                        </tr>
+                    {/query}
+                    </tbody>
+					<tfoot><tr><td colspan="4" class="t_l">{$query->getPageBar()}</td></tr></tfoot>
+                </table>
+            </div>
+            <!--退款申请列表 结束-->
+
+			<!--退款申请表单 开始-->
+		    <div id="refunds_form" class="orange_box node" style='display:none'>
+			    <form action="{url:/ucenter/refunds_edit}" method='post' name='refunds'>
+				    <input type="hidden" name="id" value="" />
+				    <table class="form_table" width="100%" cellpadding="0" cellspacing="0">
+				        <col width="120px" />
+				        <col />
+				        <caption>退款信息：</caption>
+				        <tr>
+				            <th>涉及订单号：</th><td><input type="text" name="order_no" pattern='required' alt='订单号不能为空' class="normal" value="{echo:IReq::get('order_no')}" /><label>请填写上你购买的订单账号</label></td>
+				        </tr>
+				        <tr>
+				            <th>申请原因：</th><td><textarea name="content" pattern="required"></textarea></td>
+				        </tr>
+				        <tr>
+				        	<th>退款说明：</th><td><label>* 退款成功后金额直接转入到您的账户余额中</label></td>
+				        </tr>
+				        <tr>
+				            <th></th><td><label class="btn"><input type="submit" value="提交退款申请" /></label><label class="btn"><input type="reset" value="取消" onclick="event_link('{url:/ucenter/refunds}');" /></label></td>
+				        </tr>
+				    </table>
+			    </form>
+		    </div>
+		    <!--退款申请表单 结束-->
+        </div>
+    </div>
+</div>
+<script type='text/javascript'>
+	//DOM加载完毕
+	$(function()
+	{
+		{if:IReq::get('order_no')}
+	    $('#refunds_list').toggle();
+	    $('#refunds_form').toggle();
+		{/if}
+	})
+
+	function form_back(obj)
+	{
+	    var form = new Form('refunds');
+	    form.init(obj);
+	    $('#refunds_list').hide();
+	    $('#refunds_form').show();
+	}
+
+	function form_add()
+	{
+	    var form = new Form('refunds');
+	    form.init({"order_no":"","amount":"","content":""});
+	}
+
+	{if:isset($this->msg) && $this->msg!=''}
+	alert('{$this->msg}');
+	var form = new Form('refunds');
+	var obj = {$this->info};
+	form.init(obj);
+	{/if}
+</script>

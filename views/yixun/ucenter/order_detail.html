@@ -1,0 +1,334 @@
+{set:$item = $this->order_info;}
+{set:$orderStatus = Order_Class::getOrderStatus($item)}
+
+{js:artTemplate}
+<script type='text/javascript' src='{theme:javascript/artTemplate/area_select.js}'></script>
+
+<div class="main f_r">
+	<div class="uc_title m_10">
+		<label class="current"><span>订单详情</span></label>
+	</div>
+	<div class="prompt_2 m_10">
+		<div class="t_part">
+			{set:$orderStep = Order_Class::orderStep($item)}
+			{foreach:items=$orderStep item=$stepData key=$eventTime}
+			<p>{$eventTime}&nbsp;&nbsp;<span class="black">{$stepData}</span></p>
+			{/foreach}
+		</div>
+		<p>
+			<b>订单号：</b>{$item['order_no']}
+			<b>下单日期：</b>{$item['create_time']}
+			<b>状态：</b>
+			<span class="red2">
+				<b class="{if:$orderStatus >= 6}green{else:}orange{/if}">{echo:Order_Class::orderStatusText($orderStatus)}</b>
+	        </span>
+        </p>
+
+        <form action='{url:/ucenter/order_status}' method='post'>
+        <p>
+	        <input type="hidden" name="order_id" value="{$item['id']}" />
+	    	{if:$orderStatus == 2}
+	        <label class="btn_orange">
+	        	<input type="hidden" name='op' value='cancel' />
+	        	<input type="submit" value="取消订单" />
+	        </label>
+
+			<label class="btn_green">
+				<input type="button" value="立即付款" onclick="window.location.href='{url:/block/doPay/order_id/$item[id]}'" />
+			</label>
+			{elseif:$orderStatus == 3}
+	        <label class="btn_green">
+	        	<input type="hidden" name='op' value='confirm' />
+	        	<input type="submit" value="确认收货" />
+	        </label>
+
+			<label class="btn_orange">
+				<input type="button" value="快递跟踪" onclick="exdelievey()" />
+			</label>
+	        {elseif:$orderStatus == 6}
+	        <label class="btn_orange">
+	        	<input type="button" value="申请退款" onclick='javascript:window.location.href="{url:/ucenter/refunds/order_no/$item[order_no]}"' />
+	        </label>
+	    	{/if}
+	    </p>
+        </form>
+
+	</div>
+	<div class="box m_10">
+		<div class="title">
+			<h2><span class="orange">收件人信息</span></h2>
+			{if:$item['pay_status'] == 0 && $item['status'] == 1}
+			<span style="float:right;margin-right:10px">
+				<a href="javascript:void(0);" onclick="editForm();">修改</a>
+			</span>
+			{/if}
+		</div>
+
+		<!--收获信息展示-->
+		<div class="cont clearfix" id="acceptShow">
+			<table class="dotted_table f_l" width="100%" cellpadding="0" cellspacing="0">
+				<col width="130px" />
+				<col />
+				<tr>
+					<th>收货人：</th>
+					<td>{$item['accept_name']}</td>
+				</tr>
+				<tr>
+					<th>地址：</th>
+					<td>{$this->area[$item['province']]} {$this->area[$item['city']]} {$this->area[$item['area']]} {$item['address']}</td>
+				</tr>
+				<tr>
+					<th>邮编：</th>
+					<td>{$item['postcode']}</td>
+				</tr>
+				<tr>
+					<th>固定电话：</th>
+					<td>{$item['telphone']}</td>
+				</tr>
+				<tr>
+					<th>手机号码：</th>
+					<td>{$item['mobile']}</td>
+				</tr>
+			</table>
+		</div>
+
+		<!--收获信息修改表单-->
+		<div class="cont clearfix" id="acceptForm" style="display:none;">
+			<form method="post" action="{url:/ucenter/order_accept}" name="modelForm">
+				<input type="hidden" name="order_id" value="{$item['id']}"/>
+				<input type="hidden" name="goods_weight" value=""/>
+
+				<table class="dotted_table f_l" width="100%" cellpadding="0" cellspacing="0">
+					<col width="130px" />
+					<col />
+					<tr>
+						<th>收货人：</th>
+						<td><input class="normal" type="text" name="accept_name" pattern="required" value="{$item['accept_name']}" alt="收货人姓名错误"/><label>收货人姓名</label></td>
+					</tr>
+					<tr>
+						<th>地址地区：</th>
+						<td>
+							<select name="province" child="city,area" onchange="areaChangeCallback(this);countDelievey();"></select>
+							<select name="city" child="area" parent="province" onchange="areaChangeCallback(this);"></select>
+							<select name="area" parent="city" pattern="required"></select>
+						</td>
+					</tr>
+					<tr>
+						<th>邮编：</th>
+						<td><input class="normal" type="text" name="postcode" pattern="zip" value="{$item['postcode']}" alt="填写正确的邮编"/><label>收货人邮编</label></td>
+					</tr>
+					<tr>
+						<th>地址：</th>
+						<td><input class="normal" type="text" name="address" pattern="required" value="{$item['address']}" alt="收货地址错误"/><label>收货地址</label></td>
+					</tr>
+					<tr>
+						<th>固定电话：</th>
+						<td><input class="normal" type="text" name="telphone" empty pattern="phone" value="{$item['telphone']}" alt="请输入正确的联系电话"/><label>联系电话</label></td>
+					</tr>
+					<tr>
+						<th>手机号码：</th>
+						<td><input class="normal" type="text" name="mobile" empty pattern="mobi" maxlength="11" value="{$item['mobile']}" alt="手机号码错误"/><lable>手机号码</lable></td>
+					</tr>
+					<tr>
+						<th></th><td colspan="2"><label class="btn"><input type="submit" value="保存" /></label></td>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+
+	<!--支付和配送-->
+	<div class="box m_10">
+		<div class="title"><h2><span class="orange">支付及配送方式</span></h2></div>
+		<div class="cont clearfix">
+			<table class="dotted_table f_l" width="100%" cellpadding="0" cellspacing="0">
+				<col width="130px" />
+				<col />
+				<tr>
+					<th>支付方式：</th>
+					<td>{$this->pay_name}</td>
+				</tr>
+
+				{if:isset($this->pay_note)}
+				<tr>
+					<th>支付说明：</th>
+					<td>{$this->pay_note}</td>
+				</tr>
+				{/if}
+
+				<tr>
+					<th>运费：</th>
+					<td>{$item['real_freight']}</td>
+				</tr>
+				<tr>
+					<th>物流公司：</th>
+					<td>{$this->deliveryRow['freight_name']}</td>
+				</tr>
+				<tr>
+					<th>快递单号：</th>
+					<td>{$this->deliveryRow['delivery_code']}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+
+    <!--发票信息-->
+    {if:$item['invoice']==1}
+	<div class="box m_10">
+		<div class="title"><h2><span class="orange">发票信息</span></h2></div>
+		<div class="cont clearfix">
+			<table class="dotted_table f_l" width="100%" cellpadding="0" cellspacing="0">
+				<col width="129px" />
+				<col />
+				<tr>
+					<th>所需税金：</th>
+					<td>{$item['taxes']}</td>
+				</tr>
+				<tr>
+					<th>发票抬头：</th>
+					<td>{$item['invoice_title']}</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+    {/if}
+
+	<!--物品清单-->
+	<div class="box m_10">
+		<div class="title"><h2><span class="orange">商品清单</span></h2></div>
+		<div class="cont clearfix">
+			<table class="list_table f_l" width="100%" cellpadding="0" cellspacing="0">
+				<tbody>
+					<tr>
+						<th>图片</th>
+						<th>商品名称</th>
+						<th>赠送积分</th>
+						<th>商品价格</th>
+						<th>优惠金额</th>
+						<th>商品数量</th>
+						<th>小计</th>
+					</tr>
+                    {set:$order_id=$item['id']}
+                    {query:name=order_goods as og join=left join goods as go on og.goods_id eq go.id where=order_id eq $order_id field=og.*,go.point item=$good}
+                    {set:$good_info = JSON::decode($good['goods_array'])}
+                    {set:$totalWeight = $good['goods_nums'] * $good['goods_weight']}
+					<tr>
+						<td><img class="pro_pic" src="{webroot:$good[img]}" width="50px" height="50px" onerror='this.src="{skin:images/front/nopic_100_100.gif}"' /></td>
+						<td class="t_l">
+							<a class="blue" href="{url:/site/products/id/$good[goods_id]}" target='_blank'>{$good_info['name']}</a>
+							{if:$good_info['value']!=''}<p>{$good_info['value']}</p>{/if}
+						</td>
+						<td>{echo:$good['point']*$good['goods_nums']}</td>
+						<td class="red2">￥{$good['goods_price']}</td>
+						<td class="red2">￥{echo:$good['goods_price']-$good['real_price']}</td>
+						<td>x {$good['goods_nums']}</td>
+						<td class="red2 bold">￥{echo:$good['goods_nums']*$good['real_price']}</td>
+					</tr>
+                    {/query}
+				</tbody>
+			</table>
+		</div>
+	</div>
+
+	<div class="gray_box">
+		<div class="t_part">
+			<p>商品总金额：￥{$item['real_amount']}</p>
+			<p>+ 运费：￥<label id="freightFee">{$item['real_freight']}</label></p>
+
+            {if:$item['taxes'] > 0}
+            <p>+ 税金：￥{$item['taxes']}</p>
+            {/if}
+
+            {if:$item['pay_fee'] > 0}
+            <p>+ 支付手续费：￥{$item['pay_fee']}</p>
+            {/if}
+
+            {if:$item['insured'] > 0}
+            <p>+ 保价：￥{$item['insured']}</p>
+            {/if}
+
+            <p>订单折扣或涨价：￥{$item['discount']}</p>
+
+            {if:$item['promotions'] > 0}
+            <p>- 促销优惠金额：￥{$item['promotions']}</p>
+            {/if}
+		</div>
+
+		<div class="b_part">
+			<p>订单支付金额：<span class="red2">￥<label id="order_amount">{$item['order_amount']}</label></span></p>
+		</div>
+	</div>
+</div>
+
+<script type="text/javascript">
+//DOM加载完毕
+$(function(){
+	//初始化地域联动
+	template.compile("areaTemplate",areaTemplate);
+	createAreaSelect('province',0,{$item['province']});
+	createAreaSelect('city',{$item['province']},{$item['city']});
+	createAreaSelect('area',{$item['city']},{$item['area']});
+
+	//设置商品总重量
+	$('[name="goods_weight"]').val({$totalWeight});
+});
+
+//计算运费
+function countDelievey()
+{
+	var provinceId   = $('[name="province"]').val();
+	var total_weight = {$totalWeight};
+	var goodsSum     = {$item['real_amount']};
+	var distribution = {$item['distribution']};
+
+	$.getJSON('{url:/block/order_delivery}',{"province":provinceId,"total_weight":total_weight,"goodsSum":goodsSum,"distribution":distribution},function(json){
+		if(json)
+		{
+			//不能送达
+			if(json.if_delivery == 1)
+			{
+				alert('对不起，该地区不能送达，请您重新选择省份');
+				return;
+			}
+
+			//做订单差运算
+			var oldFreightFee  = $('#freightFee').text();
+			var oldOrderAmount = $('#order_amount').text();
+			var diff           = parseFloat(json.price) - parseFloat(oldFreightFee);
+			var diffAmount     = parseFloat(oldOrderAmount) + parseFloat(diff);
+
+			//更新数据
+			$('#freightFee').text(json.price);
+			$('#order_amount').text(diffAmount);
+		}
+	});
+}
+
+/**
+ * 生成地域js联动下拉框
+ * @param name
+ * @param parent_id
+ * @param select_id
+ */
+function createAreaSelect(name,parent_id,select_id)
+{
+	//生成地区
+	$.getJSON("{url:/block/area_child}",{"aid":parent_id,"random":Math.random()},function(json)
+	{
+		$('[name="'+name+'"]').html(template.render('areaTemplate',{"select_id":select_id,"data":json}));
+	});
+}
+
+//快递单跟踪
+function exdelievey()
+{
+	art.dialog.open('{url:/block/exdelivery}',{title:'快递跟踪',width:"820px",height:"420px"});
+}
+
+//修改表单信息
+function editForm()
+{
+	$('#acceptShow').toggle();
+	$('#acceptForm').toggle();
+}
+</script>

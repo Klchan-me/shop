@@ -1,0 +1,62 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>管理后台</title>
+<link rel="stylesheet" href="{skin:css/admin.css}" />
+{js:jquery}
+{js:dialog}
+{js:form}
+{js:validate}
+{js:artTemplate}
+<script type='text/javascript' src="{theme:javascript/admin.js}"></script>
+</head>
+<body>
+<div class="pop_win" style="width:450px;height:200px;">
+	<form name="balanceForm" callback="submitCallback();" action="#">
+		<table class="form_table" style="width:95%">
+			<col width="120px" />
+			<col />
+			<tr>
+				<td class="t_r">请选择：</td>
+				<td>
+					<select name="type" class="middle" onchange="selectChange(this);" pattern='required'>
+						<option value="1">充值</option>
+						<option value="2">退款</option>
+						<option value="3">提现</option>
+					</select>
+				</td>
+			</tr>
+			<tr id="orderNo" style="display:none;">
+				<td class="t_r">订单号：</td>
+				<td><input type="text" name="order_no" maxlength="20" class="middle" pattern='required' alt='必须要填写订单号' /></td>
+			</tr>
+			<tr>
+				<td class="t_r">请输入金额：</td>
+				<td><input name="balance" class="small" type="text" maxlength="8" pattern='float' alt='必须要填写退款金额' /></td>
+			</tr>
+		</table>
+	</form>
+</div>
+
+<script type='text/javascript'>
+//提交回调函数
+function submitCallback()
+{
+	return false;
+}
+//选择预付款操作项
+function selectChange(obj)
+{
+	if(obj.value == 2)
+	{
+		$('#orderNo').show();
+	}
+	else
+	{
+		$('#orderNo').hide();
+	}
+}
+</script>
+</body>
+</html>

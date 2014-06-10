@@ -1,0 +1,108 @@
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>商品管理</span><span>></span><span>商品回收站</span></div>
+	<div class="operating">
+		<a href="javascript:void(0);"><button class="operating_btn" onclick="window.location='{url:/goods/goods_list}'" type="button"><span class="return">返回列表</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" onclick="selectAll('id[]')" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" onclick="goods_recycle_del()" type="button"><span class="delete">彻底删除</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" onclick="goods_recycle_restore()" type="button"><span class="recover">还原</span></button></a>
+	</div>
+
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col width="100px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col width="80px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col width="70px" />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>商品名称</th>
+					<th>分类</th>
+					<th>销售价</th>
+					<th>库存</th>
+					<th>上架</th>
+					<th>品牌</th>
+					<th>重量</th>
+					<th>排序</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<form action="" method="post" name="orderForm">
+	<div class="content">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col width="100px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col width="80px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col width="70px" />
+			<tbody>
+				{set:$page=IReq::get('page') ? IFilter::act(IReq::get('page'),'int') : 1}
+				{query:name=goods as go join=left join brand as b on go.brand_id eq b.id where=go.is_del eq 1 fields=go.*,b.name as brand_name order=go.sort asc,go.id desc page=$page id=$goodsHandle}
+				<tr>
+					<td><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+					<td><a href="{url:/site/products/id/$item[id]}" target="_blank" title="{$item['name']}">{$item['name']}</a></td>
+					<td>
+					{set:$catName = array()}
+					{query:name=category_extend as ce join=left join category as cd on cd.id eq ce.category_id fields=cd.name where=goods_id eq $item[id] item=$catData}
+						{set:$catName[] = $catData['name']}
+					{/query}
+					{echo:join(',',$catName)}
+					</td>
+					<td>{$item['sell_price']}</td>
+					<td>{$item['store_nums']}</td>
+					<td>{echo:$item['is_del']==0?'是':'否'}</td>
+					<td>{$item['brand_name']}</td>
+					<td>{$item['weight']}</td>
+					<td>{$item['sort']}</td>
+					<td>
+						<a href="{url:/goods/goods_edit/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" /></a>
+						<a href="javascript:void(0)" onclick="delModel({link:'{url:/goods/goods_del/id/$item[id]}'})" ><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</div>
+</form>
+{$goodsHandle->getPageBar()}
+
+<script type="text/javascript">
+function goods_recycle_del()
+{
+	$("form[name='orderForm']").attr('action','{url:/goods/goods_recycle_del}');
+	confirm('确定要彻底删除所选中的信息吗？','formSubmit(\'orderForm\')');
+}
+
+function goods_recycle_restore()
+{
+	var flag = 0;
+	$('input:checkbox[name="id[]"]:checked').each(
+		function(i)
+		{
+			flag = 1;
+		}
+	);
+	if(flag == 0 )
+	{
+		alert('请选择要还原的数据');
+		return false;
+	}
+	$("form[name='orderForm']").attr('action','{url:/goods/goods_recycle_restore}');
+	confirm('确定要还原删除所选中的信息吗？','formSubmit(\'orderForm\')');
+}
+</script>

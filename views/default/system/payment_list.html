@@ -1,0 +1,50 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>支付管理</span><span>></span><span>支付方式</span></div>
+	<div class="field">
+		<table class="list_table">
+			<colgroup>
+				<col width="170px">
+				<col width="120px">
+				<col />
+				<col width="80px">
+				<col width="80px">
+			</colgroup>
+
+			<thead>
+				<tr>
+					<th>图标</th>
+					<th>名称</th>
+					<th>描述</th>
+					<th>开启状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+	<table class="list_table">
+		<colgroup>
+			<col width="170px">
+			<col width="120px">
+			<col />
+			<col width="80px">
+			<col width="80px">
+		</colgroup>
+
+		<tbody>
+			{query:name=payment}
+			<tr>
+				<td><img src="{webroot:plugins}{$item['logo']}" style='width:150px;height:60px' /></td>
+				<td>{$item['name']}</td>
+				<td>{$item['description']}</td>
+				<td><label class="{echo:$item['status'] == 0 ? 'green' : 'red'}">{echo:$item['status'] == 0 ? '使用中' : '已关闭'}</label></td>
+				<td>
+					<a href="{url:/system/payment_edit/id/$item[id]}"><img src='{skin:images/admin/icon_edit.gif}' alt='修改' title='修改' /></a>
+				</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+</div>

@@ -1,0 +1,83 @@
+<div class="headbar">
+	<div class="position">订单<span>></span><span>订单管理</span><span>></span><span>订单回收站</span></div>
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="window.location='{url:/order/order_list}'"><span class="import">返回列表</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="recycle_del()"><button class="operating_btn" type="button"><span class="delete">彻底删除</span></button></a>
+		<a href="javascript:void(0)" onclick="recycle_restore()"><button class="operating_btn"><span class="recover">还原</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="30px" />
+			<col width="155px" />
+			<col width="75px" />
+			<col width="75px" />
+			<col width="75px" />
+			<col width="75px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>订单号</th>
+					<th>收货人</th>
+					<th>支付状态</th>
+					<th>发货状态</th>
+					<th>配送方式</th>
+					<th>支付方式</th>
+					<th>用户名</th>
+					<th>下单时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<form name="orderForm" action="" method="post">
+<div class="content">
+	<table class="list_table">
+		<col width="30px" />
+		<col width="155px" />
+		<col width="75px" />
+		<col width="75px" />
+		<col width="75px" />
+		<col width="75px" />
+		<col />
+		<tbody>
+			{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+			{query: name=order as o join=left join delivery as d on o.distribution eq d.id left join payment as p on o.pay_type eq p.id left join user as u on u.id eq o.user_id fields=o.id as oid,d.name as dname,p.name as pname,o.order_no,o.accept_name,o.pay_status,o.distribution_status,u.username,o.create_time,o.status where=if_del eq 1 page=$page }
+			<tr>
+				<td class="t_c"><input name="id[]" type="checkbox" value="{$item['oid']}" /></td>
+				<td>{$item['order_no']}</td>
+				<td>{$item['accept_name']}</td>
+				<td>{if:$item['pay_status']==0}未付款{else:}已付款{/if}</td>
+				<td>{if:$item['distribution_status']==0}未发货{else:}已发货{/if}</td>
+				<td>{$item['dname']}</td>
+				<td>{$item['pname']}</td>
+				<td>{echo:$item['username']=='' ? '游客' : $item['username']}</td>
+				<td>{$item['create_time']}</td>
+				<td>
+					{if:$item['status']<3}
+					<a href="{url:/order/order_edit/id/$item[oid]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" title="编辑"/></a>
+					{/if}
+					<a href="javascript:void(0)" onclick="delModel({link:'{url:/order/order_recycle_del/id/$item[oid]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+				</td>
+			</tr>
+			{/query}
+		</tbody>
+	</table>
+</div>
+{$query->getPageBar()}
+</form>
+
+<script type="text/javascript">
+	function recycle_restore()
+	{
+		$("form[name='orderForm']").attr('action','{url:/order/order_recycle_restore}');
+		confirm('确定要还原所选中的信息吗？','formSubmit(\'orderForm\')');
+	}
+	function recycle_del()
+	{
+		$("form[name='orderForm']").attr('action','{url:/order/order_recycle_del}');
+		confirm('确定要彻底删除所选中的信息吗？','formSubmit(\'orderForm\')');
+	}
+</script>

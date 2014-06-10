@@ -1,0 +1,44 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>权限管理</spam><span>></span><span>权限列表</span></div>
+	<div class="operating">
+		<a href="javascript:;" onclick="event_link('{url:/system/right_edit}')"><button class="operating_btn" type="button"><span class="addition">添加权限</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel({msg:'是否把信息放到回收站内？'});"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:;" onclick="event_link('{url:/system/right_recycle}')"><button class="operating_btn" type="button"><span class="recycle">回收站</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>名字</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+	<form name='right_list' method='post' action='{url:/system/right_update/recycle/del}'>
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+
+			<tbody>
+				{query: name=right where=is_del eq 0}
+				<tr>
+					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
+					<td>{$item['name']}</td>
+					<td>
+						<a href='{url:/system/right_edit/id/$item[id]}'><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" title="编辑" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/system/right_update/recycle/del/id/$item[id]}',msg:'是否把信息放到回收站内？'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>

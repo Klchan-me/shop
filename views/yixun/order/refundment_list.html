@@ -1,0 +1,49 @@
+<div class="headbar">
+	<div class="position">订单<span>></span><span>单据管理</span><span>></span><span>退款单申请列表</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel()"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="30px" />
+			<col width="30px" />
+			<col width="160px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th></th>
+					<th>订单号</th>
+					<th>退款金额</th>
+					<th>申请时间</th>
+					<th>退款原因</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<form name="orderForm" action="{url:/order/refundment_doc_del}" method="post">
+	<div class="content">
+		<table class="list_table">
+			<col width="30px" />
+			<col width="30px" />
+			<col width="160px" />
+			<col />
+			<tbody>
+				{set:$page=(isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=refundment_doc where=if_del eq 0 and pay_status eq 0 order=id desc page=$page }
+				<tr>
+					<td class="t_c"><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+					<td><a href="{url:/order/refundment_doc_show/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_check.gif}" title="查看" /></a></td>
+					<td>{$item['order_no']}</td>
+					<td>{$item['amount']}</td>
+					<td>{$item['time']}</td>
+					<td>{$item['content']}</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</div>
+	{$query->getPageBar()}
+</form>

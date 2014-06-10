@@ -1,0 +1,40 @@
+{
+  "title":{
+    "text":  "(title)",
+    "style": "{font-size: 20px; color:#ff0000; font-family: Verdana; text-align: center;}"
+  },
+
+  "y_legend":{
+    "text": "iWebShop",
+    "style": "{color: #736AFF; font-size: 12px;}"
+  },
+
+  "elements":[
+    {
+      "type":      "bar_cylinder",
+      "alpha":     0.7,
+      "colour":    "#990000",
+      "text":      "消费金额",
+      "values" :   [(numbers)]
+    }
+  ],
+
+  "x_axis":{
+    "stroke":1,
+    "tick_height":10,
+    "colour":"#d000d0",
+    "grid_colour":"#00ff00",
+    "labels": {
+      "labels": [(dates)]
+    }
+   },
+
+  "y_axis":{
+    "tick_length": 3,
+    "colour":      "#d000d0",
+    "grid_colour": "#00ff00",
+    "offset":      0,
+    "steps":	(steps),
+    "max":         (max)
+  }
+}

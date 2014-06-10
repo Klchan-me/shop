@@ -1,0 +1,93 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>权限管理</span><span>></span><span>{if:isset($this->roleRow['id'])}编辑{else:}添加{/if}角色</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/system/role_edit_act}" method="post" name="role_edit">
+			<input type='hidden' name='id' />
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>名称：</th>
+					<td><input type='text' class='normal' name='name' pattern='required' alt='请填写角色名称' /><label>* 角色名称</label></td>
+				</tr>
+				<tr>
+					<th valign="top">权限分配：</th>
+					<td>
+						{if:!empty($this->rightArray)}
+						{foreach:items = $this->rightArray item = $groupRight key = $rightKey}
+						<div style='clear:both;padding-top:10px' class='bold'>{$rightKey} <label><input type='checkbox' id='checkbox_{$rightKey}' onclick='checkGroupAll(this,"{$rightKey}");' />全选</label></div>
+						<ul class='attr_list' id='ul_{$rightKey}' alt="{$rightKey}">
+							{foreach:items = $groupRight}
+							{set:$is_focus = false}
+							{if:stripos($this->roleRow['rights'],$item['right']) !== false}
+							{set:$is_focus = true}
+							{/if}
+							<li><label class='{if:$is_focus == true}green{else:}attr{/if}'><input type='checkbox' value='{$item['id']}' name='right[]' {if:$is_focus == true}checked=checked{/if} onclick='checkItem("{$rightKey}");' />{$item['name']}</label></li>
+							{/foreach}
+						</ul>
+						{/foreach}
+						{/if}
+
+						{if:!empty($this->rightUndefined)}
+						<ul class='attr_list'>
+							{foreach:items = $this->rightUndefined}
+							<li><label class='{if:$is_focus == true}green{else:}attr{/if}'><input type='checkbox' value='{$item['id']}' name='right[]' {if:$is_focus == true}checked=checked{/if} />{$item['name']}</label></li>
+							{/foreach}
+						</ul>
+						{/if}
+					</td>
+				</tr>
+				<tr><td></td><td><button class="submit" type='submit'><span>保 存</span></button></td></tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	var formObj = new Form('role_edit');
+	formObj.init({
+		'id':'{$this->roleRow['id']}',
+		'name':'{$this->roleRow['name']}'
+	});
+
+	//分组权限全选
+	function checkGroupAll(obj,nameVal)
+	{
+		if(obj.checked == true)
+		{
+			$('#ul_'+nameVal+' [name="right[]"]').attr('checked',true);
+		}
+		else
+		{
+			$('#ul_'+nameVal+' [name="right[]"]').attr('checked',false);
+		}
+	}
+
+	//选择权限
+	function checkItem(nameVal)
+	{
+		var totalNum   = $('#ul_'+nameVal+' [name="right[]"]').length;
+		var checkedNum = $('#ul_'+nameVal+' [name="right[]"]:checked').length;
+
+		if(checkedNum >= totalNum)
+		{
+			$('#checkbox_'+nameVal).attr('checked',true);
+		}
+		else
+		{
+			$('#checkbox_'+nameVal).attr('checked',false);
+		}
+	}
+
+	//预选择复选框
+	jQuery(function(){
+		$('ul.attr_list[alt]').each(
+			function(i)
+			{
+				checkItem($(this).attr('alt'));
+			}
+		);
+	});
+</script>

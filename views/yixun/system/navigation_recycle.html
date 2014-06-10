@@ -1,0 +1,63 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>权限管理</span><span>></span><span>管理员导航回收站</span></div>
+	<div class="operating">
+		<a href="javascript:;" onclick="event_link('{url:/system/navigation}')"><button class="operating_btn" type="button"><span class="return">返回列表</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="recycle_del()"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick="recycle_restore();"><button class="operating_btn" type="button"><span class="recover">批量还原</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="100px" />
+			<col width="200px" />
+			<col />
+			<col width="200px" />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>导航名称</th>
+					<th>导航链接</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+	<form name='navigation_list' method='post' action='{url:/system/navigation_recycle_del}'>
+		<table id="list_table" class="list_table">
+			<col width="100px" />
+			<col width="200px" />
+			<col />
+			<col width="200px" />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=quick_naviga fields=id,naviga_name,url where=admin_id eq $ad_id and is_del eq 1 page=$page pagesize=20}
+				<tr>
+					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
+					<td>{$item['naviga_name']}</td>
+					<td>{$item['url']}</td>
+					<td>
+						<a href='{url:/system/navigation_edit/id/$item[id]}'><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" title="编辑" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/system/navigation_recycle_del/id/$item[id]}'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$query->getPageBar()}
+<script type="text/javascript">
+function recycle_restore()
+{
+	$("form[name='navigation_list']").attr('action','{url:/system/navigation_recycle_restore}');
+	confirm('确定要还原所选中的信息吗？','formSubmit(\'navigation_list\')');
+}
+function recycle_del()
+{
+	$("form[name='navigation_list']").attr('action','{url:/system/navigation_recycle_del}');
+	confirm('确定要彻底删除所选中的信息吗？','formSubmit(\'navigation_list\')');
+}
+</script>

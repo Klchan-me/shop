@@ -1,0 +1,55 @@
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>用户组管理</span><span>></span><span>会员组列表</span></div>
+	<div class="operating">
+		<a href="javascript:;" onclick="event_link('{url:/member/group_edit}');"><button class="operating_btn" type="button"><span class="addition">添加用户组</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('check[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel({form:'group_list',msg:'确定要删除选中的记录吗？'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col />
+			<col />
+			<col />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>会员组</th>
+					<th>折扣率</th>
+					<th>最小经验</th>
+					<th>最大经验</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<form action="{url:/member/group_del}" method="post" name="group_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+<div class="content">
+	<table id="list_table" class="list_table">
+		<col width="40px" />
+		<col />
+		<col />
+		<col />
+		<col />
+		<col />
+		<tbody>
+			{query: name=user_group}
+			<tr>
+				<td class="t_c"><input name="check[]" type="checkbox" value="{$item['id']}" /></td>
+				<td>{$item['group_name']}</td>
+				<td>{$item['discount']}</td>
+				<td>{$item['minexp']}</td>
+				<td>{$item['maxexp']}</td>
+				<td><a href="{url:/member/group_edit/gid/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a>
+					{set:$tmpId=$item['id'];}
+					<a href="javascript:void(0)" onclick="delModel({link:'{url:/member/group_del/check/$tmpId}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+				</td>
+			</tr>
+			{/query}
+		</tbody>
+	</table>
+</div>
+</form>

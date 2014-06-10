@@ -1,0 +1,49 @@
+<div class="wrapper clearfix">
+	<div class="wrap_box">
+		{set:$type = IReq::get('bind_type')}
+		{if:$type == 'exists'}
+		<h3 class="notice">绑定已有{echo:$siteConfig->name}账号</h3>
+		<p class="tips">您可以直接把第三方登录的用户信息与您的{echo:$siteConfig->name}账号绑定在一起</p>
+		<div class="box">
+			<form action='{url:/simple/bind_exists_user}' method='post'>
+				<table class="form_table f_l">
+					<col width="300px" />
+					<col />
+					{if:$this->message != ''}
+					<tr><th></th><td><div class="prompt"><img src="{skin:images/front/error_s.gif}" width="16" height="15" />{$this->message}</div></td></tr>
+					{/if}
+
+					<tr><th class="t_r">用户名/邮箱：</th><td><input class="gray" type="text" name='login_info' value='{$this->login_info}' pattern="required" alt="请输入正确的用户名或者邮箱地址" /></td></tr>
+					<tr><th class="t_r">密码：</th><td><input class="gray" name='password' type="password" pattern="^\S{4,20}$" alt="请输入正确的密码4-20个字符" /></td></tr>
+					<tr><th></th><td><label class="btn_orange"><input type="submit" value='绑定' /></label> &nbsp; <label class="btn_orange"><input type='button' value='没有{echo:$siteConfig->name}账号' onclick="window.location.href='{url:/simple/bind_user}';" /></label></td></tr>
+				</table>
+			</form>
+		</div>
+		{else:}
+		<h3 class="notice">完善基本的{echo:$siteConfig->name}账号信息</h3>
+		<p class="tips">完善了基本信息后，您可以直接把第三方登录的用户信息与您的{echo:$siteConfig->name}账号绑定在一起</p>
+		<div class="box">
+			<form action='{url:/simple/bind_nexists_user}' method='post'>
+				<table class="form_table">
+					<col width="300px" />
+					<col />
+					{if:$this->message != ''}
+					<tr><th></th><td><div class="prompt"><img src="{skin:images/front/error_s.gif}" width="16" height="15" />{$this->message}</div></td></tr>
+					{/if}
+
+					<tr><th class="t_r">用户名：</th><td><input class="gray" name='username' value="{echo:isset($this->oauth_username) ? $this->oauth_username : ISafe::get('oauth_username')}" type="text" pattern="required" alt="请输入正确的用户名" /></td></tr>
+					<tr><th class="t_r">邮箱：</th><td><input class="gray" name='email' type="text" pattern="email" value="{$this->email}" alt="请输入正确邮箱地址" /></td></tr>
+					<tr><th></th><td><label class="btn_orange"><input type="submit" value='绑定' /></label> &nbsp; <label class="btn_orange"><input type='button' value='我有{echo:$siteConfig->name}账号' onclick="window.location.href='{url:/simple/bind_user/bind_type/exists}';" /></label></td></tr>
+				</table>
+			</form>
+		</div>
+		{/if}
+	</div>
+</div>
+
+<script text="text/javascript">
+	jQuery()
+	{
+		$(".form_table input").focus(function(){$(this).addClass('current');}).blur(function(){$(this).removeClass('current');})
+	}
+</script>

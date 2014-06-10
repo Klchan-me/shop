@@ -1,0 +1,89 @@
+<div class="headbar">
+	<div class="position"><span>营销</span><span>></span><span>代金券管理</span><span>></span><span>代金券详情</span></div>
+	<div class="operating">
+		<a href="javascript:;" onclick="event_link('{url:/market/ticket_list}')"><button class="operating_btn" type="button"><span class="link">代金券列表</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_more_del}';delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_status/status/is_send}';delModel({msg:'是否修改发放状态？'});"><button class="operating_btn" type="button"><span class="send">批量发放</span></button></a>
+		<a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_status/status/is_close}';delModel({msg:'是否修改禁用状态？'});"><button class="operating_btn" type="button"><span class="stop">批量禁用</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col width="300px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>卡号</th>
+					<th>密码</th>
+					<th>面值</th>
+					<th>有效期</th>
+					<th class="t_c">已被使用</th>
+					<th class="t_c">是否发放</th>
+					<th class="t_c">状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form method='post' action='#'>
+		<input type='hidden' name='ticket_id' value='{$this->ticket_id}' />
+		<table class="list_table">
+			<col width="40px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col width="300px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=prop where=type eq 0 and `condition` eq '$this->ticket_id' page=$page}
+				<tr>
+					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
+					<td>{$item['card_name']}</td>
+					<td>{$item['card_pwd']}</td>
+					<td>{$item['value']} 元</td>
+					<td>{$item['start_time']} ～ {$item['end_time']}</td>
+					<td class="t_c">{echo:$item['is_userd']==1 ? '<span class="gray bold">是</span>' : '<span class="green">否</span>'}</td>
+					<td class="t_c">{echo:$item['is_send'] ==1 ? '<span class="gray bold">是</span>' : '<span class="green">否</span>'}</td>
+					<td class="t_c">
+						{if:$item['is_close'] == 1}
+						<span class="gray bold">禁用</span>
+						{elseif:$item['is_close'] == 2}
+						被占用
+						{else:}
+						<span class="green bold">正常</span>
+						{/if}
+					</td>
+					<td>
+						<a href='javascript:void(0)' onclick="delModel({msg:'是否要修改禁用状态？',link:'{url:/market/ticket_status/ticket_id/$this->ticket_id/status/is_close/id/$item[id]}'});">
+							<img class="operator" src="{skin:images/admin/icon_stop.gif}" alt="禁用" title="禁用" />
+						</a>
+
+						<a href='javascript:void(0)' onclick="delModel({msg:'是否要修改发放状态？',link:'{url:/market/ticket_status/ticket_id/$this->ticket_id/status/is_send/id/$item[id]}'});">
+							<img class="operator" src="{skin:images/admin/icon_send.gif}" alt="发放" title="发放" />
+						</a>
+
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/market/ticket_more_del/ticket_id/$this->ticket_id/id/$item[id]}'});">
+							<img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" />
+						</a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$query->getPageBar()}

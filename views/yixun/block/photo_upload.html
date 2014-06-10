@@ -1,0 +1,26 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link rel="stylesheet" href="{skin:css/admin.css}" />
+{js:jquery}
+{js:dialog}
+</head>
+<body>
+<div class="pop_win" style='width:420px;height:140px;'>
+	<div class="content">
+		<form action="{echo:IFilter::act(IReq::get('callback'),'text')}" method='post' enctype='multipart/form-data'>
+			<table class='form_table'>
+				<col width="120px" />
+				<col />
+				<tr>
+					<td class="t_r">选择图片文件：</td>
+					<td><input type='file' class='file' name='attach' /></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+</body>
+</html>

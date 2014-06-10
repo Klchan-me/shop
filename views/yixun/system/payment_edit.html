@@ -1,0 +1,82 @@
+{js:kindeditor}
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>支付管理</span><span>></span><span>支付插件配置</span></div>
+</div>
+
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/system/payment_update}" method="post">
+			<input type='hidden' name='id' value='' />
+			<table class="form_table" cellpadding="0" cellspacing="0">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>支付方式名称：</th>
+					<td>
+						<input class="normal" name="name" type="text" value="" pattern="required" alt="支付方式名称不能为空！" />
+						<label>*</label>
+					</td>
+				</tr>
+				<tr>
+					<th>支付平台中商户ID：</th>
+					<td><input class="normal" name="partner_id" type="text" value="" /></td>
+				</tr>
+				<tr>
+					<th>支付平台中商户密钥：</th>
+					<td><input class="normal" name="partner_key" type="text" value="" /></td>
+				</tr>
+				<tr>
+					<th valign="top">简述：</th>
+					<td>{$this->paymentRow['description']}</td>
+				</tr>
+				<tr>
+					<th>手续费设置：</th>
+					<td>
+						<label class='attr'><input name="poundage_type" type="radio" value="1" onclick="$('#paymentFeeText').text('商品总额的百分比：');" checked="checked" />按商品总额的百分比</label>
+						<label class='attr'><input name="poundage_type" type="radio" value="2" onclick="$('#paymentFeeText').text('固定收取的手续费：');" />按固定金额</label>
+						<label><span id="paymentFeeText">{说明}</span><input class="small" name="poundage" type="text" value=""  pattern="required" alt="费用不能为空！" /></label>
+					</td>
+				</tr>
+				<tr>
+					<th>排序：</th><td><input class="small" name="order" type="text" value="" pattern="required" alt="排序不能为空！" /></td>
+				</tr>
+				<tr>
+					<th>支付说明：</th>
+					<td>
+						<textarea id="note" name="note" style="width:700px;height:280px;visibility:hidden;">{$this->paymentRow['note']}</textarea>
+						<label>此信息会展示在用户的支付页面</label>
+					</td>
+				</tr>
+				<tr>
+					<th>开启：</th>
+					<td>
+						<label class='attr'><input name="status" type="radio" value="0" checked="checked" />开启</label>
+						<label class='attr'><input name="status" type="radio" value="1" />关闭</label>
+						<label>只有开启后，用户才能从前台进行支付选择</label>
+					</td>
+				</tr>
+				<tr>
+					<th></th>
+					<td>
+						<button class="submit" type='submit'><span>确 定</span></button>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script language="javascript">
+//DOM加载完毕
+$(function(){
+	var formInstance = new Form();
+	formInstance.init({echo:JSON::encode($this->paymentRow)});
+
+	//展示支付费用
+	$('input[name="poundage_type"]:checked').trigger('click');
+
+	KindEditor.ready(function(K){
+		K.create('#note');
+	});
+});
+</script>

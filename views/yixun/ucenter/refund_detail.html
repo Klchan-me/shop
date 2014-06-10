@@ -1,0 +1,26 @@
+{set:$info = $this->data}
+<div class="main f_r">
+    <div class="uc_title m_10">
+        <label class="current"><span>退款详情</span></label>
+    </div>
+	<div class="box m_10">
+		<table class="border_table dark_gray" width="100%" cellpadding="0" cellspacing="0">
+			<tr>
+				<td><b>涉及订单：</b>{$info['order_no']}</td>
+				<td>{if:$info['pay_status']==0}<span class="orange bold">正在处理中</span>{elseif:$info['pay_status']==1}<span class="red bold">退款失败</span>{elseif:$info['pay_status']==2}<span class="green bold sel">退款成功</span>{/if}</td>
+			</tr>
+			<tr>
+				<td><b>申请时间：</b>{$info['time']}</td>
+				<td><b>退款金额：</b><span class="red2 bold">{$info['amount']}</span></td>
+			</tr>
+			<tr><td colspan="2"><b>退款原因：</b>{$info['content']}</td></tr>
+			<tr><td colspan="2"><b>处理时间：</b>{echo:$info['dispose_time']?$info['dispose_time']:'未处理';}</td></tr>
+			<tr><td colspan="2"><b>处理建议：</b>{echo:$info['dispose_idea']?$info['dispose_idea']:'未回复'}</td></tr>
+			<tr>
+				<td colspan="2" align="center">
+					<label class="btn"><input type="button" value="返 回" onclick='event_link("{url:/ucenter/refunds}")'></label>
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>

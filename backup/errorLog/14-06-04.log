@@ -1,0 +1,1452 @@
+<ERROR_INFO>
+errID:2
+errStr:file_get_contents(http://item.jd.com/907012.html) [<a href='function.file-get-contents'>function.file-get-contents</a>]: failed to open stream: �������ӷ���һ��ʱ���û����ȷ�𸴻����ӵ�����û�з�Ӧ�����ӳ���ʧ�ܡ�
+
+errFile:E:\open\php\iwebshop\plugins\collect\collect.php
+errLine:48
+errTime:14-06-04 14:23:10
+##出错时变量的值：##
+array (
+  'url' => 'http://item.jd.com/907012.html',
+)
+<\ERROR_INFO>
+没有找到商品属性<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:37
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:117
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:37
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:117
+errTime:14-06-04 17:36:59
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:37
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:117
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:37
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:117
+errTime:14-06-04 17:37:00
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:37
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:117
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:37
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:117
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:37
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:117
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:37
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:117
+errTime:14-06-04 17:37:01
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:37
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:117
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:37
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:117
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:37
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:117
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:37
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:117
+errTime:14-06-04 17:37:02
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:37
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:117
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:37
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:117
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:37
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:117
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:37
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:117
+errTime:14-06-04 17:37:03
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:37
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:117
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:37
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:117
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:5
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:17
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:37
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\index.php
+errLine:117
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\index.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:5
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: siteConfig
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Trying to get property of non-object
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:17
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:37
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>
+<ERROR_INFO>
+errID:8
+errStr:Undefined variable: callback
+errFile:E:\open\php\iwebshop\runtime\yixun\site\error.php
+errLine:117
+errTime:14-06-04 17:37:04
+##出错时变量的值：##
+array (
+  '__runtimeFile' => 'E:/open/php/iwebshop\\runtime/yixun/site\\error.php',
+  'data' => NULL,
+)
+<\ERROR_INFO>

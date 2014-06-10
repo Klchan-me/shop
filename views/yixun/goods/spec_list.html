@@ -1,0 +1,92 @@
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>规格管理</span><span>></span><span>规格列表</span></div>
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="addNewSpec();"><span class="addition">添加规格</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)"><button class="operating_btn" type="button" onclick="location.href='{url:/goods/spec_recycle_list}'"><span class="recycle">回收站</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col width="80px" />
+			<col />
+			<col width="100px" />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>规格名称</th>
+					<th>显示方式</th>
+					<th>规格数据</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form action='{url:/goods/spec_del}' method='post' name='specForm'>
+		<table class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col width="80px" />
+			<col />
+			<col width="100px" />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query:name=spec where=is_del eq 0 order=id desc page=$page pagesize=20}
+				<tr>
+					<td class="t_c"><input type="checkbox" name="id[]" value="{$item['id']}" /></td>
+					<td>{$item['name']}{echo:$item['note']?"【".$item['note']."】":"";}</td>
+					<td>{if:$item['type']==1}文字{else:}图片{/if}</td>
+					<td>
+						{foreach:items=JSON::decode($item['value']) item=$rs}
+							{if:$item['type']==1}
+							{$rs},
+							{else:}
+							<img class="spec_photo" src={webroot:$rs} />
+							{/if}
+						{/foreach}
+					</td>
+					<td>
+						<a href="javascript:addNewSpec({$item['id']});"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/goods/spec_del/id/$item[id]}'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$query->getPageBar()}
+
+<script type='text/javascript'>
+//添加新规格
+function addNewSpec(spec_id)
+{
+	var url = '{url:/goods/spec_edit/id/@spec_id@}';
+	url = url.replace('@spec_id@',spec_id?spec_id:0);
+
+	art.dialog.open(url,{
+		id:'addSpecWin',
+	    title:'规格设置',
+	    okVal:'确定',
+	    ok:function(iframeWin, topWin){
+	    	var formObject = iframeWin.document.forms['specForm'];
+			$.post(formObject.action,$(formObject).serialize(),function(json){
+				if(json.flag == 'success')
+				{
+					window.location.reload();
+					return true;
+				}
+				else
+				{
+					alert(json.message);
+					return false;
+				}
+			},'json');
+	    }
+	});
+}
+</script>

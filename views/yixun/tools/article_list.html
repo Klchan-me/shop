@@ -1,0 +1,66 @@
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>文章管理</span><span>></span><span>文章列表</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="event_link('{url:/tools/article_edit}')"><button class="operating_btn" type="button"><span class="addition">添加文章</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="250px" />
+			<col width="120px" />
+			<col width="150px" />
+			<col width="60px" />
+			<col width="60px" />
+			<col width="60px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>标题</th>
+					<th>文章分类</th>
+					<th>发布时间</th>
+					<th>展示</th>
+					<th>首页推荐</th>
+					<th>排序</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form action="{url:/tools/article_del}" method="post" name="article">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="250px" />
+			<col width="120px" />
+			<col width="150px" />
+			<col width="60px" />
+			<col width="60px" />
+			<col width="60px" />
+			<col />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=article as ar,article_category as ac where=ar.category_id eq ac.id order=ar.sort asc,ar.id desc page=$page pagesize=20 fields=ar.id,ar.title,ar.create_time,ar.top,ar.style,ar.color,ar.sort,ar.visibility,ac.name}
+				<tr>
+					<td class="t_c"><input type="checkbox" name="id[]" value="{$item['id']}" /></td>
+					<td><a target="_blank" href='{url:/site/article_detail/id/$item[id]}' title='查看'>{echo:Article::showTitle($item['title'],$item['color'],$item['style'])}</a></td>
+					<td>{$item['name']}</td>
+					<td>{$item['create_time']}</td>
+					<td>{echo:($item['visibility']==1) ? '是':'否'}</td>
+					<td>{echo:($item['top']==1) ? '是':'否'}</td>
+					<td>{$item['sort']}</td>
+					<td>
+						<a href='{url:/tools/article_edit/id/$item[id]}'><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" title="编辑" /></a>
+						<a target="_blank" href='{url:/site/article_detail/id/$item[id]}'><img class="operator" src="{skin:images/admin/icon_check.gif}" alt="查看" title="查看" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/tools/article_del/id/$item[id]}'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$query->getPageBar()}

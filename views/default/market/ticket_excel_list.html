@@ -1,0 +1,57 @@
+<div class="headbar">
+	<div class="position"><span>营销</span><span>></span><span>代金券管理</span><span>></span><span>代金券文件列表</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="event_link('{url:/market/ticket_edit}')"><button class="operating_btn" type="button"><span class="addition">添加代金券</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="document.forms[0].action='{url:/market/ticket_excel_pack}';delModel({msg:'确定要打包下载么？'});"><button class="operating_btn" type="button"><span class="download">打包下载</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="200px" />
+			<col width="200px" />
+			<col width="100px" />
+			<col />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>文件名</th>
+					<th>生成时间</th>
+					<th>文件大小</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form method='post' action='{url:/market/ticket_excel_del}'>
+		<table class="list_table">
+			<col width="40px" />
+			<col width="200px" />
+			<col width="200px" />
+			<col width="100px" />
+			<col />
+			<tbody>
+				{foreach:items=$this->dirArray}
+				<tr>
+					<td><input type='checkbox' name='id[]' value='{$item['name']}' /></td>
+					<td>{$item['name']}</td>
+					<td>{$item['time']}</td>
+					<td>{echo:($item['size']>=1024) ? ($item['size']>>10).'KB' : $item['size'].'B'}</td>
+					<td>
+						<a href='{url:/market/ticket_excel_download/file/$item[name]}' target='_blank'>
+							<img class="operator" src="{skin:images/admin/icon_down.gif}" alt="下载" title="下载" />
+						</a>
+
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/market/ticket_excel_del/id/$item[name]}'});">
+							<img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" />
+						</a>
+					</td>
+				</tr>
+				{/foreach}
+			</tbody>
+		</table>
+	</form>
+</div>

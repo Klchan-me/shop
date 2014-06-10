@@ -1,0 +1,78 @@
+{js:kindeditor}
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>商品分类管理</span><span>></span><span>{if:isset($category['id'])}编辑{else:}添加{/if}分类</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/goods/category_save/}" method="post">
+			<table class="form_table" cellpadding="0" cellspacing="0">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>分类名称：</th>
+					<td>
+						<input class="normal" name="name" type="text" value="{$category['name']}" pattern="required" alt="分类名称不能为空" /><label>* 必选项</label>
+						<input name="category_id" value="{$category['id']}" type="hidden" />
+					</td>
+				</tr>
+				<tr>
+					<th>上级分类：</th>
+					<td>
+						<select class="normal" name="parent_id" onchange='update_model();'>
+						<option value="0">顶级分类</option>
+						{foreach:items=$all_category item=$value}
+						<option value="{$value['id']}" {if:$category['parent_id']==$value['id']} selected {/if} model_id="{$value['model_id']}">{$value['name']}</option>
+						{/foreach}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>商品模型：</th>
+					<td>
+						{if:$models}
+						<select class="normal" name="model" pattern='required' alt='必需选择商品模型'>
+							<option value=''>选择商品模型</option>
+							{foreach:items=$models item=$value}
+							<option value="{$value['id']}" {if:isset($category['model_id']) && $category['model_id']==$value['id']} selected {/if}>{$value['name']}</option>
+							{/foreach}
+						</select>
+						<label>* 必选项</label>
+						{else:}
+						系统暂无商品模型，<a href='{url:/goods/model_edit}' class='orange'>请点击添加</a>
+						{/if}
+					</td>
+				</tr>
+				<tr>
+					<th>首页是否显示：</th>
+					<td>
+						<label class='attr'><input name="visibility" type="radio" value="1" checked='checked' /> 是 </label>
+						<label class='attr'><input name="visibility" type="radio" value="0" {if:isset($category['visibility']) && $category['visibility']==0} checked='checked' {/if} /> 否 </label>
+					</td>
+				</tr>
+				<tr>
+					<th>排序：</th><td><input class="normal" name="sort" pattern='int' empty alt='排序必须是一个数字' type="text" value="{$category['sort']}"/></td>
+				</tr>
+				<tr>
+					<th>SEO标题：</th><td><input class="normal" name="title" type="text" value="{$category['title']}" /></td>
+				</tr>
+				<tr>
+					<th>SEO关键词：</th><td><input class="normal" name="keywords" type="text" value="{$category['keywords']}" /></td>
+				</tr>
+				<tr>
+					<th>SEO描述：</th><td><textarea name="descript" cols="" rows="">{$category['descript']}</textarea></td>
+				</tr>
+				<tr>
+					<td></td><td><button class="submit" type="submit"><span>确 定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type='text/javascript'>
+	//修改分类同步模型
+	function update_model()
+	{
+		var selectedOption = $('[name="parent_id"] option:selected');
+		$('[name="model"]').val(selectedOption.attr('model_id'));
+	}
+</script>

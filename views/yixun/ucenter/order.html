@@ -1,0 +1,49 @@
+<div class="main f_r">
+    <div class="uc_title m_10">
+        <label class="current"><span>我的订单</span></label>
+    </div>
+    <div class="box m_10">
+        <table class="list_table" width="100%" cellpadding="0" cellspacing="0">
+        	<col width="140px" />
+            <tr>
+                <th>订单编号</th><th>下单日期</th><th>收货人</th><th>支付方式</th><th>总金额</th><th>订单状态</th>
+            </tr>
+            {set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+            {set:$user_id = $this->user['user_id']}
+            {query:name=order id=$order where=user_id eq $user_id and if_del eq 0  page=$page order=id desc}
+            <tr>
+                <td><a href="{url:/ucenter/order_detail/id/$item[id]}" class="orange">{$item['order_no']}</a></td><td>{$item['create_time']}</td><td>{$item['accept_name']}</td><td>{$this->payments[$item['pay_type']]['name']}</td><td>￥{echo:sprintf("%01.2f",($item['order_amount']))}</td><td>
+                {if:$item['status']==1}
+                    {if:$item['pay_type']==0}
+                    <b class="orange">等待确认</b>
+                    {else:}
+                    <b class="orange">等待付款</b>
+                    {/if}
+                {elseif:$item['status']==2}
+                    {if:$item['distribution_status']==1}
+                    <b class="green">已发货</b>
+                    {else:}
+                    <b class="orange">等待发货[已付款]</b>
+                    {/if}
+                {elseif:$item['status']==3 || $item['status']==4}
+                    <b class="gray">已取消</b>
+                {elseif:$item['status']==5}
+                    <b class="green">已完成</b>
+                    {if:$item['pay_status']==2}
+                        <b class="green">已退款</b>
+                    {elseif:$item['pay_status']==3}
+                        <b class="green">已申请退款</b>
+                    {/if}
+                    {if:$item['distribution_status']==2}
+                        <b class="green">已退货</b>
+                    {elseif:$item['distribution_status']==3}
+                        <b class="green">已申请退货</b>
+                    {/if}
+                {/if}
+                </td>
+            {/query}
+            </tr>
+            <tfoot><tr><td colspan="6" class="t_l">{$order->getPageBar()}</td></tr></tfoot>
+        </table>
+    </div>
+</div>

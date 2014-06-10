@@ -1,0 +1,127 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>权限管理</span><span>></span><span>管理员{if:isset($this->adminRow['id'])}编辑{else:}添加{/if}</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/system/admin_edit_act}"  method="post" name="admin_edit">
+			<input type='hidden' name='id' />
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>用户名：</th>
+					<td>
+						<input type='text' name='admin_name' class='normal' pattern='^\w{4,20}$' alt='请填写英文字母，数字或下划线，在4-20个字符之间' onblur="checkName();" />
+						<label id='unique'>* 管理员登录后台的用户名，请填写英文字母，数字或下划线，在4-20个字符之间</label>
+					</td>
+				</tr>
+
+				{if:$this->adminRow['id']}
+				<tr name="reset_pwd">
+					<th>密码重设：</th>
+					<td><button type='button' class='btn' onclick="reset_pwd();"><span>重 设</span></button></td>
+				</tr>
+				{/if}
+
+				<tr name="pwd">
+					<th>密码：</th>
+					<td>
+						<input type='password' class='normal' name='password' pattern='^\w{6,32}$' alt='请填写英文字母，数字或下划线，在6-32个字符之间' />
+						<label>* 管理员登录后台的密码，请填写英文字母，数字或下划线，在6-32个字符之间</label>
+					</td>
+				</tr>
+
+				<tr name="pwd">
+					<th>重复密码：</th>
+					<td>
+						<input type='password' class='normal' name='repassword' pattern='^\w{6,32}$' alt='重复输入管理员登录后台的密码' bind='password' />
+						<label>* 重复输入管理员登录后台的密码</label>
+					</td>
+				</tr>
+
+				<tr>
+					<th>角色：</th>
+					<td>
+						{if:$this->adminRow['id'] == 1 && $this->adminRow['role_id'] == 0}
+						超级管理员
+						{else:}
+						<select class='normal' name='role_id' pattern='required' alt='请选择一个角色'>
+							<option value=''>请选择</option>
+							<option value='0'>超级管理员</option>
+							{query:name=admin_role}
+							<option value='{$item['id']}'>{$item['name']}</option>
+							{/query}
+						</select>
+						<label>*为管理员分配一个角色</label>
+						{/if}
+
+						<label class='attr'><button id="specAddButton" class="btn" type="button" onclick="window.location.href='{url:/system/role_edit}'"><span class="add">添加角色</span></button></label>
+					</td>
+				</tr>
+				<tr>
+					<th>Email:</th>
+					<td>
+						<input type='text' name='email' class='normal' pattern='email' empty alt='请填写正确的email格式' />
+						<label>联系此管理员的email邮箱地址</label>
+					</td>
+				</tr>
+				<tr><td></td><td><button class="submit" type="submit"><span>保 存</span></button></td></tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+
+	//ajax检查admin_name唯一性
+	function checkName()
+	{
+		var nameVal = $('[name="admin_name"]').val(); //获取登录名
+		var idVal   = $('[name="id"]').val();         //获取id
+
+		jQuery.post(
+			'{url:/system/check_admin}',{admin_name:nameVal,admin_id:idVal},function(content)
+			{
+				var content = $.trim(content);
+				if(content == -1)
+				{
+					$('[name="admin_name"]').removeClass('valid-text');
+					$('#unique').removeClass('valid-msg');
+
+					$('[name="admin_name"]').addClass('invalid-text');
+					$('#unique').addClass('invalid-msg');
+
+					$('#unique').html(nameVal+'用户名已经存在，请重新更换一个');
+				}
+			}
+		);
+	}
+
+	//展示密码重设
+	function reset_pwd()
+	{
+		$('[name="reset_pwd"]').hide();
+
+		$('[name="pwd"]').each(
+			function (i)
+			{
+				$('[name="pwd"]:eq('+i+') *').show();
+			}
+		);
+	}
+
+	//修改信息时自动隐藏
+	{if:$this->adminRow['id']}
+		$('[name="pwd"] *').hide();
+	{/if}
+
+	//表单回填
+	var formObj = new Form('admin_edit');
+	formObj.init
+	({
+		'id':'{$this->adminRow['id']}',
+		'admin_name':'{$this->adminRow['admin_name']}',
+		'role_id':'{$this->adminRow['role_id']}',
+		'email':'{$this->adminRow['email']}'
+	});
+</script>

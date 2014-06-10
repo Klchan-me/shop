@@ -1,0 +1,73 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>后台管理</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<link rel="stylesheet" href="{skin:css/admin.css}" />
+	<link rel="shortcut icon" href="favicon.ico" />
+	{js:jquery}
+	{js:dialog}
+	{js:form}
+	{js:validate}
+	{js:artTemplate}
+	<script type='text/javascript' src="{theme:javascript/common.js}"></script>
+	<script type='text/javascript' src="{theme:javascript/admin.js}"></script>
+	<script type='text/javascript' src="{theme:javascript/menu.js}"></script>
+</head>
+<body>
+	<div class="container">
+		<div id="header">
+			<div class="logo">
+				<a href="{url:/system/default}"><img src="{skin:images/admin/logo.gif}" width="303" height="43" /></a>
+			</div>
+			<div id="menu">
+				<ul name="menu">
+				</ul>
+			</div>
+			<p><a href="{url:/systemadmin/logout}">退出管理</a> <a href="{url:/system/default}">后台首页</a> <a href="{url:}" target='_blank'>商城首页</a> <span>您好 <label class='bold'>{$this->admin['admin_name']}</label>，当前身份 <label class='bold'>{$this->admin['admin_role_name']}</label></span></p>
+		</div>
+		<div id="info_bar">
+			<label class="navindex"><a href="{url:/system/navigation}">快速导航管理</a></label>
+			<span class="nav_sec">
+			{set:$adminId = $this->admin['admin_id']}
+			{query:name=quick_naviga where=admin_id eq $adminId and is_del eq 0}
+			<a href="{$item['url']}" class="selected">{$item['naviga_name']}</a>
+			{/query}
+			</span>
+		</div>
+
+		<div id="admin_left">
+			<ul class="submenu"></ul>
+			<div id="copyright"></div>
+		</div>
+
+		<div id="admin_right">
+			{viewcontent}
+		</div>
+		<div id="separator"></div>
+	</div>
+
+	<script type='text/javascript'>
+		//DOM加载完毕执行
+		$(function(){
+			//隔行换色
+			$(".list_table tr:nth-child(even)").addClass('even');
+			$(".list_table tr").hover(
+				function () {
+					$(this).addClass("sel");
+				},
+				function () {
+					$(this).removeClass("sel");
+				}
+			);
+
+			//后台菜单创建
+			{set:$menu = new Menu();}
+			var data = {echo:$menu->submenu()};
+			var current = '{echo:$menu->current}';
+			var url='{url:/}';
+			initMenu(data,current,url);
+		});
+	</script>
+</body>
+</html>

@@ -1,0 +1,230 @@
+{js:my97date}
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>邮件短信设置</span><span>></span><span>筛选到货通知</span></div>
+	<div class="operating">
+		<div class="search f_r">
+		<form name="serachuser" action="{url:/}" method="get">
+			<input type='hidden' name='controller' value='message' />
+			<input type='hidden' name='action' value='notify_list' />
+			<select class="normal" name="search">
+				<option value="u.username" {if:$search=='u.username'}selected{/if}>用户名</option>
+				<option value="goods.name" {if:$search=='goods.name'}selected{/if}>商品名</option>
+				<option value="notify.email" {if:$search=='notify.email'}selected{/if}>Email</option>
+			</select>
+			<input class="small" name="keywords" type="text" value="{$keywords}" /><button class="btn" type="submit"><span class="sch">搜 索</span></button>
+		</form>
+		</div>
+		<a href="javascript:void(0)" onclick="sendMail()"><button class="operating_btn" type="button"><span class="remove">发送通知</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('check[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel({form:'notify_list',msg:'确定要删除选中的记录吗？'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick="location.reload()"><button class="operating_btn" type="button"><span class="refresh">刷新</span></button></a>
+		<a href="javascript:void(0)" onclick="filter()"><button class="operating_btn" type="button"><span class="send">筛选</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="250" />
+			<col width="60px" />
+			<col width="100px" />
+			<col width="150px" />
+			<col width="150px" />
+			<col width="150px" />
+			<col />
+			<thead>
+				<tr role="head">
+					<th class="t_c">选择</th>
+					<th>缺货商品名称</th>
+					<th datatype="num">库存</th>
+					<th>用户名</th>
+					<th>email</th>
+					<th>登记时间</th>
+					<th>通知时间</th>
+					<th>通知状态</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<form action="{url:/message/notify_del}" method="post" name="notify_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+<div class="content">
+	<table id="list_table" class="list_table">
+		<col width="40px" />
+		<col width="250" />
+		<col width="60px" />
+		<col width="100px" />
+		<col width="150px" />
+		<col width="150px" />
+		<col width="150px" />
+		<col />
+		<tbody>
+			{foreach:items=$list_items item=$item}
+			<tr>
+				<td class="t_c"><input name="check[]" type="checkbox" value="{$item['id']}" /></td>
+				<td><a href="{url:/goods/goods_edit/gid/$item[goods_id]}">{$item['goods_name']}</a></td>
+				<td>{$item['store_nums']}</td>
+				<td><a href="{url:/member/member_edit/uid/$item[user_id]}">{$item['username']}</a></td>
+				<td>{$item['email']}</td>
+				<td>{$item['register_time']}</td>
+				<td>{$item['notify_time']}</td>
+				<td>{if:$item['notify_status']==1}已通知{else:}<font color="#FF0000">未通知</font>{/if}</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+</div>
+{$pageBar}
+</form>
+<SCRIPT LANGUAGE="JavaScript">
+var content_filter = {};
+var tpl_filter =	'<form name="form_filter" action="" method="post"></form>'+
+					'<div name="filter" style="width:630px;">'+
+					'	<div name="menu" style="clear:both;width:100%;float:left;border-bottom:1px solid #DDDDDD;height:24px;">'+
+					'		<div style="width:120px;float:left;">添加筛选条件：</div>'+
+					'		<div style="width:100px;float:left;"><select name="requirement" onchange="addoption()">'+
+					'				<option value="c">请选择</option>'+
+					'				<option value="goodsname">商品名称</option>'+
+					'				<option value="username">用户名</option>'+
+					'				<option value="store_nums">库存</option>'+
+					'				<option value="email">Email</option>'+
+					'				<option value="regtime">登记日期</option>'+
+					'				<option value="status">通知状态</option>'+
+					'			</select></div>'+
+					'		<div><a href="javascript:void(0)" onclick="del_all_option()" >删除所有筛选条件</a></div>'+
+					'	</div>'+
+					'</div>';
+var tpl_option = new Array();
+tpl_option['goodsname'] =	'	<div name="goodsname" style="clear:both;width:100%;float:left;border-bottom:1px solid #DDDDDD;">'+
+						'		<div style="width:120px;float:left;border-right:1px solid #DDDDDD;height:24px;">商品名称</div>'+
+						'		<div style="width:100px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;"><select name="goodsname_key"><option value="eq">等于</option><option value="contain">包含</option></select></div>'+
+						'		<div style="width:350px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;"><input type="text" name="goodsname_value" /></div>'+
+						'		<div style="border-right:1px solid #DDDDDD;height:24px;width:26px;float:left;"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" onclick="del_option(this)" /></div>'+
+						'	</div>';
+tpl_option['username'] ='	<div name="username" style="clear:both;width:100%;float:left;border-bottom:1px solid #DDDDDD;">'+
+						'		<div style="width:120px;float:left;border-right:1px solid #DDDDDD;height:24px;">用户名</div>'+
+						'		<div style="width:100px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;"><select name="username_key"><option value="eq">等于</option><option value="contain">包含</option></select></div>'+
+						'		<div style="width:350px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;"><input type="text" name="username_value" /></div>'+
+						'		<div style="border-right:1px solid #DDDDDD;height:24px;width:26px;float:left;"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" onclick="del_option(this)" /></div>'+
+						'	</div>';
+tpl_option['store_nums'] ='	<div name="store_nums" style="clear:both;width:100%;float:left;border-bottom:1px solid #DDDDDD;">'+
+						'		<div style="width:120px;float:left;border-right:1px solid #DDDDDD;height:24px;">库存</div>'+
+						'		<div style="width:100px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;"><select name="store_nums_key"><option value="gt">大于</option><option value="eq">等于</option><option value="lt">小于</option></select></div>'+
+						'		<div style="width:350px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;"><input type="text" name="store_nums_value" /></div>'+
+						'		<div style="border-right:1px solid #DDDDDD;height:24px;width:26px;float:left;"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" onclick="del_option(this)" /></div>'+
+						'	</div>';
+tpl_option['email']	=	'	<div name="email" style="clear:both;width:100%;float:left;border-bottom:1px solid #DDDDDD;">'+
+						'		<div style="width:120px;float:left;border-right:1px solid #DDDDDD;height:24px;">Email</div>'+
+						'		<div style="width:100px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;"><select name="email_key"><option value="eq">等于</option><option value="contain">包含</option></select></div>'+
+						'		<div style="width:350px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;"><input type="text" name="email_value" /></div>'+
+						'		<div style="border-right:1px solid #DDDDDD;height:24px;width:26px;float:left;"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" onclick="del_option(this)" /></div>'+
+						'	</div>';
+tpl_option['regtime'] =	'	<div name="regtime" style="clear:both;width:100%;float:left;border-bottom:1px solid #DDDDDD;">'+
+						'		<div style="width:120px;float:left;border-right:1px solid #DDDDDD;height:24px;">登记时间</div>'+
+						'		<div style="width:100px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;">开始 - 截止</div>'+
+						'		<div style="width:350px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;"><input type="text" name="regtimeBegin" onfocus="WdatePicker()" style="width:80px;" /> - <input type="text" name="regtimeEnd" onfocus="WdatePicker()" style="width:80px;" /></div>'+
+						'		<div style="border-right:1px solid #DDDDDD;height:24px;width:26px;float:left;"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" onclick="del_option(this)" /></div>'+
+						'	</div>';
+tpl_option['status'] ='	<div name="status" style="clear:both;width:100%;float:left;border-bottom:1px solid #DDDDDD;">'+
+						'		<div style="width:120px;float:left;border-right:1px solid #DDDDDD;height:24px;">通知状态</div>'+
+						'		<div style="width:100px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;"></div>'+
+						'		<div style="width:350px;float:left;border-right:1px solid #DDDDDD;height:24px;padding-left:3px;"><select name="status"><option value="-1">请选择</option><option value="1">已通知</option><option value="0">未通知</option></select></div>'+
+						'		<div style="border-right:1px solid #DDDDDD;height:24px;width:26px;float:left;"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" onclick="del_option(this)" /></div>'+
+						'	</div>';
+function sendMail()
+{
+	var ids = getArray('check[]','checkbox')
+	if(ids.length>0)
+	{
+		loadding();
+		$.post('{url:/message/notify_send/}',{notifyid:ids},function(c){
+			unloadding();
+			art.dialog({
+				content: '总共发送邮件：'+c.count+'条<br />成功发送：'+c.succeed+'条<br />发送失败：'+c.failed+'条',
+				icon: 'alert',
+				lock: true,
+				ok: function(){
+					location.reload();
+					return true;
+				}
+			});
+		},'json');
+	}
+	else
+	{
+		alert("您尚未选中任何记录！");
+	}
+}
+function filter()
+{
+	art.dialog({
+		id: 'filter',
+		title: '筛选',
+		height: '320px',
+		width: '480px',
+		border: false,
+		content: content_filter,
+		tmpl: tpl_filter,
+		ok:function(){
+			var obj = $("select[name='requirement'] option");
+			var queryurl = '';
+			for (var i=1;i<obj.length ;i++)
+			{
+				if ($(obj[i]).attr('disabled')==true)
+				{
+					switch ($(obj[i]).val())
+					{
+						case 'goodsname':
+							queryurl += 'goodsname_k='+$("select[name='goodsname_key']").val()+'&goodsname_v='+$(":input[name='goodsname_value']").val()+'&';
+							break;
+						case 'username':
+							queryurl += 'username_k='+$("select[name='username_key']").val()+'&username_v='+$(":input[name='username_value']").val()+'&';
+							break;
+						case 'store_nums':
+							queryurl += 'store_nums_k='+$("select[name='store_nums_key']").val()+'&store_nums_v='+$(":input[name='store_nums_value']").val()+'&';
+							break;
+						case 'email':
+							queryurl += 'email_k='+$("select[name='email_key']").val()+'&email_v='+$(":input[name='email_value']").val()+'&';
+							break;
+						case 'regtime':
+							queryurl += 'regtimeBegin='+$(":input[name='regtimeBegin']").val()+'&regtimeEnd='+$(":input[name='regtimeEnd']").val()+'&';
+							break;
+						case 'status':
+							queryurl += 'status='+$("select[name='status']").val()+'&';
+							break;
+					}
+				}
+			}
+			var tempUrl = '{url:/message/notify_filter/@queryurl@}';
+			tempUrl     = tempUrl.replace('@queryurl@',queryurl);
+			$("form[name='form_filter']").attr('action',tempUrl);
+			$("form[name='form_filter']").submit();
+			return true;
+		},
+		cancel:true
+	});
+}
+function del_all_option()
+{
+	$("div[name='filter']").children().not("div[name='menu']").each(function(i){
+		$(this).remove();
+	});
+	$("select[name='requirement'] option").each(function(i){
+		$(this).removeAttr('disabled');
+	});
+}
+function del_option(obj)
+{
+	var name = $(obj).parent().parent().attr('name');
+	$("select[name='requirement'] option[value='"+name+"']").removeAttr('disabled');
+	$(obj).parent().parent().remove();
+}
+function addoption()
+{
+	var obj = $("select[name='requirement'] option:selected");
+	if ($("div[name='"+obj.val()+"']").length<1)
+	{
+		$("div[name='filter']").append(tpl_option[obj.val()]);
+	}
+	obj.attr('disabled',true);
+	$("select[name='requirement'] option:selected").removeAttr('selected');
+}
+</SCRIPT>

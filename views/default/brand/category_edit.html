@@ -1,0 +1,23 @@
+{js:kindeditor}
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>品牌管理</span><span>></span><span>{if:isset($category['id'])}编辑{else:}添加{/if}分类</span></div>
+</div>	
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/brand/category_save/}" method="post">
+			<table class="form_table">	
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>分类名称：</th>
+					<td><input class="normal" name="name" type="text" value="{$category['name']}" pattern="required" alt="分类名称不能为空" /><label>*</label>
+						<input name="category_id" value="{$category['id']}" type="hidden" />
+					</td>
+				</tr>
+				<tr>
+					<td></td><td><button class="submit" type="submit"><span>确 定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

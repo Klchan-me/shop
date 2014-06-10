@@ -1,0 +1,148 @@
+{set:$type = IReq::get('type');}
+{if:$type=='default1'}
+	<div class="container">
+		<table class="m_10" width="100%" cellspacing="0" cellpadding="0" border="0">
+			<col width="70%" />
+			<col />
+			<tr>
+				<td align="left"><img src="{echo:'{'}webroot:image/logo.gif}" width="250" height="53" /></td>
+				<td valign="bottom" align="left"><input id="pic_print" name="pic_print" class="v_m" type="checkbox" /> <label for="pic_print">打印图片</label><p>客户：{echo:'{'}$accept_name}<span class="ml_20">电话：{echo:'{'}$mobile}</span></p></td>
+			</tr>
+		</table>
+		<table class="table" width="100%" cellspacing="0" cellpadding="0" border="0">
+			<col width="300px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col />
+			<thead>
+				<tr class="f14"><th align="left" colspan="3"><b>订单号：{echo:'{'}$order_no}</b></th><th align="right"><b>订购日期：{echo:'{'}echo:date('Y-m-d',strtotime($create_time))}</b></th></tr>
+			</thead>
+			<tbody>
+				<tr class="f14"><th>商品名称</th><th>单价</th><th>数量</th><th>小计</th></tr>
+				{echo:'{'}query:name=order_goods as og where=order_id eq $id}
+				<tr>
+				{echo:'{'}query:name=goods where=id eq $item[goods_id] item=$va}
+				<td align="left"><img src="{echo:'{'}webroot:$va[img]}" class="pic" width="70" height="70" /><label>{echo:'{'}$va['name']}<br />
+				{echo:'{'}if:$item['product_id']!=0}
+				{echo:'{'}query:name=products where=id eq $item[product_id] item=$asd}
+					{echo:'{'}set:$spec_array=Block::show_spec($asd['spec_array']);}
+					{echo:'{'}foreach:items=$spec_array item=$specValue key=$specName}
+						<span class="gray">{echo:'{'}$specName}：{echo:'{'}$specValue}<br /></span>
+					{echo:'{'}/foreach}
+				{echo:'{'}/query}
+				{echo:'{'}/if}
+				</label></td>
+				{echo:'{'}/query}
+				<td>￥{echo:'{'}$item['real_price']}元</td>
+				<td>{echo:'{'}$item['goods_nums']}</td>
+				<td>￥{echo:'{'}echo:$item['real_price']*$item['goods_nums']}元</td>
+				</tr>
+				{echo:'{'}/query}
+			</tbody>
+		</table>
+		<table class="table" width="100%" cellspacing="0" cellpadding="0" border="0">
+			<col /><col width="250px" />
+			<tr>
+				<td align="left"></td><td align="left">商品总价：￥{echo:'{'}$real_amount}元</td>
+			</tr>
+			<tr>
+				<td align="left">订单附言：{echo:'{'}$postscript}</td><td align="left">配送费用：￥{echo:'{'}$real_freight}</td>
+			</tr>
+			<tr>
+				<td></td><td align="left">保价费用：￥{echo:'{'}$insured}</td>
+			</tr>
+			<tr>
+				<td></td><td align="left">支付手续费：￥{echo:'{'}$pay_fee}</td>
+			</tr>
+			<tr>
+				<td></td><td align="left">订单优惠：￥{echo:'{'}$promotions}</td>
+			</tr>
+			<tr>
+				<td></td><td align="left"><b class="f14">应付总金额：￥{echo:'{'}$order_amount}元</b></td>
+			</tr>
+		</table>
+		<table class="table" width="100%" cellspacing="0" cellpadding="0" border="0">
+			<col /><col width="250px" />
+			<tr>
+				<td align="left">服务商：{echo:'{'}if:isset($set['name'])}{echo:'{'}$set['name']}{echo:'{'}/if}</td><td align="left">电话：{echo:'{'}if:isset($set['mobile'])}{echo:'{'}$set['mobile']}{echo:'{'}/if}</td>
+			</tr>
+			<tr>
+				<td align="left">邮箱：{echo:'{'}if:isset($set['email'])}{echo:'{'}$set['email']}{echo:'{'}/if}</td><td align="left">网站：{echo:'{'}if:isset($set['url'])}{echo:'{'}$set['url']}{echo:'{'}/if}</td>
+			</tr>
+		</table>
+		<table class="table" width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tr>
+				<td align="left">您目前的总积分是<b>{echo:'{'}query:name=member where=user_id eq $user_id}{echo:'{'}$item['point']}{echo:'{'}/query}</b>分，
+				累计购物
+				{echo:'{'}query:name=order fields=count(id) as num,sum(order_amount) as total where=user_id eq $user_id and status eq 5}<b class="orange">{echo:'{'}$item['num']}</b>次，累计购物金额<b class="orange">￥{echo:'{'}if:$item['total']}{echo:'{'}$item['total']}{echo:'{'}else:}0{echo:'{'}/if}元</b></td>{echo:'{'}/query}
+			</tr>
+			<tfoot><tr><td><input class="btn_print noprint" type="submit" onclick="javascript:window.print();" value="打印" /></td></tr></tfoot>
+		</table>
+	</div>
+{/if}
+{if:$type=='default2'}
+	<div class="container">
+		<table class="m_10" width="100%" cellspacing="0" cellpadding="0" border="0">
+			<col width="30%" />
+			<col width="40%" />
+			<col />
+			<tr>
+				<td align="left"><p>订单号：{echo:'{'}$order_no}<br />日期：{echo:'{'}echo:date('Y-m-d',strtotime($create_time))}</p></td>
+				<td class="f30"><b>{echo:'{'}$order_no}</b></td>
+				<td valign="bottom" align="left"><input id="pic_print" name="pic_print" class="v_m" type="checkbox" /> <label for="pic_print">打印图片</label><p>客户：{echo:'{'}$accept_name}<span class="ml_20">电话：{echo:'{'}$mobile}</span></p></td>
+			</tr>
+		</table>
+		<table class="table" width="100%" cellspacing="0" cellpadding="0" border="0">
+			<col width="300px" />
+			<col width="100px" />
+			<col width="100px" />
+			<col />
+			<tbody>
+				<tr class="f14"><th>商品名称</th><th>单价</th><th>数量</th><th>小计</th></tr>
+				{echo:'{'}query:name=order_goods as og where=order_id eq $id}
+				<tr>
+				{echo:'{'}query:name=goods where=id eq $item[goods_id] item=$va}
+				<td align="left"><img src="{echo:'{'}webroot:$va[img]}" class="pic" width="70" height="70" /><label>{echo:'{'}$va['name']}<br />
+				{echo:'{'}if:$item['product_id']!=0}
+				{echo:'{'}query:name=products where=id eq $item[product_id] item=$asd}
+					{echo:'{'}set:$spec_array=Block::show_spec($asd['spec_array']);}
+					{echo:'{'}foreach:items=$spec_array item=$specValue key=$specName}
+						<span class="gray">{echo:'{'}$specName}：{echo:'{'}$specValue}<br /></span>
+					{echo:'{'}/foreach}
+				{echo:'{'}/query}
+				{echo:'{'}/if}
+				</label></td>
+				{echo:'{'}/query}
+				<td>￥{echo:'{'}$item['real_price']}元</td>
+				<td>{echo:'{'}$item['goods_nums']}</td>
+				<td>￥{echo:'{'}echo:$item['real_price']*$item['goods_nums']}元</td></tr>
+				{echo:'{'}/query}
+			</tbody>
+		</table>
+		<table class="table" width="100%" cellspacing="0" cellpadding="0" border="0">
+			<col /><col width="250px" />
+			<tr>
+				<td align="left"></td><td align="left">配送：{echo:'{'}if:isset($deliver['delivery_type'])}{echo:'{'}query:name=delivery where=id eq $deliver[delivery_type]}{echo:'{'}$item['name']}{echo:'{'}/query}{echo:'{'}/if}</td>
+			</tr>
+			<tr>
+				<td align="left">订单附言：{echo:'{'}$postscript}</td><td align="left">收货人：{echo:'{'}if:isset($deliver['name'])}{echo:'{'}$deliver['name']}{echo:'{'}/if}</td>
+			</tr>
+			<tr>
+				<td></td><td align="left">电话：{echo:'{'}if:isset($deliver['telphone'])}{echo:'{'}$deliver['telphone']}{echo:'{'}/if}</td>
+			</tr>
+			<tr>
+				<td></td><td align="left">手机：{echo:'{'}if:isset($deliver['mobile'])}{echo:'{'}$deliver['mobile']}{echo:'{'}/if}</td>
+			</tr>
+			<tr>
+				<td></td><td align="left">地址：{echo:'{'}if:isset($deliver['address'])}{echo:'{'}$deliver['address']}{echo:'{'}/if}</td>
+			</tr>
+			<tr>
+				<td></td><td align="left">邮编：{echo:'{'}if:isset($deliver['postcode'])}{echo:'{'}$deliver['postcode']}{echo:'{'}/if}</td>
+			</tr>
+		</table>
+		<table width="100%" cellspacing="0" cellpadding="0" border="0">
+			<tr><td class="f18" align="left"><b>签字：</b></td></tr>
+		</table>
+		<input class="btn_print noprint" type="submit" onclick="javascript:window.print();" value="打印" />
+	</div>
+{/if}

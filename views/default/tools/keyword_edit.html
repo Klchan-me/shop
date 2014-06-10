@@ -1,0 +1,34 @@
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>关键词管理</span><span>></span><span>添加关键词</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action='{url:/tools/keyword_add}' method='post'>
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>关键词：</th>
+					<td><input type='text' name='word' class='middle' value='' pattern="required" alt="请填写最少一个词语" /><label>搜索和查询商品信息的依据，必须节选自商品的名称中，可以填写多个词，以“，” 分隔</label></td>
+				</tr>
+				<tr>
+					<th>是否为热门词：</th>
+					<td>
+						<label class='attr'><input type='radio' name='hot' value='1' />是</label>
+						<label class='attr'><input type='radio' name='hot' value='0' checked=checked />否</label>
+					</td>
+				</tr>
+				<tr>
+					<th>排序：</th>
+					<td>
+						<input type='text' name='order' class='small' pattern='int' alt='请填写数字' />
+						<label>数值越小，排名越靠前</label>
+					</td>
+				</tr>
+				<tr>
+					<td></td><td><button class='submit' type='submit'><span>确 定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

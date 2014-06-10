@@ -1,0 +1,38 @@
+{js:kindeditor}
+<div class="headbar clearfix">
+	<div class="position"><span>会员</span><span>></span><span>邮件短信设置</span><span>></span><span>编辑模板</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/message/tpl_save/}" method="post">
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>模板名称：</th><td>{$tpl['name']}
+					<input type="hidden" name="tpl_id" value="{$tpl['id']}" />
+					</td>
+				</tr>
+				<tr>
+					<th>标签变量：</th><td>{$tpl['variable']}</td>
+				</tr>
+				<tr>
+					<th>邮件标题：</th><td><input class="normal" name="title" type="text" value="{$tpl['title']}" /></td>
+				</tr>
+				<tr>
+					<th valign="top">模板内容：</th>
+					<td><textarea id="content" name="content" style="width:530px;height:250px;">{$tpl['content']}</textarea></td>
+				</tr>
+				<tr>
+					<th></th><td><button class="submit" type="submit"><span>确定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script language="javascript">
+	KindEditor.ready(function(K){
+		K.create('#content');
+	});
+</script>

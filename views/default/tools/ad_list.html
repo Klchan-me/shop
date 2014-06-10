@@ -1,0 +1,63 @@
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>广告管理</span><span>></span><span>广告列表</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="event_link('{url:/tools/ad_edit}')"><button class="operating_btn" type="button"><span class="addition">添加广告</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="200px" />
+			<col width="100px" />
+			<col width="120px" />
+			<col width="70px" />
+			<col width="80px" />
+			<col width="180px" />
+			<col />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>名称</th>
+					<th>显示类别</th>
+					<th>广告位</th>
+					<th>排序</th>
+					<th>宽×高</th>
+					<th>开始时间 ～ 结束时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form name='ad' method='post' action='{url:/tools/ad_del}'>
+		<table id="list_table" class="list_table">
+			<col width="40px" />
+			<col width="200px" />
+			<col width="100px" />
+			<col width="120px" />
+			<col width="70px" />
+			<col width="80px" />
+			<col width="180px" />
+			<col />
+			<tbody>
+				{query: name=ad_manage as ad,ad_position as adp fields=adp.name as adp_name,ad.* where=ad.position_id eq adp.id order=ad.order ASC}
+				<tr>
+					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
+					<td>{$item['name']}</td>
+					<td>{echo:Ad::showType($item['type'])}</td>
+					<td>{$item['adp_name']}</td>
+					<td>{$item['order']}</td>
+					<td>{$item['width']}×{$item['height']}</td>
+					<td>{$item['start_time']} ～ {$item['end_time']} </td>
+					<td>
+						<a href='{url:/tools/ad_edit/id/$item[id]}'><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" title="编辑" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/tools/ad_del/id/$item[id]}'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>

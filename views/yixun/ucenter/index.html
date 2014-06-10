@@ -1,0 +1,121 @@
+{set:$user_id = $this->user['user_id']}
+{query:name=member where=user_id eq $user_id item=$user}{/query}
+{query:name=order fields=sum(order_amount) as amount,count(id) as num where=user_id eq $user_id and pay_status eq 1 item=$statistics}{/query}
+{set:$msgObj = new Mess($user_id);$msgNum = $msgObj->needReadNum()}
+{set:$propIds = trim($user['prop'],',');$propIds = $propIds ? $propIds : 0}
+{query:fields=count(id) as prop_num name=prop where= id in ($propIds) and type eq 0 item=$propData}{/query}
+
+<div class="main f_r">
+    {if:$msgNum>0}
+    <div class="prompt m_10">
+        <b>温馨提示：</b>您有<span class="red">{$msgNum}</span> 条站内未读短信息，<a class="blue" href="{url:/ucenter/message}">现在去看看</a>
+    </div>
+    {/if}
+
+	<div class="userinfo_bar"><span class="f_r">上一次登录时间：{echo:ISafe::get('last_login')}</span><b class="f14">您好，{$this->user['username']} 欢迎回来!</b></div>
+	<div class="box clearfix">
+		<h3>用户信息</h3>
+		<dl class="userinfo_box">
+			<dt>
+			{set:$user_ico = $this->user['head_ico']}
+			<a class="ico"><img id="user_ico_img" src="{webroot:$user_ico}" width="100" height="100" alt="" onerror="this.src='{skin:images/front/user_ico.gif}'" /></a>
+			<a class="blue" href="javascript:select_ico();">修改头像</a>
+			</dt>
+			<dd>
+			<table width="100%" cellpadding="0" cellspacing="0">
+				<col width="350px" />
+				<col />
+				<tr>
+					<td>你的账户目前总积分：<b class="red2">{$user['point']} 分</b>&nbsp;&nbsp;&nbsp;<a class="blue" href="{url:/ucenter/integral}">查看积分历史</a></td>
+					<td>你的订单交易总数量：<b class="red2">{$statistics['num']} 笔</b>&nbsp;&nbsp;&nbsp;<a class="blue" href="{url:/ucenter/order}">进入订单列表</a></td>
+				</tr>
+				<tr>
+					<td>总消费额：<b class="red2">￥{$statistics['amount']}</b></td>
+					<td>预存款余额：<b class="red2">￥{$user['balance']}</b></td>
+				</tr>
+				<tr>
+					<td>代金券：<b class="red2">{$propData['prop_num']} 张</b></td>
+					<td></td>
+				</tr>
+			</table>
+
+			<div class="stat">
+				<span>待评价商品：<label>(<b class="red2">{echo:Common::countUserWaitComment($user_id)}</b>)</label></span>
+				<span>待付款订单：<label>(<b class="red2">{echo:Common::countUserWaitPay($user_id)}</b>)</label></span>
+				<span>待确认收货：<label>(<b class="red2"><a href="{url:/ucenter/order}">{echo:Common::countUserWaitCommit($user_id)}</b>)</a></label></span>
+			</div>
+			</dd>
+		</dl>
+	</div>
+	<h3 class="bg">我的订单</h3>
+	<div class="box m_10">
+		<table class="list_table" width="100%" cellpadding="0" cellspacing="0">
+			<col width="140px" />
+			<tr>
+				<th>订单编号</th><th>下单日期</th><th>收货人</th><th>支付方式</th><th>总金额</th><th>订单状态</th>
+			</tr>
+
+			{query:name=order where=user_id eq $user[user_id] and if_del eq 0 order=id desc limit=6}
+			<tr>
+				<td><a href="{url:/ucenter/order_detail/id/$item[id]}">{$item['order_no']}</a></td>
+				<td>{$item['create_time']}</td>
+				<td>{$item['accept_name']}</td>
+				<td>{$this->payments[$item['pay_type']]['name']}</td>
+				<td>￥{echo:($item['order_amount'])}</td>
+				<td>
+					{set:$orderStatus = Order_Class::getOrderStatus($item)}
+					<b class="{if:$orderStatus >= 6}green{else:}orange{/if}">{echo:Order_Class::orderStatusText($orderStatus)}</b>
+				</td>
+			</tr>
+			{/query}
+
+			<tfoot><tr><td colspan="6" class="t_r"><a class="blue" href="{url:/ucenter/order}">更多订单&gt;&gt;</a></td></tr></tfoot>
+		</table>
+	</div>
+	<div class="box">
+		<div class="title"><h2>也许你会对下列商品感兴趣</h2></div>
+		<div class="cont clearfix">
+			<ul class="prolist f_l">
+				{query:name=goods where=id in( select goods_id from commend_goods where commend_id eq 4 ) and is_del eq 0 limit=12}
+				<li>
+				<a href="{url:/site/products/id/$item[id]}" target="_black"><img src="{webroot:}{echo:Thumb::get($item['img'],100,100)}" alt="{$item['name']}" height="100" width="100"></a>
+				<p class="pro_title"><a href="{url:/site/products/id/$item[id]}" target='_black'>{$item['name']}</a></p>
+				<p class="price_new"><b>￥{$item['sell_price']}</b></p>
+				</li>
+				{/query}
+			</ul>
+		</div>
+	</div>
+</div>
+<script type='text/javascript'>
+//选择头像
+function select_ico()
+{
+	{set:$callback = urlencode(IUrl::creatUrl('/ucenter/user_ico_upload'))}
+	art.dialog.open('{url:/block/photo_upload?callback=$callback}',
+	{
+		'id':'user_ico',
+		'title':'设置头像',
+		'ok':function(iframeWin, topWin)
+		{
+			iframeWin.document.forms[0].submit();
+			return false;
+		}
+	});
+}
+
+//头像上传回调函数
+function callback_user_ico(content)
+{
+	var content = eval(content);
+	if(content.isError == true)
+	{
+		alert(content.message);
+	}
+	else
+	{
+		$('#user_ico_img').attr('src',content.data);
+	}
+	art.dialog({id:'user_ico'}).close();
+}
+</script>

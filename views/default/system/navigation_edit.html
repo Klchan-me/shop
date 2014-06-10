@@ -1,0 +1,39 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>权限管理</span><span>></span><span>管理员导航{if:isset($this->navigationRow['id'])}编辑{else:}添加{/if}</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/system/navigation_update}"  method="post" name="navigation_edit">
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>导航名称：</th>
+					<td><input type=hidden name="id" id='id'/>
+						<input type='text' name='naviga_name' id='naviga_name' class='normal' pattern='required' alt='请输入导航名称'/>
+						<label id='unique'>* 管理员常用链接的名称</label>
+					</td>
+				</tr>
+				<tr name="pwd">
+					<th>url地址：</th>
+					<td>
+						<input type='text' class='normal' name='url' id='url' pattern='required' alt='请输入url地址' />
+						<label>* 管理员常用链接的链接地址&nbsp;&nbsp;(完整路径)</label>
+					</td>
+				</tr>
+				<tr><td></td><td><button class="submit" type='submit'><span>保 存</span></button></td></tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	//表单回填
+	var formObj = new Form('navigation_edit');
+	formObj.init
+	({
+		'id':'{$this->navigationRow['id']}',
+		'naviga_name':'{$this->navigationRow['naviga_name']}',
+		'url':'{$this->navigationRow['url']}'
+	});
+</script>

@@ -1,0 +1,65 @@
+<div class="headbar">
+	<div class="position">订单<span>></span><span>快递单管理</span><span>></span><span>发货信息回收站</span></div>
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="location.href='{url:/order/ship_info_list}'"><span class="import">返回列表</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="recycle_restore()"><button class="operating_btn" type="button"><span class="recover">还原</span></button></a>
+		<a href="javascript:void(0)" onclick="recycle_del()"><button class="operating_btn" type="button"><span class="delete">彻底删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="30px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>发货点名称</th>
+					<th>地址</th>
+					<th>邮编</th>
+					<th>电话</th>
+					<th>发货人</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+<form action="" method="post" name="ship_list">
+	<table class="list_table">
+		<col width="30px" />
+		<col />
+		<tbody>
+			{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+			{query: name=merch_ship_info where=is_del eq '0' order=id desc  page=$page}
+			<tr>
+				<td class="t_c"><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+				<td>{$item['ship_name']}</td>
+				<td>{$item['address']}</td>
+				<td>{$item['postcode']}</td>
+				<td>{if:$item['mobile']!=""}{$item['mobile']}{else:}{$item['telphone']}{/if}</td>
+				<td>{$item['ship_user_name']}</td>
+				<td>
+					<a href="{url:/order/recycle_restore/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_recover.gif}" alt="返回" /></a>
+					<a href="javascript:void(0)" onclick="delModel({link:'{url:/order/recycle_del/id/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+				</td>
+			</tr>
+			{/query}
+		</tbody>
+	</table>
+	</form>
+</div>
+{$query->getPageBar()}
+
+<script type="text/javascript">
+function recycle_del()
+{
+	$("form[name='ship_list']").attr('action','{url:/order/recycle_del}');
+	confirm('确定要彻底删除所选中的信息吗？','formSubmit(\'ship_list\')');
+}
+function recycle_restore()
+{
+	$("form[name='ship_list']").attr('action','{url:/order/recycle_restore}');
+	confirm('确定要还原所选中的信息吗？','formSubmit(\'ship_list\')');
+}
+</script>

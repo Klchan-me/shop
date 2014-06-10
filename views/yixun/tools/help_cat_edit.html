@@ -1,0 +1,48 @@
+{set:$id=IReq::get('id');}
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>帮助管理</span><span>></span><span>{if:isset($id)}编辑{else:}添加{/if}分类</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		{set:$tmpId = $id===null?"":"id=$id";}
+		<form action='{url:/tools/help_cat_edit_act/$id}' method='post' name='cat'>
+			{if:$id!==null}
+			<input type='hidden' name='id' value='{$id}' />
+			{/if}
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>名称：</th>
+					<td>
+						<input type='text' class='middle' name='name' value='{$this->cat_row['name']}' pattern='required' alt='名称不能为空' />
+						<label>*分类名称（必填）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>在站点下方显示：</th>
+					<td>
+						<label class='attr'><input type='radio' name='position_foot' value='1' {echo:$this->cat_row['position_foot']==1?'checked':''} />是</label>
+						<label class='attr'><input type='radio' name='position_foot' value='0' {echo:$this->cat_row['position_foot']==0?'checked':''} />否</label>
+					</td>
+				</tr>
+				<tr>
+					<th>在帮助系统左侧显示：</th>
+					<td>
+						<label class='attr'><input type='radio' name='position_left' value='1' {echo:$this->cat_row['position_left']==1?'checked':''} />是</label>
+						<label class='attr'><input type='radio' name='position_left' value='0' {echo:$this->cat_row['position_left']==0?'checked':''} />否</label>
+					</td>
+				</tr>
+				<tr>
+					<th>排序：</th>
+					<td>
+						<input type='text' class='small' name='sort' value='{$this->cat_row['sort']}' pattern='^\d+$' alt='请填写一个数字' />
+					</td>
+				</tr>
+				<tr>
+					<th></th><td><button class='submit' type='submit'><span>确 定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

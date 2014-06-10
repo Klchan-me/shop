@@ -1,0 +1,122 @@
+<div class="headbar clearfix">
+	<div class="position">订单<span>></span><span>订单管理</span><span>></span><span>打印模板</span></div>
+	<ul class="tab" name="menu">
+		<li name="selec" class="selected" id="selec1"><a href="javascript:selectTab('1');" hidefocus="true">购物清单模板</a></li>
+		<li name="selec" id="selec2"><a href="javascript:selectTab('2');" hidefocus="true">配货单模板</a></li>
+		<li name="selec" id="selec3"><a href="javascript:selectTab('3');" hidefocus="true">快递单模板</a></li>
+	</ul>
+</div>
+
+<div class="content_box">
+	<div class="content">
+
+		<form name="ModelForm" action="{url:/order/print_template_update}" method="post">
+			<table name="form_table" id="tab-1" class="form_table">
+				<tr>
+					<td><textarea class="big" name="con_shop" id="con_shop" style='width:95%'>{$ifile_shop}</textarea></td>
+				</tr>
+				<tr class='td_c'>
+					<td>
+						<button class='submit' type="submit"  onclick="return checkForm();"><span>保 存</span></button>
+						<button class='submit' type="button" onclick="return default_va('default1','con_shop')"><span>恢复默认</span></button>
+					</td>
+				</tr>
+			</table>
+
+			<table name="form_table" id="tab-2" style="display:none" class="form_table">
+				<tr>
+					<td><textarea class="big" name="con_pick" id="con_pick" style='width:95%'>{$ifile_pick}</textarea></td>
+				</tr>
+				<tr class='td_c'>
+					<td>
+						<button class='submit' type="submit"  onclick="return checkForm();"><span>保 存</span></button>
+						<button class='submit' type="button" onclick="return default_va('default2','con_pick')"><span>恢复默认</span></button>
+					</td>
+				</tr>
+			</table>
+		</form>
+
+		<table name="form_table" id="tab-3" style="display:none;" class="list_table">
+			<thead>
+			<tr>
+				<th style='height:25px'>名称</th>
+				<th>状态</th>
+				<th>操作</th>
+			</tr>
+			</thead>
+
+			<tbody>
+				{query:name = expresswaybill}
+				<tr>
+					<td>{$item['name']}</td>
+					<td>{echo:$item['is_close']==0 ? '开启' : '关闭'}</td>
+					<td>
+						<a href='{url:/order/expresswaybill_edit/id/$item[id]}'><img class="operator" alt="编辑" src="{skin:images/admin/icon_edit.gif}"></a>
+						<a href='javascript:void(0);' onclick="delModel({link:'{url:/order/expresswaybill_del/id/$item[id]}'})"><img class="operator" alt="删除" src="{skin:images/admin/icon_del.gif}"></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+
+			<tfoot>
+				<tr class='td_c'>
+					<td colspan='3'>
+						<button type='button' class='submit' onclick='window.location.href="{url:/order/expresswaybill_edit}";'><span>添加模板</span></button>
+					</td>
+				</tr>
+			</tfoot>
+		</table>
+
+	</div>
+</div>
+
+
+<script type='text/javascript'>
+
+	//恢复默认值
+	function default_va(value,id)
+	{
+		var tempUrl = '{url:/order/template/type/@value@}';
+		tempUrl     = tempUrl.replace('@value@',value);
+
+		$.post(tempUrl,function(date){
+			$('#'+id).val(date);
+		});
+	}
+
+	//选择当前Tab
+	function selectTab(curr_tab)
+	{
+		$("table[name=form_table]").hide();
+		$("#tab-"+curr_tab).show();
+		$("li[name='selec']").removeClass("selected");
+		$("#selec"+curr_tab).addClass("selected");
+	}
+
+	//模型属性表单验证
+	function checkForm()
+	{
+		var con1=$("#con_shop").val();
+		var con2=$("#con_pick").val();
+
+		if($.trim(con1)==""){
+			selectTab('1');
+			alert("购物清单模板不能为空!");
+			return false;
+		}
+		if($.trim(con2)==""){
+			selectTab('2');
+			alert("配货单模板不能为空!");
+			return false;
+		}
+		return true;
+	}
+
+	//渲染视图直接切换tab滑动门
+	{if:IReq::get('tab_index')}
+		jQuery(function(){
+			selectTab("{echo:IReq::get('tab_index')}");
+		});
+	{/if}
+
+</script>

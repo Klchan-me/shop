@@ -1,0 +1,56 @@
+{js:kindeditor}
+{set:$id=IReq::get('id');}
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>帮助管理</span><span>></span><span>{if:isset($id)}编辑{else:}添加{/if}帮助文档</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		{if:$id!==null}
+		<form action='{url:/tools/help_edit_act/id/$id}' method='post' name='article'>
+		{else:}
+		<form action='{url:/tools/help_edit_act}' method='post' name='article'>
+		{/if}
+
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				{if:$id!==null}
+				<input type='hidden' name='id' value="{$id}" />
+				{/if}
+				<tr>
+					<th>分类：</th>
+					<td>
+						<select name="cat_id" class="auto" pattern="required" alt="请选择分类值" >
+						{query:name=help_category order=sort ASC}
+							{set:$checked=$this->help_row['cat_id']==$item['id']?" selected='selected' ":""}
+							<option value="{$item['id']}" {$checked} >{$item['name']}</option>
+						{/query}
+						</select>
+
+						<label>*选择帮助所属分类（必填）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>标题：</th>
+					<td><input type='text' name='name' class='normal' value='{$this->help_row['name']}' pattern='required' alt='标题不能为空' /></td>
+				</tr>
+				<tr>
+					<th>排序：</th><td><input type='text' pattern="int" alt="请填写整数" class='small' name='sort' value='{$this->help_row['sort']}' /><label>数字越小位置越靠前</label></td>
+				</tr>
+
+				<tr>
+					<th valign="top">内容：</th><td><textarea id="content" name='content' style='width:700px;height:300px' pattern='required' alt='内容不能为空'>{echo:htmlspecialchars($this->help_row['content'])}</textarea></td>
+				</tr>
+				<tr>
+					<th></th><td><button class='submit' type='submit'><span>确 定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	KindEditor.ready(function(K){
+		K.create('#content');
+	});
+</script>

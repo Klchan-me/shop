@@ -1,0 +1,182 @@
+{set:$user_id = $this->user['user_id']}
+{set:$favoriteSum = 0}
+<div class="main f_r">
+	<div class="uc_title m_10">
+		<label class="current"><span>收藏夹</span></label>
+	</div>
+
+	<div class="box">
+		<div class="title">
+			<b class="gray">按分类查找：</b>
+			<a href="{url:/ucenter/favorite/}" class='{if:IReq::get('cat_id') == ''}orange{/if}'>全部（<label id='favoriteSum'></label>）</a>
+			{query:name=favorite as f,category as c where=f.user_id eq $user_id and f.cat_id eq c.id fields=count(*) as num,c.name,c.id group=cat_id}
+			{set:$favoriteSum+=$item['num']}
+			<a href="{url:/ucenter/favorite/cat_id/$item[id]}" class='{if:IReq::get('cat_id') == $item['id']}orange{/if}'>{$item['name']}（{$item['num']}）</a>
+			{/query}
+		</div>
+	</div>
+
+	<form action='#' method='post' id='favorite' name='favorite'>
+		<table class="border_table" width="100%" cellpadding="0" cellspacing="0">
+			<col width='15px' />
+			<col />
+			<col width='100px' />
+			<col width='60px' />
+			<col width='70px' />
+			<thead>
+				<tr>
+					<td><input type="checkbox" onclick="selectAll('id[]');" /></td>
+					<td align="center">商品名称</td>
+					<td align="center">收藏时间</td>
+					<td align="center">价格</td>
+					<td align="center">操作</td>
+				</tr>
+			</thead>
+
+			<tbody>
+				{set:$favoriteObj = null;$favoriteList = $this->get_favorite($favoriteObj)}
+				{foreach:items=$favoriteList}
+				{set:$type=1}
+				<tr>
+					<td><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+					<td>
+						<dl>
+							{set:$tmp=$item['data']['id'];$tmpIMG=$item['data']['img'];}
+							<dt><a href="{url:/site/products/id/$tmp}"><img src="{webroot:}{echo:Thumb::get($tmpIMG,88,88)}" width="88px" height="88px" alt="{$item['data']['name']}" /></a></dt>
+							<dd><a class="blue" href="{url:/site/products/id/$tmp}">{$item['data']['name']}</a></dd>
+
+							<input type='hidden' name='goods_id[]' value='{$item['data']['id']}' />
+							<dd>库存：{$item['data']['store_nums']}</dd>
+
+							<dd id='summary_show_{$item['id']}'>{$item['summary']}</dd>
+							<dd class="blue" id='summary_button_box_{$item['id']}'>
+								<a class="blue" href='javascript:void(0)' onclick='$("#summary_box_{$item['id']}").show();$("#summary_button_box_{$item['id']}").hide();'>+更新备注</a>
+							</dd>
+
+							<dd class="blue" id='summary_box_{$item['id']}' style='display:none'>
+								备注：<input type="text" id="summary_val_{$item['id']}" />
+								<input class="sbtn" type="button" value="提交" onclick="edit_summary({$item['id']});" />
+								<input class="sreset" type="button" value="[取消]" onclick='$("#summary_box_{$item['id']}").hide();$("#summary_button_box_{$item['id']}").show();' />
+							</dd>
+						</dl>
+					</td>
+
+					<td>{$item['time']}</td>
+					<td><span class='red'>￥{$item['data']['sell_price']}</span></td>
+					<td>
+						<label class="btn_gray_s"><input type="button" value="加入购物车" onclick="joinCart_list({$item['data']['id']});" /></span></label><br />
+						<label class="btn_gray_s"><input type="button" value="取消收藏" onclick="delModel({link:'{url:/ucenter/favorite_del/id/$item[id]}',msg:'是否取消收藏？'});" /></span></label>
+						<div class="msgbox" style="width:350px;display:none;margin:-44px 0 0 -250px;*margin:-10px 0 0 -350px;">
+							<div class="msg_t"><a class="close f_r" onclick="$(this).parents('.msgbox').hide();">关闭</a>请选择规格</div>
+							<div class="msg_c" id='product_box_{$item['data']['id']}'></div>
+						</div>
+					</td>
+				</tr>
+				{/foreach}
+			</tbody>
+
+			<tfoot>
+				<tr>
+					<td colspan="5">
+						<div class="pages_bar f_r">{$favoriteObj->getPageBar()}</div>
+						<label><input class="radio" type="checkbox" onclick="selectAll('id[]');" />全选</label>
+						<label class="btn_gray_s"><input type="button" onclick="$('#favorite').attr('action','{url:/ucenter/favorite_del}');delModel({msg:'是否取消收藏？',form:'favorite'});" value="取消收藏" /></span></label>
+					</td>
+				</tr>
+			</tfoot>
+
+		</table>
+	</form>
+
+</div>
+
+<!--选择货品添加购物车模板 开始-->
+<script type='text/html' id='selectProductTemplate'>
+<table width="100%">
+	<col />
+	<col width="80px" />
+	<col width="60px" />
+	<%for(var item in productData){%>
+	<%item = productData[item]%>
+	<tr>
+		<td align="left">
+			<%for(var spectName in item['specData']){%>
+			<%var spectValue = item['specData'][spectName]%>
+				<%=spectName%>：<%=spectValue%> &nbsp&nbsp
+			<%}%>
+		</td>
+		<td align="center"><span class="bold red2">￥<%=item['sell_price']%></span></td>
+		<td align="right"><label class="btn_gray_s"><input type="button" onclick="joinCart_ajax('<%=item['id']%>','product');" value="购买"></label></td>
+	</tr>
+	<%}%>
+	<tr>
+		<td colspan='3' align="left"><a href="{url:/site/products/id/<%=item['goods_id']%>}">查看更多</a></td>
+	</tr>
+</table>
+</script>
+<!--选择货品添加购物车模板 结束-->
+
+<script type='text/javascript'>
+//修改备注信息
+function edit_summary(idVal)
+{
+	var summary = $("#summary_val_"+idVal).val();
+	if($.trim(summary))
+	{
+		$.getJSON('{url:/ucenter/edit_summary}',{id:idVal,summary:summary},function(content){
+			if(content.isError == false)
+			{
+				$('#summary_show_'+idVal).html(summary);
+				$("#summary_box_"+idVal).hide();$("#summary_button_box_"+idVal).show();
+				$('#summary_val_'+idVal).val('');
+			}
+			else
+			{
+				alert(content.message);
+			}
+		});
+	}
+	else
+	{
+		alert('请填写备注信息');
+	}
+}
+
+//统计总数
+$('#favoriteSum').html('{$favoriteSum}');
+
+//[ajax]加入购物车
+function joinCart_ajax(id,type)
+{
+	$.getJSON('{url:/simple/joinCart}',{goods_id:id,type:type},function(content){
+		if(content.isError == false)
+		{
+			var count = parseInt($('[name="mycart_count"]').html()) + 1;
+			$('[name="mycart_count"]').html(count);
+			$('.msgbox').hide();
+			alert(content.message);
+		}
+		else
+		{
+			alert(content.message);
+		}
+	});
+}
+
+//列表页加入购物车统一接口
+function joinCart_list(id)
+{
+	$.getJSON('{url:/simple/getProducts}',{"id":id},function(content){
+		if(!content)
+		{
+			joinCart_ajax(id,'goods');
+		}
+		else
+		{
+			var selectProductTemplate = template.render('selectProductTemplate',{'productData':content});
+			$('#product_box_'+id).html(selectProductTemplate);
+			$('#product_box_'+id).parent().show();
+		}
+	});
+}
+</script>

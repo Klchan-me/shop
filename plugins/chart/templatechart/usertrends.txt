@@ -1,0 +1,53 @@
+{
+  "title":
+  {
+	"text":"(title)",
+	"style":"{color:#FF0000;font-size:24px;}"
+  },
+  "bg_colour":"#042544",
+  
+  "elements":[
+    {
+      "type":      "line",
+      "colour":    "#736AFF",
+      "text":      "新用户",
+      "tip":"#key#:#val#<br>时间：#x_label#",
+	  "dot-style": {
+				"type":"solid-dot", "dot-size": 6, "tip":"#key#:#val#<br>时间：#x_label#" },
+    
+      "values" :   [(newline)]
+    },
+    {
+      "type":      "line",
+      "colour":    "#FF0000",
+      "text":      "老用户",
+      "tip":"#key#:#val#<br>时间：#x_label#",
+	  "dot-style": {
+				"type":"solid-dot", "dot-size": 6, "tip":"#key#:#val#<br>时间：#x_label#" },
+    
+      "values" :   [(oldline)]
+    }
+  ],
+"x_axis":{
+    "grid-colour": "#C0C0C0",
+    "grid-visible":false,
+    "labels": {
+    "colour": "#FFFFFF",
+    "rotate": "330",
+     "labels":[(xlabels)]
+    }
+  },
+  "y_axis":{
+  "grid-colour": "#C0C0C0",
+  "steps":(steps),
+  "labels": {
+  "colour": "#FFFFFF"
+  },
+  "min": (ymin),
+   "max":   (ymax)
+  },
+  "x_legend":{
+    "text":"WebZhu--网站统计报表",
+    "style":"{font-size: 12px; color:#FF9400;}"
+  }
+}

@@ -1,0 +1,55 @@
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>文章管理</span><span>></span><span>{if:isset($this->catRow['id'])}编辑{else:}添加{/if}分类</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action='{url:/tools/cat_edit_act}' method='post' name='cat'>
+			<input type='hidden' name='id' value='' />
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>上级分类：</th>
+					<td>
+						{set:$id = isset($this->catRow['id']) ? $this->catRow['id'] : 0}
+						<select class="auto" name="parent_id" pattern="required" alt="请选择分类值">
+							<option value='0'>顶级分类</option>
+							{query:name=article_category order=id desc where=id neq $id}
+							<option value='{$item['id']}'>{$item['name']}</option>
+							{/query}
+						</select>
+						<label>*所属分类（必填）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>名称：</th>
+					<td>
+						<input type='text' class='middle' name='name' value='' pattern='required' alt='名称不能为空' />
+						<label>*分类名称（必填）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>是否为系统分类：</th>
+					<td>
+						<label class='attr'><input type='radio' name='issys' value='0' checked=checked />否</label>
+						<label class='attr'><input type='radio' name='issys' value='1' />是</label>
+					</td>
+				</tr>
+				<tr>
+					<th>排序：</th>
+					<td>
+						<input type='text' class='small' name='sort' value='' pattern='^\d+$' alt='请填写一个数字' />
+					</td>
+				</tr>
+				<tr>
+					<th></th><td><button class='submit' type='submit'><span>确 定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	var FromObj = new Form('cat');
+	FromObj.init({echo:JSON::encode($this->catRow)});
+</script>

@@ -1,0 +1,6 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+/*text获取焦点时候*/
+.focusInTextarea{border-color:blue;}

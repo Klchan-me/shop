@@ -1,0 +1,55 @@
+<form name="ModelForm" action="{url:/system/delivery_operate}" method="post">
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>配送管理</span><span>></span><span>配送方式回收站</span></div>
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="window.location='{url:/system/delivery}'"><span class="import">返回列表</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="document.getElementById('delivery_op').value='del';delModel()"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick="document.getElementById('delivery_op').value='recover';document.ModelForm.submit();"><button class="operating_btn" type="button"><span class="recover">恢复</span></button></a><input type='hidden' id='delivery_op' name='op'>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="250px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>配送方式</th>
+					<th>状态</th>
+					<th>物流保价</th>
+					<th>货到付款</th>
+					<th>排序</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<table class="list_table">
+		<col width="40px" />
+		<col width="250px" />
+		<col />
+		<tbody>
+			{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+			{query: name=delivery page=$page order=sort  where=is_delete eq 1}
+			<tr>
+				<td class="t_c"><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+				<td>{$item['name']}</td>
+				<td>{if:$item['status']==1}启用{else:}关闭{/if}</td>
+				<td>{if:$item['is_save_price']==1}是{else:}否{/if}</td>
+				<td>{if:$item['type']==1}是{else:}否{/if}</td>
+				<td>{$item['sort']}</td>
+				<td>
+					<a href="{url:/system/delivery_edit/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" /></a>
+					<a href="javascript:void(0)" onclick="window.location.href='{url:/system/delivery_operate/op/recover/id/$item[id]}';"><img class="operator" src="{skin:images/admin/icon_recover.gif}" alt="还原" /></a>
+					<a href="javascript:void(0)" onclick="delModel({link:'{url:/system/delivery_operate/op/del/id/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}"  alt="删除" /></a>
+				</td>
+			</tr>
+			{/query}
+		</tbody>
+	</table>
+</div>
+{$query->getPageBar()}
+</form>

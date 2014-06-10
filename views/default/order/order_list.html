@@ -1,0 +1,130 @@
+<div class="headbar">
+	<div class="position">订单<span>></span><span>订单管理</span><span>></span><span>订单列表</span></div>
+	<div class="operating">
+		<div class="search f_r">
+			<form name="serachuser" action="{url:/}" method="get">
+				<input type='hidden' name='controller' value='order' />
+				<input type='hidden' name='action' value='order_list' />
+				用户名：<input class="small" name="name" type="text" value="{$name}" />
+				订单号：<input class="small" name="order_no" type="text" value="{$order_no}" />
+				<button class="btn" type="submit"><span class="sch">搜 索</span></button>
+			</form>
+		</div>
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="window.location='{url:/order/order_edit}'"><span class="addition">添加订单</span></button></a>
+		<a href="javascript:void(0);" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0);" onclick="delModel({form:'orderForm'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0);" onclick="$('#orderForm').attr('action','{url:/order/expresswaybill_template}');$('#orderForm').submit();"><button class="operating_btn"><span class="export">批量打印快递单</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" onclick="location.href='{url:/order/print_template}'"><span class="export">单据模板</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="location.href='{url:/order/order_recycle_list}'"><span class="recycle">回收站</span></button></a>
+	</div>
+	<div class="searchbar">
+		<form action="{url:/}" method="get" name="order_list">
+			<input type='hidden' name='controller' value='order' />
+			<input type='hidden' name='action' value='order_list' />
+
+			<select name="pay_status" class="auto">
+				<option value="">选择支付状态</option>
+				<option value="0">未支付</option>
+				<option value="1">已支付</option>
+				<option value="2">退款成功</option>
+			</select>
+
+			<select name="distribution_status" class="auto">
+				<option value="">选择发货状态</option>
+				<option value="0">未发货</option>
+				<option value="1">已发货</option>
+				<option value="2">退货成功</option>
+			</select>
+
+			<select name="status" class="auto">
+				<option value="">选择订单状态</option>
+				<option value="1">新订单</option>
+				<option value="2">确认订单</option>
+				<option value="3">取消订单</option>
+				<option value="4">作废订单</option>
+				<option value="5">完成订单</option>
+			</select>
+			<button class="btn" type="submit"><span class="sel">筛 选</span></button>
+		</form>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="30px" />
+			<col width="155px" />
+			<col width="75px" />
+			<col width="75px" />
+			<col width="75px" />
+			<col width="75px" />
+			<col width="105px" />
+			<col width="80px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>订单号</th>
+					<th>收货人</th>
+					<th>支付状态</th>
+					<th>发货状态</th>
+					<th>配送方式</th>
+					<th>打印</th>
+					<th>支付方式</th>
+					<th>用户名</th>
+					<th>下单时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<form name="orderForm" id="orderForm" action="{url:/order/order_del}" method="post">
+	<div class="content">
+		<table class="list_table">
+			<col width="30px" />
+			<col width="155px" />
+			<col width="75px" />
+			<col width="75px" />
+			<col width="75px" />
+			<col width="75px" />
+			<col width="105px" />
+			<col width="80px" />
+			<col />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=order as o join=left join delivery as d on o.distribution eq d.id left join payment as p on o.pay_type eq p.id left join user as u on u.id eq o.user_id fields=o.id as oid,d.name as dname,o.pay_type,p.name as pname,o.order_no,o.accept_name,o.pay_status,o.distribution_status,u.username,o.create_time,o.status,o.if_print where=if_del eq 0 $where order=o.id desc page=$page }
+				<tr>
+					<td class="t_c"><input name="id[]" type="checkbox" value="{$item['oid']}" /></td>
+					<td title="{$item['order_no']}">{$item['order_no']}</td>
+					<td title="{$item['accept_name']}">{$item['accept_name']}</td>
+					<td>{if:$item['pay_status']==0}未付款{elseif:$item['pay_status']==1}<b class='green'>已付款</b>{elseif:$item['pay_status']==2}退款完成{else:}<span class="red"><b>申请退款</b></span>{/if}</td>
+					<td>{if:$item['status'] == 5}<b class='green'>已收货</b>{elseif:$item['distribution_status']==1}<b class='green'>已发货</b>{else:}未发货{/if}</td>
+					<td title="{$item['dname']}">{$item['dname']}</td>
+					<td>
+						<span class="{echo:strpos($item['if_print'],'shop') === false ? 'prt':'prted'}" title="购物清单打印" onclick="window.open('{url:/order/shop_template/id/$item[oid]}');">购</span>
+						<span class="{echo:strpos($item['if_print'],'pick') === false ? 'prt':'prted'}" title="配货单打印" onclick="window.open('{url:/order/pick_template/id/$item[oid]}');">配</span>
+						<span class="{echo:strpos($item['if_print'],'merge') === false ? 'prt':'prted'}" title="联合打印" onclick="window.open('{url:/order/merge_template/id/$item[oid]}');">合</span>
+						<span class="{echo:strpos($item['if_print'],'express') === false ? 'prt':'prted'}" title="快递单打印" onclick="window.open('{url:/order/expresswaybill_template/id/$item[oid]}');">递</span>
+					</td>
+					<td title="{if:$item['pay_type']==0}货到付款{else:}{$item['pname']}{/if}">{if:$item['pay_type']==0}货到付款{else:}{$item['pname']}{/if}</td>
+					<td title="{echo:$item['username']=='' ? '游客' : $item['username']}">{echo:$item['username']=='' ? '游客' : $item['username']}</td>
+					<td title="{$item['create_time']}">{$item['create_time']}</td>
+					<td><a href="{url:/order/order_show/id/$item[oid]}"><img class="operator" src="{skin:images/admin/icon_check.gif}" title="查看" /></a>{if:$item['status']<3}<a href="{url:/order/order_edit/id/$item[oid]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" title="编辑"/></a>{else:}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{/if}<a href="javascript:void(0)" onclick="delModel({link:'{url:/order/order_del/id/$item[oid]}'})" ><img class="operator" src="{skin:images/admin/icon_del.gif}" title="删除"/></a></td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</div>
+	{$query->getPageBar()}
+</form>
+
+<script type='text/javascript'>
+//DOM加载结束
+$(function(){
+	var formInstance = new Form('order_list');
+	formInstance.init({
+		"pay_status":"{$pay_status}",
+		"distribution_status":"{$distribution_status}",
+		"status":"{$status}"
+	});
+});
+</script>

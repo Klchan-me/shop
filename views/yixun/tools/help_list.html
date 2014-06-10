@@ -1,0 +1,52 @@
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>帮助管理</span><span>></span><span>帮助列表</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="event_link('{url:/tools/help_edit}');"><button class="operating_btn" type="button"><span class="addition">添加帮助</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col width="120px" />
+			<col width="80px" />
+			<col width="110px" />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>标题</th>
+					<th>帮助分类</th>
+					<th>排序</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form action="{url:/tools/help_del}" method="post" name="article">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col width="120px" />
+			<col width="80px" />
+			<col width="110px" />
+			<tbody>
+				{foreach:items=$this->list}
+				<tr>
+					<td class="t_c"><input type="checkbox" name="id[]" value="{$item['id']}" /></td>
+					<td><a target="_blank" href='{url:/site/help/id/$item[id]}' title='查看'>{$item['name']}</a></td>
+					<td>{$item['cat_name']}</td>
+					<td>{$item['sort']}</td>
+					<td>
+						<a href='{url:/tools/help_edit/id/$item[id]}'><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" title="编辑" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/tools/help_del/id/$item[id]}'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+					</td>
+				</tr>
+				{/foreach}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$this->query->getPageBar()}

@@ -1,0 +1,229 @@
+{js:my97date}
+<script type="text/javascript" src="{theme:javascript/event.js}"></script>
+<div class="headbar">
+	<div class="position"><span>营销</span><span>></span><span>促销活动管理</span><span>></span><span>{if:isset($this->promotionRow['id'])}编辑{else:}添加{/if}促销活动</span></div>
+	<ul class='tab' name='conf_menu'>
+		<li class='selected'><a href="javascript:select_tab(0);">活动信息</a></li>
+		<li><a href="javascript:select_tab(1);">活动规则</a></li>
+	</ul>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/market/pro_rule_edit_act}"  method="post" name='pro_rule_edit'" callback='invalid_callback("rule_table");'>
+			<input type='hidden' name='id' />
+			<table class="form_table" name="rule_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>活动名称：</th>
+					<td><input type='text' class='normal' name='name' pattern='required' alt='请填写活动名称' /><label>* 填写活动名称</label></td>
+				</tr>
+				<tr>
+					<th>活动时间：</th>
+					<td>
+						<input type='text' name='start_time' class='Wdate' pattern='datetime' onblur="FireEvent(this,'onchange');" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})"  alt='请填写一个日期' /> ～
+						<input type='text' name='end_time' class='Wdate' pattern='datetime' onblur="FireEvent(this,'onchange');" onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' />
+						<label>* 此活动的使用时间段</label>
+					</td>
+				</tr>
+				<tr>
+					<th>允许参与人群：</th>
+					<td>
+						<ul class='attr_list clearfix'>
+							<li><label class='attr'><input type='checkbox' name='group_all' value='all' onclick='select_all();' />全部</label></li>
+							{query:name=user_group}
+							<li><label class='attr'><input type='checkbox' {if:in_array($item['id'],explode(',',$this->promotionRow['user_group']))}checked=checked{/if} name='user_group[]' value='{$item['id']}' />{$item['group_name']}</label></li>
+							{/query}
+						</ul>
+						<label>* 此活动允许参加的用户组</label>
+					</td>
+				</tr>
+				<tr>
+					<th>是否开启：</th>
+					<td>
+						<label class='attr'><input type='radio' name='is_close' value='0' />是</label>
+						<label class='attr'><input type='radio' name='is_close' value='1' checked=checked />否</label>
+					</td>
+				</tr>
+				<tr>
+					<th>活动介绍：</th>
+					<td><textarea name='intro' class='textarea'>{$this->promotionRow['intro']}</textarea></td>
+				</tr>
+			</table>
+			<div class='clear'></div>
+			<table class="form_table" name="rule_table" style='display:none'>
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>购物车总金额条件：</th>
+					<td><input type='text' name='condition' class='small' pattern='float' alt='请填写一个金额数字' />元 <label>* 当购物车总金额达到所填写的现金额度时规则生效</label></td>
+				</tr>
+				<tr>
+					<th>活动规则：</th>
+					<td>
+						<select class='auto' name='award_type' pattern='required' alt='请选择一种规则' onchange="change_rule(this.value);">
+							<option value=''>请选择</option>
+							<option value='1'>当购物车金额满 M 元时,优惠 N 元</option>
+							<option value='2'>当购物车金额满 M 元时,优惠 N% </option>
+							<option value='3'>当购物车金额满 M 元时,赠送 N 个积分</option>
+							<option value='4'>当购物车金额满 M 元时,赠送一张面值 N 元的代金券</option>
+							<option value='6'>当购物车金额满 M 元时,免运费</option>
+							<option value='7'>当购物车金额满 M 元时,赠送 N 经验值</option>
+						</select>
+						<label>* 选择一种活动规则</label>
+					</td>
+				</tr>
+				<tr id='rule_box'>
+				</tr>
+			</table>
+			<button class="submit" type='submit'><span>确 定</span></button>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+
+	//校验回调
+	function invalid_callback(nameVal)
+	{
+		if($('.invalid-text').length > 0)
+		{
+			var parentObj = $('.invalid-text:eq(0)').parents('[name="'+nameVal+'"]');
+			$('[name="'+nameVal+'"]').index(parentObj);
+			select_tab($('[name="'+nameVal+'"]').index(parentObj));
+			return false;
+		}
+		return true;
+	}
+
+	//修改规则
+	function change_rule(selectVal)
+	{
+		//判断是否为真正的onchange事件
+		if(selectVal != $('#rule_box').data('index'))
+		{
+			$('#rule_box').data('index',selectVal);
+		}
+		else
+		{
+			return;
+		}
+
+		var html = '';
+		switch(selectVal)
+		{
+			case "1":
+			{
+				html = "<th>优惠金额：</th>"
+						+"<td><input type='text' name='award_value' class='small' pattern='float' alt='请填写一个金额数字' />元"
+						+"<label>* 优惠的金额，从购物车总金额中减掉此部分金额</label></td>";
+			}
+			break;
+
+			case "2":
+			{
+				html = "<th>优惠百分比：</th>"
+						+"<td><input type='text' name='award_value' class='small' pattern='float' alt='请填写一个数字' />%"
+						+"<label>* 优惠的百分比，从购物车总金额中的折扣百分比，如输入9则表示打9折</label></td>";
+			}
+			break;
+
+			case "3":
+			{
+				html = "<th>赠送积分：</th>"
+						+"<td><input type='text' name='award_value' class='small' pattern='int' alt='请填写一个数字' />"
+						+"<label>* 赠送的积分</label></td>";
+			}
+			break;
+
+			case "4":
+			{
+				html = "<th>设置代金券：</th>"
+						+"<td><select class='auto' name='award_value' pattern='required'><option value=''>请选择</option></select>"
+						+"<label>* 选择一个代金券</label></td>";
+
+				//异步获取代金券
+				$.getJSON('{url:/market/getTicketList}',function(content){
+					for(pro in content)
+					{
+						$('select[name="award_value"]').append('<option value="'+content[pro]['id']+'">'+content[pro]['name']+'   面值:'+content[pro]['value']+'元</option>');
+					}
+					//获取后设置默认的代金券选择
+					formObj.setValue('award_value',"{$this->promotionRow['award_value']}");
+				});
+			}
+			break;
+
+			case "5":
+			{
+				html = "<th>选择赠品：</th>"
+						+"<td>暂无此功能"
+						+"<label>* 购物车总额</label></td>";
+			}
+			break;
+
+			case "7":
+			{
+				html = "<th>赠送经验：</th>"
+						+"<td><input type='text' name='award_value' class='small' pattern='int' alt='请填写一个数字' />"
+						+"<label>* 赠送的经验</label></td>";
+			}
+			break;
+		}
+		$('#rule_box').html(html);
+		formObj.setValue('award_value',"{$this->promotionRow['award_value']}");
+	}
+
+	//选择参与人群
+	function select_all()
+	{
+		var is_checked = $('[name="group_all"]').attr('checked');
+		if(is_checked ==  true)
+		{
+			var checkedVal  = true;
+			var disabledVal = true;
+		}
+		else
+		{
+			var checkedVal  = false;
+			var disabledVal = false;
+		}
+
+		$('input:checkbox[name="user_group[]"]').each(
+			function(i)
+			{
+				$(this).attr('checked',checkedVal);
+				$(this).attr('disabled',disabledVal);
+			}
+		);
+	}
+
+	//表单回填
+	var formObj = new Form('pro_rule_edit');
+	formObj.init
+	({
+		'id':'{$this->promotionRow['id']}',
+		'name':'{$this->promotionRow['name']}',
+		'start_time':'{$this->promotionRow['start_time']}',
+		'end_time':'{$this->promotionRow['end_time']}',
+		'user_group[]':'{echo:str_replace(",",";",$this->promotionRow['user_group']);}',
+		'group_all':"{$this->promotionRow['user_group']}",
+		'is_close':'{$this->promotionRow['is_close']}',
+		'condition':'{$this->promotionRow['condition']}',
+		'award_type':'{$this->promotionRow['award_type']}'
+	});
+
+	change_rule("{$this->promotionRow['award_type']}");
+
+	//滑动门
+	function select_tab(indexVal)
+	{
+		indexVal = (parseInt(indexVal)>0) ? indexVal : 0;
+		$('table[name="rule_table"]').hide();
+		$('table[name="rule_table"]:eq('+indexVal+')').show();
+
+		//切换tab样式
+		$('ul[name="conf_menu"] li').attr('class','');
+		$('ul[name="conf_menu"] li:eq('+indexVal+')').attr('class','selected');
+	}
+</script>

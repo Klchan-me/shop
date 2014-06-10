@@ -1,0 +1,31 @@
+<script type='text/javascript' src='{theme:javascript/event.js}' charset="UTF-8"></script>
+<div class="headbar">
+	<div class="position"><span>营销</span><span>></span><span>销售统计</span><span>></span><span>注册用户统计</span></div>
+	<form action='{url:/market/amount}' method='post'>
+	<div class="operating">
+		<div class="search f_l">
+        {js:my97date}
+
+        从 <input type="text" name='start' class="Wdate" id="date_start" pattern='date' onFocus="WdatePicker()" onblur="FireEvent(this,'onchange')"/>到 <input type="text" name='end' pattern='date' class="Wdate" id="date_end" onFocus="WdatePicker()" onblur="FireEvent(this,'onchange')"/><button class="btn"><span >查 询</span></button>
+		</div>
+	</div>
+    </form>
+</div>
+<div>
+<div class="content_box">
+	<h3>人均消费统计：</h3>
+	<div class='cont'>
+	<ul>
+	<li>人均消费统计，更清楚了解每月用户对销售产品消费情况，更清楚的了解销售产品处在什么趋势，为你下一步的营销计划做出更好的判定！</li>
+	</ul>
+	</div>
+</div>
+<div class='content_box'><div id="myChart"></div></div>
+{if:$this->numbers!==null}
+{set:$fc=new FlashChart(IUrl::creatUrl("").'plugins/chart/',"100%",320);$info=array("title"=>'人均消费统计','numbers'=>$this->numbers,'dates'=>$this->dates,'max'=>$this->max,'steps'=>$this->steps);$fc->setChart("plugins/chart/templatechart/amount.txt",$info);}
+{else:}
+<script type='text/javascript'>
+$('#myChart').css('color','red').text('没有你要查询的数据!');
+</script>
+{/if}
+</div>

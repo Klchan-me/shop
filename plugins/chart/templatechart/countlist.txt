@@ -1,0 +1,66 @@
+{
+  "title":
+  {
+	"text":"(title)",
+	"style":"{color:#FF0000;font-size:24px;}"
+  },
+  "bg_colour":"#042544",
+  
+  "elements":[
+    {
+      "type":      "(charttype)",
+      "colour":    "#736AFF",
+      "text":      "IP",
+      "font-size": 10,
+      "width":     1,
+      "tip":"#key#:#val#",
+"dot-style": {
+				"type":"solid-dot", "dot-size": 6, "tip":"#key#:#val#" },
+      "values" :   [(listip)]
+    },
+    {
+      "type":      "(charttype)",
+      "colour":    "#FF0000",
+      "text":      "PV",
+      "font-size": 10,
+      "width":     1,
+      "tip":"#key#:#val#",
+"dot-style": {
+				"type":"solid-dot", "dot-size": 6, "tip":"#key#:#val#" },
+      "values" :   [(listpv)]
+    },
+    {
+      "type":      "(charttype)",
+      "colour":    "#1E9B00",
+      "text":      "UV",
+      "font-size": 10,
+      "width":     1,
+      "tip":"#key#:#val#",
+"dot-style": {
+				"type":"solid-dot", "dot-size": 6, "tip":"#key#:#val#" },
+      "values" :   [(listuid)]
+    }
+  ],
+"x_axis":{
+    "grid-colour": "#C0C0C0",
+    "grid-visible":false,
+    "labels": {
+    "colour": "#FFFFFF",
+    "rotate": "(rotate)",
+     "labels":[(xlabels)]
+    }
+  },
+  "y_axis":{
+  "grid-colour": "#C0C0C0",
+  "steps":(steps),
+  "labels": {
+  "colour": "#FFFFFF"
+  },
+  "min": (ymin),
+   "max":   (ymax)
+  },
+  "x_legend":{
+    "text":"WebZhu--网站统计报表",
+    "style":"{font-size: 12px; color:#FF9400;}"
+  }
+}

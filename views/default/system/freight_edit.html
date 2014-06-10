@@ -1,0 +1,58 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>配送管理</span><span>></span><span>物流公司{if:empty($id)}添加{else:}编辑{/if}</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action='{url:/system/freight_update}' method='post'>
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>物流公司选择：</th>
+					<td>
+						<select name="freight_type" id="freight_type">
+							<option value="CNEMS" {if:$freight_type=='CNEMS'}selected{/if}>中国邮政EMS </option>
+							<option value="CNST" {if:$freight_type=='CNST'}selected{/if}>申通快递 </option>
+							<option value="CNTT" {if:$freight_type=='CNTT'}selected{/if}>天天快递 </option>
+							<option value="CNYT" {if:$freight_type=='CNYT'}selected{/if}>圆通速递 </option>
+							<option value="CNSF" {if:$freight_type=='CNSF'}selected{/if}>顺丰速运 </option>
+							<option value="CNYD" {if:$freight_type=='CNYD'}selected{/if}>韵达快递 </option>
+							<option value="CNZT" {if:$freight_type=='CNZT'}selected{/if}>中通速递 </option>
+							<option value="CNLB" {if:$freight_type=='CNLB'}selected{/if}>龙邦物流 </option>
+							<option value="CNZJS" {if:$freight_type=='CNZJS'}selected{/if}>宅急送 </option>
+							<option value="CNQY" {if:$freight_type=='CNQY'}selected{/if}>全一快递 </option>
+							<option value="CNHT" {if:$freight_type=='CNHT'}selected{/if}>汇通速递 </option>
+							<option value="CNMH" {if:$freight_type=='CNMH'}selected{/if}>民航快递 </option>
+							<option value="CNYF" {if:$freight_type=='CNYF'}selected{/if}>亚风速递 </option>
+							<option value="CNKJ" {if:$freight_type=='CNKJ'}selected{/if}>快捷速递 </option>
+							<option value="DDS" {if:$freight_type=='DDS'}selected{/if}>DDS快递 </option>
+							<option value="CNHY" {if:$freight_type=='CNHY'}selected{/if}>华宇物流 </option>
+							<option value="CNZY" {if:$freight_type=='CNZY'}selected{/if}>中铁快运 </option>
+							<option value="FEDEX" {if:$freight_type=='FEDEX'}selected{/if}>FedEx </option>
+							<option value="UPS" {if:$freight_type=='UPS'}selected{/if}>UPS </option>
+							<option value="DHL" {if:$freight_type=='DHL'}selected{/if}>DHL </option>
+							<option value="OTHER" {if:$freight_type=='OTHER'}selected{/if}>其它 </option>
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<th>物流公司全称：</th>
+					<td><input type="text" name="freight_name" id="freight_name" class="normal" value="{$freight_name}" pattern="required" alt="物流名称错误"/><lable></lable><input type="hidden" name="id" value="{$id}" /></td>
+				</tr>
+				<tr>
+					<th>物流公司网址：</th><td><input class="normal" type="text" name="url" id="url" value="{$url}" empty pattern="url" alt="网址错误"/></td>
+				</tr>
+				<tr>
+					<th>排序：</th><td><input class="small" type="text" name="sort" id="sort" value="{$sort}" /></td>
+				</tr>
+				<tr>
+					<td></td><td><button class="submit" type="submit"><span>保 存</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+<script type='text/javascript'>
+	
+	
+</script>

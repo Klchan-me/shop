@@ -1,0 +1,230 @@
+<div class="headbar clearfix">
+	<div class="position"><span>商品</span><span>></span><span>模型管理</span><span>></span><span>模型{if:isset($id)}编辑{else:}添加{/if}</span></div>
+	<ul class="tab" name="menu1">
+		<li id="li_1" class="selected"><a href="javascript:selectTab('1');" hidefocus="true">基本信息</a></li>
+		<li id="li_2"><a href="javascript:selectTab('2');" hidefocus="true">规格</a></li>
+	</ul>
+</div>
+
+<form name="ModelForm" action="{url:/goods/model_update}" method="post">
+	<div class="content_box">
+		<div class="content form_content">
+			<!--属性表格-->
+			<table id="tab-1" class="form_table" name="table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>模型名称：</th>
+					<td>
+						<input class="normal" name="model_name" id="model_name" type="text" pattern="required" alt="模型名称不能为空！" value="{$name}"  /><label>* 模型名称（必填）</label>
+						<input name="model_id" type="hidden" value="{$id}" />
+					</td>
+				</tr>
+				<tr>
+					<th>添加扩展属性：</th>
+					<td><button class="btn" onclick="addAttr()" type="button"><span class="add">添加扩展属性</span></button></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<table width="90%" class='border_table'>
+							<thead>
+								<tr>
+									<th>属性名</th>
+									<th>操作样式</th>
+									<th>选择项数据【每项数据之间用逗号','做分割】</th>
+									<th>是否作为商品的筛选项</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody id="attr_list"></tbody>
+
+							<!--属性列表-->
+							<script type='text/html' id='attrListTemplate'>
+							<%for(var item in templateData){%>
+							<%include('attrTrTemplate',{'item':templateData[item]})%>
+							<%}%>
+							</script>
+
+							<!--属性单行-->
+							<script type='text/html' id='attrTrTemplate'>
+							<tr class='td_c'>
+								<td>
+									<input name='attr[id][]' type='hidden' value="<%=item['id']%>" />
+									<input name='attr[name][]' class='small' type='text' pattern='required' value="<%=item['name']%>" />
+								</td>
+								<td>
+									<select class="middle" name='attr[show_type][]'>
+										<option value='1' <%if(item['type']=='1'){%>selected<%}%>>单选框</option>
+										<option value='2' <%if(item['type']=='2'){%>selected<%}%>>复选框</option>
+										<option value='3' <%if(item['type']=='3'){%>selected<%}%>>下拉框</option>
+									</select>
+								</td>
+								<td>
+									<input class='normal' name='attr[value][]' type='text' value="<%=item['value']%>" pattern='required' />
+								</td>
+								<td>
+									<input type='checkbox' <%if(item['search']== '1'){%>checked<%}%> onclick="selectCheck(this)" />
+									<input type='hidden' name='attr[is_search][]' value="<%=item['search']?item['search']:0%>" />
+								</td>
+								<td>
+									<img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" onclick="delAttr(this)" />
+								</td>
+							</tr>
+							</script>
+						</table>
+					</td>
+				</tr>
+			</table>
+
+			<!--规格表格-->
+			<table id="tab-2" class="form_table" name="table" style="display: none">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>添加规格：</th>
+					<td><button class="btn" onclick="addSpec()" type="button"><span class="add">添加规格</span></button></td>
+				</tr>
+				<tr>
+					<td></td>
+					<td>
+						<table width="90%" class="border_table">
+							<thead>
+								<tr>
+									<th>规格</th>
+									<th>操作</th>
+								</tr>
+							</thead>
+							<tbody id="spec_list"></tbody>
+
+							<!--规格列表模板-->
+							<script type='text/html' id='specListTemplate'>
+							<%for(var item in templateData){%>
+							<%include('specTrTemplate',{'item':templateData[item]})%>
+							<%}%>
+							</script>
+
+							<!--规格单行模板-->
+							<script type='text/html' id='specTrTemplate'>
+							<tr class='td_c'>
+								<td>
+									<input name='spec[id][]' type='hidden' value="<%=item['id']%>" />
+									<%=item['name']%> <%if(item['note']){%>[<%=item['note']%>]<%}%>
+								</td>
+								<td>
+									<img class="operator" src="{skin:images/admin/icon_asc.gif}" onclick="positionUp($(this).parent().parent(),$('#spec_list'))" alt="向上" />
+									<img class="operator" src="{skin:images/admin/icon_desc.gif}" onclick="positionDown($(this).parent().parent(),$('#spec_list'))" alt="向下" />
+									<img class="operator" src="{skin:images/admin/icon_del.gif}" onclick="delAttr(this)" alt="删除" />
+								</td>
+							</tr>
+							</script>
+						</table>
+					</td>
+				</tr>
+			</table>
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<td></td>
+					<td><button class="submit" type="submit"><span>保 存</span></button></td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</form>
+
+<script type='text/javascript'>
+	$(function(){
+		//初始化属性
+		{if:isset($model_attr)}
+		{foreach:items = $model_attr}{/foreach}
+		var attrListHtml = template.render('attrListTemplate',{'templateData':{echo:JSON::encode($model_attr)}});
+		$('#attr_list').html(attrListHtml);
+		{/if}
+
+		//初始化规格
+		{if:isset($model_spec)}
+		{foreach:items = $model_spec}{/foreach}
+		var specListHtml = template.render('specListTemplate',{'templateData':{echo:JSON::encode($model_spec)}});
+		$('#spec_list').html(specListHtml);
+		{/if}
+	});
+
+	//添加模型规格
+	function addSpec()
+	{
+		art.dialog.open('{url:/goods/select_spec}', {
+		    title: '选择规格',
+		    okVal:'保存',
+		    ok:function(iframeWin, topWin){
+				var specChecked = $(iframeWin.document).find('[name="spec"]:checked');
+				if(specChecked.length == 1)
+				{
+					var specJson = $.parseJSON(specChecked.val());
+					var specTrHtml = template.render('specTrTemplate',{'item':specJson});
+					$('#spec_list').append(specTrHtml);
+				}
+		    }
+		});
+	}
+
+	//添加一个模型属性
+	function addAttr()
+	{
+		var attrTrHtml = template.render('attrTrTemplate',{'item':[]});
+		$('#attr_list').append(attrTrHtml);
+	}
+
+	//删除模型属性
+	function delAttr(curr_attr)
+	{
+		$(curr_attr).parent().parent().remove();
+	}
+
+	//选择当前Tab
+	function selectTab(curr_tab)
+	{
+		$("table[name='table']").hide();
+		$("#tab-"+curr_tab).show();
+		$("ul[name=menu1] > li").removeClass('selected');
+		$('#li_'+curr_tab).addClass('selected');
+	}
+
+	//设置选择复选框的值
+	function selectCheck(_self)
+	{
+		var checkValue = $(_self).siblings('[name="attr[is_search][]"]')[0];
+
+		if($(_self).attr("checked"))
+		{
+			checkValue.value = 1;
+		}
+		else
+		{
+			checkValue.value = 0;
+		}
+	}
+
+	//项上升
+	function positionUp(_self,container)
+	{
+		var childrenIndex = container.children().index(_self);
+		if(childrenIndex == 0)
+		{
+			return;
+		}
+		_self.insertBefore(container.children().get(childrenIndex-1));
+	}
+
+	//项下降
+	function positionDown(_self,container)
+	{
+		var childrenIndex = container.children().index(_self);
+		if(childrenIndex == container.children().length - 1)
+		{
+			return;
+		}
+		_self.insertAfter(container.children().get(childrenIndex+1));
+	}
+</script>

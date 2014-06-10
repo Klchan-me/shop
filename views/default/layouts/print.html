@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>单据打印</title>
+{js:jquery}
+<link rel="shortcut icon" href="favicon.ico" />
+<style media="print" type="text/css">.noprint{display:none}</style>
+<style media="screen,print" type="text/css">
+body,div,dl,dt,dd,ul,ol,li,h1,h2,h3,h4,h5,h6,pre,form,fieldset,input,textarea,p,blockquote,th,td,button{padding:0;margin:0;font-size:100%;}
+body{font:12px/1.5 "宋体", Arial, Helvetica, sans-serif;color:#404040;background-color:#fff;text-align:center}
+table{border-collapse:collapse;}
+.container{width:90%;margin:20px auto}
+.v_m{vertical-align: middle}
+.ml_20{margin-left:20px;}
+.m_10{ margin-bottom:10px;}
+.f14{font-size:14px;}
+.f18{font-size:18px;}
+.f30{font-size:30px;}
+.bold{font-weight:bold}
+.gray{color:#979797}
+.orange{color:#f76f10;}
+table.table{border-top:2px solid #b0b0b0;}
+table.table tr{_background-image:none}
+table.table thead th{height:35px;padding:0 15px;}
+table.table tbody th{height:35px;background:#f8f8f8;border-top:1px solid #d0d0d0;border-bottom:1px solid #d0d0d0;}
+table.table tbody td{padding:12px 10px}
+table.table tbody td img.pic{float:left;padding:1px;border:1px solid #d2d2d2; vertical-align:middle;margin-right:10px;}
+table.table tfoot{border-top:2px solid #b0b0b0;}
+.btn_print{width:112px;height:31px;margin:20px auto;border:0;background: url({skin:images/front/submit_bg.gif}) -93px -402px no-repeat;}
+</style>
+<script type='text/javascript'>
+	//更新打印状态
+	function update_print_status(order_id,print_type)
+	{
+		var order_id   = order_id;
+		var print_type = print_type;
+		$.get('{url:/order/update_print_status}',{order_id:order_id,print_type:print_type});
+	}
+</script>
+</head>
+
+<body>
+{viewcontent}
+</body>
+</html>

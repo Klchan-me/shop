@@ -1,0 +1,71 @@
+{set:$dbObj = IDBFactory::getDB();$tableInfo = $dbObj->query('show table status');}
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>数据库管理</span><span>></span><span>备份数据库</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="selectAll('name[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="confirm('确定要备份么？','backup_act()');"><button class="operating_btn" type="button"><span class="backup">备份</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="50px" />
+			<col width="200px" />
+			<col width="110px" />
+			<col width="105px" />
+			<col width="150px" />
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>数据库表</th>
+					<th>记录条数</th>
+					<th>占用空间</th>
+					<th>编码</th>
+					<th>说明</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form>
+		<table class="list_table">
+			<col width="50px" />
+			<col width="200px" />
+			<col width="110px" />
+			<col width="105px" />
+			<col width="150px" />
+			<col />
+			<tbody>
+				{foreach:items = $tableInfo}
+				<tr>
+					<td class="t_c"><input type="checkbox" name="name[]" value="{$item['Name']}" /></td>
+					<td>{$item['Name']}</td>
+					<td>{$item['Rows']}</td>
+					<td>{echo:$item['Data_length']>=1024 ? ($item['Data_length']>>10).' KB':$item['Data_length'].' B'}</td>
+					<td>{$item['Collation']}</td>
+					<td>{$item['Comment']}</td>
+				</tr>
+				{/foreach}
+			</tbody>
+		</table>
+	</form>
+</div>
+<script type="text/javascript">
+//备份数据库表
+function backup_act()
+{
+	loadding('正在备份请稍候......');
+	var jsonData = getArray('name[]','checkbox');
+	$.post('{url:/tools/db_act_bak}',{name:jsonData},function(c){
+		if(c.isError == true)
+		{
+			alert(c.message);
+		}
+		else
+		{
+			window.location.href=c.redirect;
+		}
+		unloadding();
+	},'json');
+}
+</script>

@@ -1,0 +1,216 @@
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>商品管理</span><span>></span><span>商品列表</span></div>
+	<div class="operating">
+		<div class="search f_r">
+			<form name="searchModForm" action="{url:/}" method="get">
+				<input type='hidden' name='controller' value='goods' />
+				<input type='hidden' name='action' value='goods_list' />
+				<select class="auto" name="search[name]">
+					<option value="goodsName">商品名</option>
+					<option value="goodsNo">商品货号</option>
+				</select>
+				<input class="small" name="search[keywords]" type="text" value="" />
+				<button class="btn" type="submit"><span class="sch">搜 索</span></button>
+			</form>
+		</div>
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="window.location.href='{url:/goods/goods_edit}'"><span class="addition">添加商品</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="selectAll('id[]')"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="goods_del()"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="goods_stats('up')"><span class="import">批量上架</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="goods_stats('down')"><span class="export">批量下架</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="importCsvPacket();"><span class="combine">CSV商品导入</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="goodsCollect();"><span class="export">商品采集器</span></button></a>
+		<a href="javascript:void(0);"><button class="operating_btn" type="button" onclick="window.location.href='{url:/goods/goods_recycle_list}'"><span class="recycle">回收站</span></button></a>
+	</div>
+
+	<div class="searchbar">
+		<form action="{url:/}" method="get" name="searchListForm">
+			<input type='hidden' name='controller' value='goods' />
+			<input type='hidden' name='action' value='goods_list' />
+			<select class="auto" name="search[category_id]">
+				<option value="">选择分类</option>
+				{query:name=category}
+				<option value="{$item['id']}">{$item['name']}</option>
+				{/query}
+			</select>
+			<select class="auto" name="search[is_del]">
+				<option value="">选择上下架</option>
+				<option value="0">上架</option>
+				<option value="2">下架</option>
+			</select>
+			<select class="auto" name="search[store_nums]">
+				<option value="">选择库存</option>
+				<option value="1">无货</option>
+				<option value="10">低于10</option>
+				<option value="100">10-100</option>
+				<option value="101">100以上</option>
+			</select>
+			<select class="auto" name="search[commend_id]">
+				<option value="">选择商品标签</option>
+				<option value="1">最新商品</option>
+				<option value="2">特价商品</option>
+				<option value="3">热卖商品</option>
+				<option value="4">推荐商品</option>
+			</select>
+			<button class="btn" type="submit"><span class="sel">筛 选</span></button>
+		</form>
+	</div>
+
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="400px" />
+			<col width="120px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col width="80px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>商品名称</th>
+					<th>分类</th>
+					<th>销售价</th>
+					<th>库存</th>
+					<th>上架</th>
+					<th>品牌</th>
+					<th>重量</th>
+					<th>排序</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<form action="" method="post" name="orderForm">
+	<div class="content">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="400px" />
+			<col width="120px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col width="80px" />
+			<col width="70px" />
+			<col width="70px" />
+			<col />
+			<tbody>
+				{foreach:items = $this->goodsHandle->find()}
+				<tr>
+					<td><input name="id[]" type="checkbox" value="{$item['id']}" /></td>
+					<td><img src='{webroot:$item[img]}' style='width:20px;' /><a href="{url:/site/products/id/$item[id]}" target="_blank" title="{$item['name']}">{$item['name']}</a></td>
+					<td>
+					{set:$catName = array()}
+					{query:name=category_extend as ce join=left join category as cd on cd.id eq ce.category_id fields=cd.name where=goods_id eq $item[id] item=$catData}
+						{set:$catName[] = $catData['name']}
+					{/query}
+					{echo:join(',',$catName)}
+					</td>
+					<td>{$item['sell_price']}</td>
+					<td>{$item['store_nums']}</td>
+					<td>{echo:$item['is_del']==0?'是':'否'}</td>
+					<td>{$item['brand_name']}</td>
+					<td>{$item['weight']}</td>
+					<td>{$item['sort']}</td>
+					<td>
+						<a href="{url:/goods/goods_edit/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" /></a>
+						<a href="javascript:void(0)" onclick="delModel({link:'{url:/goods/goods_del/id/$item[id]}'})" ><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+					</td>
+				</tr>
+				{/foreach}
+			</tbody>
+		</table>
+	</div>
+</form>
+
+{$this->goodsHandle->getPageBar()}
+
+<script type="text/javascript">
+//DOM加载
+$(function(){
+	{if:$this->search}
+	var searchData = {echo:JSON::encode($this->search)};
+	for(var index in searchData)
+	{
+		$('[name="search['+index+']"]').val(searchData[index]);
+	}
+	{/if}
+});
+
+//csv导入ui框
+function importCsvPacket()
+{
+	art.dialog.open('{url:/goods/csvImport}',{
+		id:'csvImport',
+	    title:'导入csv商品数据包',
+	    okVal:'开始导入',
+	    ok:function(iframeWin, topWin){
+	    	var formObject = iframeWin.document.forms[0];
+	    	formObject.onsubmit();
+	    	loadding();
+	    	return false;
+	    }
+	});
+}
+
+//upload csv file callback
+function artDialogCallback(message)
+{
+	if(message)
+	{
+		alert(message);
+		return;
+	}
+	window.location.reload();
+}
+
+//删除
+function goods_del()
+{
+	var flag = 0;
+	$('input:checkbox[name="id[]"]:checked').each(function(i){flag = 1;});
+	if(flag == 0)
+	{
+		alert('请选择要删除的数据');
+		return false;
+	}
+	$("form[name='orderForm']").attr('action','{url:/goods/goods_del}');
+	confirm('确定要删除所选中的信息吗？','formSubmit(\'orderForm\')');
+}
+
+//上下架操作
+function goods_stats(type)
+{
+	if($('input:checkbox[name="id[]"]:checked').length > 0)
+	{
+		$("form[name='orderForm']").attr('action','{url:/goods/goods_stats/type/}'+type);
+		confirm('确定将选中的商品进行操作吗？',"formSubmit('orderForm')");
+	}
+	else
+	{
+		alert('请选择要操作的商品!');
+		return false;
+	}
+}
+
+//商品采集器界面
+function goodsCollect()
+{
+	art.dialog.open('{url:/goods/collect_import}',{
+		id:'collect_import',
+	    title:'商品采集器',
+	    okVal:'开始采集',
+	    ok:function(iframeWin, topWin){
+	    	var formObject = iframeWin.document.forms[0];
+	    	formObject.submit();
+	    	loadding();
+	    	return false;
+	    }
+	});
+}
+</script>

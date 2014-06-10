@@ -1,0 +1,56 @@
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>广告管理</span><span>></span><span>广告位列表</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="event_link('{url:/tools/ad_position_edit}');"><button class="operating_btn" type="button"><span class="addition">添加广告位</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel();"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="300px" />
+			<col width="150px" />
+			<col width="80px" />
+			<col width="80px" />
+			<col />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>名称</th>
+					<th>宽×高</th>
+					<th>播放方式</th>
+					<th>开启状态</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form name='ad_position' method='post' action='{url:/tools/ad_position_del}'>
+		<table class="list_table">
+			<col width="40px" />
+			<col width="300px" />
+			<col width="150px" />
+			<col width="80px" />
+			<col width="80px" />
+			<col />
+			<tbody>
+				{query: name=ad_position}
+				<tr>
+					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
+					<td>{$item['name']}</td>
+					<td>{$item['width']}×{$item['height']}</td>
+					<td>{echo:$item['fashion']==1 ? '轮回显示':'随机显示'}</td>
+					<td>{echo:$item['status']==1 ? '是':'否'}</td>
+					<td>
+						<a href='{url:/tools/ad_position_edit/id/$item[id]}'><img class="operator" src="{skin:images/admin/icon_check.gif}" alt="获取广告位代码" title="获取广告位代码" /></a>
+						<a href='{url:/tools/ad_position_edit/id/$item[id]}'><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/tools/ad_position_del/id/$item[id]}'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>

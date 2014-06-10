@@ -1,0 +1,139 @@
+{js:kindeditor}
+{js:artTemplate}
+<script type='text/javascript' src='{theme:javascript/artTemplate/area_select.js}'></script>
+
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>会员管理</span><span>></span><span>{if:isset($member['user_id'])}编辑会员{else:}添加会员{/if}</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/member/member_save/}" method="post" name="memberForm">
+			<input name="user_id" value="" type="hidden" />
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tbody>
+					<tr>
+						<th>用户名：</th>
+						<td><input class="normal" name="username" type="text" value="" pattern="required" alt="用户名不能为空" /><label>* 用户名称（必填）</label></td>
+					</tr>
+					<tr>
+						<th>邮箱：</th>
+						<td><input type="text" class="normal" name="email" pattern="email" alt="邮箱错误" /><label>* 邮箱（必填）</label></td>
+					</tr>
+					<tr>
+						<th>密码：</th><td><input class="normal" name="password" type="password" /><label>登录密码</label></td>
+					</tr>
+					<tr>
+						<th>确认密码：</th><td><input class="normal" name="repassword" type="password" /><label>确认密码</label></td>
+					</tr>
+					<tr>
+						<th>会员组：</th>
+						<td>
+							<select class="normal" name="group_id">
+								<option value=''>请选择</option>
+								{query:name=user_group}
+								<option value="{$item['id']}">{$item['group_name']}</option>
+								{/query}
+							</select>
+						</td>
+					</tr>
+					<tr>
+						<th>姓名：</th>
+						<td><input class="normal" name="true_name" type="text" value="" /><label>真实姓名</label></td>
+					</tr>
+					<tr>
+						<th>姓别：</th>
+						<td>
+							<label><input name="sex" type="radio" value="1" checked="checked" />男</label>
+							<label><input name="sex" type="radio" value="2" />女</label>
+						</td>
+					</tr>
+					<tr>
+						<th>电话：</th><td><input class="normal" name="telephone" type="text" value="" empty pattern="phone" alt="格式不正确 格式：（地区号-）用户号（-分机号）如010-66668888-123" /><label>格式：（地区号-）用户号（-分机号）如010-66668888-123</label></td>
+					</tr>
+					<tr>
+						<th>手机：</th><td><input class="normal" name="mobile" type="text" value="" empty pattern="mobi" alt="格式不正确" /><label>手机号码</label></td>
+					</tr>
+					<tr>
+						<th>地区：</th>
+						<td>
+							<select name="province" child="city,area" onchange="areaChangeCallback(this);"></select>
+							<select name="city" child="area" parent="province" onchange="areaChangeCallback(this);"></select>
+							<select name="area" parent="city"></select>
+						</td>
+					</tr>
+					<tr>
+						<th>地址：</th><td><input class="normal" name="contact_addr" type="text" value="" /><label>联系地址</label></td>
+					</tr>
+					<tr>
+						<th>邮编：</th><td><input class="normal" name="zip" type="text" value="" empty pattern="zip" alt="格式不正确（6位数字）" /><label>邮政编码</label></td>
+					</tr>
+					<tr>
+						<th>QQ：</th><td><input class="normal" name="qq" type="text" value="" empty pattern="qq" alt="格式不正确" /><label>QQ号码</label></td>
+					</tr>
+					<tr>
+						<th>MSN：</th><td><input class="normal" name="msn" type="text" value="" /></td>
+					</tr>
+					<tr>
+						<th>经验值：</th><td><input class="normal" name="exp" type="text" value="" /></td>
+					</tr>
+					<tr>
+						<th>积分：</th><td><input class="normal" name="point" type="text" value="" /></td>
+					</tr>
+					<tr>
+						<td></td><td><button class="submit" type="submit"><span>确 定</span></button></td>
+					</tr>
+				</tbody>
+			</table>
+		</form>
+	</div>
+</div>
+<script language="javascript">
+//DOM加载完毕
+$(function(){
+	//初始化地域联动
+	template.compile("areaTemplate",areaTemplate);
+
+	//修改模式
+	{if:isset($this->userInfo)}
+		var formObj = new Form('memberForm');
+		formObj.init({echo:JSON::encode($this->userInfo)});
+
+		//城市设置
+		{if:$this->userInfo['area']}
+			{set:$area = explode(',',trim($this->userInfo['area'],','))}
+			createAreaSelect('province',0,"{$area[0]}");
+			createAreaSelect('city',"{$area[0]}","{$area[1]}");
+			createAreaSelect('area',"{$area[1]}","{$area[2]}");
+		{else:}
+			createAreaSelect('province',0,"");
+		{/if}
+
+		//锁定字段一旦注册无法修改
+		var lockCols = ['email','username'];
+		for(var index in lockCols)
+		{
+			$('input:text[name="'+lockCols[index]+'"]').addClass('readonly');
+			$('input:text[name="'+lockCols[index]+'"]').attr('readonly',true);
+		}
+	{else:}
+		createAreaSelect('province',0,'');
+	{/if}
+});
+
+/**
+ * 生成地域js联动下拉框
+ * @param name
+ * @param parent_id
+ * @param select_id
+ */
+function createAreaSelect(name,parent_id,select_id)
+{
+	//生成地区
+	$.getJSON("{url:/block/area_child}",{"aid":parent_id,"random":Math.random()},function(json)
+	{
+		$('[name="'+name+'"]').html(template.render('areaTemplate',{"select_id":select_id,"data":json}));
+	});
+}
+</script>

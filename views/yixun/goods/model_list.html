@@ -1,0 +1,47 @@
+<form name="ModelForm" action="{url:/goods/model_del}" method="post">
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>模型管理</span><span>></span><span>模型列表</span></div>
+
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="window.location='{url:/goods/model_edit}'"><span class="addition">添加模型</span></button></a>
+		<a href="javascript:void(0)"><button class="operating_btn" type="button"  onclick="selectAll('model_id[]')"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)"><button class="operating_btn" type="button" onclick="delModel()"><span class="delete">批量删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<col width="100px" />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>模型名称</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+
+</div>
+<div class="content">
+		<table class="list_table" cellpadding="0" cellspacing="0">
+			<col width="40px" />
+			<col />
+			<col width="105px" />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=model order=id desc page=$page}
+				<tr>
+					<td class="t_c"><input name="model_id[]" type="checkbox" value="{$item['id']}" /></td>
+					<td>{$item['name']}</td>
+					<td>
+						<a href="{url:/goods/model_edit/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="编辑" /></a>
+						<a href="javascript:delModel({link:'{url:/goods/model_del/id/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</div>
+{$query->getPageBar()}
+</form>

@@ -1,0 +1,74 @@
+{set:$comment_total=$this->data['comment_total'];}
+{set:$average_point=$this->data['average_point'];}
+{set:$id=intval(IReq::get('id'));}
+
+<div class="position"> <span>您当前的位置：</span> <a href="{url:}"> 首页</a> » <a href="{url:/site/products/id/$id}">评论</a> </div>
+<div class="wrapper clearfix">
+	<div class="sidebar f_l">
+		<div class="box_2 m_10">
+			<div class="title">商品信息</div>
+			<div class="content">
+				{query: name=goods where=id eq $id limit=1}
+				<ul class="prolist clearfix">
+					<li>
+						<a href="{url:/site/products/id/$id}"><img src="{webroot:}{echo:Thumb::get($item['img'],212,167)}" title="{$item['name']}" alt="{$item['name']}" height="212" width="167"></a>
+						<p class="pro_title">商品名称：<a class="blue" href="{url:/site/products/id/$id}">{$item['name']}</a></p>
+						<p>优惠价：<b>{$item['sell_price']}</b></p>
+						<p>评价得分：<span class="grade"><i style="width:{echo:Common::gradeWidth($average_point)}px"></i></span>({$average_point}分)</p>
+						<p>评论数：{$comment_total}条</p>
+					</li>
+					<input type="submit" onclick="joinCart_list({$id});" value="加入购物车" class="submit_join m_10">
+					<div class="msgbox" style="width:350px;display:none">
+						<div class="msg_t"><a class="close f_r" onclick="$(this).parents('.msgbox').hide();">关闭</a>请选择规格</div>
+						<div class="msg_c" id='product_box_{$id}'></div>
+					</div>
+				</ul>
+				{/query}
+			</div>
+		</div>
+	</div>
+
+	<div class="main comment_list f_r">
+		<div class="tabs">
+			<div class="tabs_menu uc_title">
+				<label><span><a href="{url:/site/comments_list/id/$id}">全部评论({$comment_total}条)</a></span></label>
+				<label><span><a href="{url:/site/comments_list/id/$id/type/good}">好评({$this->data['point_grade']['good']}条)</a></span></label>
+				<label><span><a href="{url:/site/comments_list/id/$id/type/middle}">中评({$this->data['point_grade']['middle']}条)</a></span></label>
+				<label><span><a href="{url:/site/comments_list/id/$id/type/bad}">差评({$this->data['point_grade']['bad']}条)</a></span></label>
+			</div>
+
+			<div class="tabs_content">
+				{foreach:items=$this->data['comment_list'] key=$key item=$item}
+				<div class="node item">
+					<div class="user">
+						<div class="ico"><img src="{webroot:$item[head_ico]}" width="70px" height="70px" onerror="this.src='{skin:images/front/user_ico.gif}'" /></div>
+						<a class="blue">{$item['username']}</a>
+						<p class="gray">{$item['user_group_name']}</p>
+						<p class="gray"></p>
+					</div>
+					<dl class="desc">
+						<p class="clearfix"><b>评分：</b><span class="grade"><i style="width:{echo:Common::gradeWidth($item['point'])}px"></i></span><span class="light_gray">{$dateline}</span><label></label></p>
+						<hr />
+						<p><b>评语：</b><span class="gray">{$item['contents']}</span></p>
+					</dl>
+					<div class="corner b"></div>
+					<div class="corner tl"></div>
+				</div>
+				<hr />
+				{/foreach}
+			</div>
+			{$this->comment_query->getPageBar()}
+		</div>
+	</div>
+</div>
+
+<script type='text/javascript'>
+//DOM加载完毕
+$(function()
+{
+	//tab标签的class设置
+	var urlType  = "{echo:IReq::get('type') ? IReq::get('type') : 'all'}";
+	var tabIndex = {"all":0,"good":1,"middle":2,"bad":3};
+	$('.tabs_menu>label:eq('+tabIndex[urlType]+')').addClass('current');
+});
+</script>

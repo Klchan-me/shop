@@ -1,0 +1,60 @@
+<script type="text/javascript" src="{theme:javascript/event.js}"></script>
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>多平台登录</span><span>></span><span>多平台登录编辑</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action='{url:/system/oauth_edit_act}' method='post' name='oauth'>
+			<input type='hidden' name='id' />
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>名称：</th>
+					<td>
+						<input type='text' class='normal' name='name' value='{$this->oauthRow['name']}' pattern='required' alt="填写名称" />
+						<label>*登录平台名称（必填）</label>
+					</td>
+				</tr>
+
+				{if:!empty($this->oauthRow['fields'])}
+				{set:$configArray = unserialize($this->oauthRow['config'])}
+				{foreach:$items = $this->oauthRow['fields']}
+				<tr>
+					<th>{$key}：</th>
+					<td>
+						<input type='text' class='normal' name='{$item['label']}' value='{$configArray[$key]}' />
+					</td>
+				</tr>
+				{/foreach}
+				{/if}
+
+				<tr>
+					<th>是否开启：</th>
+					<td>
+						<label class='attr'><input type='radio' name='is_close' value='0' checked=checked />开启</label>
+						<label class='attr'><input type='radio' name='is_close' value='1' />关闭</label>
+					</td>
+				</tr>
+				<tr>
+					<th>描述：</th>
+					<td><textarea class='textarea' name='description' pattern='required' alt='请填写文章内容'>{$this->oauthRow['description']}</textarea></td>
+				</tr>
+				<tr>
+					<th></th><td><button class='submit' type='submit'><span>确 定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	//表单回填
+	var formObj = new Form('oauth');
+	formObj.init
+	({
+		'id':'{$this->oauthRow['id']}',
+		'name':'{$this->oauthRow['name']}',
+		'is_close':'{$this->oauthRow['is_close']}'
+	});
+</script>

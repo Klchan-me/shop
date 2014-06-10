@@ -1,0 +1,66 @@
+{js:my97date}
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>咨询管理</span><span>></span><span>建议管理</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="selectAll('check[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel({form:'suggestion_list',msg:'确定要删除选中的记录吗？'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+
+	<form name="filter_form" id="filter_form" method="get" action="{url:/}">
+		<input type='hidden' name='controller' value='comment' />
+		<input type='hidden' name='action' value='suggestion_list' />
+		<div class="searchbar">
+			建议人：<input class="small" type="text" name="username" value="{$username}" />
+			开始时间：<input class="small" type="text" name="beginTime" onfocus="WdatePicker()" value="{$beginTime}" />
+			截止时间：<input class="small" type="text" name="endTime" onfocus="WdatePicker()" value="{$endTime}" />
+			<button class="btn" type="submit"><span class="sel">筛 选</span></button>
+		</div>
+	</form>
+
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col />
+			<col width="160px" />
+			<col width="110px" />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>建议人</th>
+					<th>建议内容</th>
+					<th>添加时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<form action="{url:/comment/suggestion_del}" method="post" name="suggestion_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+	<div class="content">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col />
+			<col width="160px" />
+			<col width="110px" />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query:name=suggestion AS a join=left join user AS b ON a.user_id eq b.id fields=a.*,b.username order=a.id DESC page=$page where=$this->where}
+				<tr>
+					<td class="t_c"><input name="check[]" type="checkbox" value="{$item['id']}" /></td>
+					<td><a href="{url:/member/member_edit/uid/$item[user_id]}">{$item['username']}</a></td>
+					<td><a href="{url:/comment/suggestion_edit/id/$item[id]}">{$item['title']}</a></td>
+					<td>{$item['time']}</td>
+					<td>
+						<a href="{url:/comment/suggestion_edit/id/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a>
+						<a href="javascript:void(0)" onclick="delModel({link:'{url:/comment/suggestion_del/check/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</div>
+	{$query->getPageBar();}
+</form>

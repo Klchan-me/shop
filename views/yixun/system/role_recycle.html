@@ -1,0 +1,43 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>权限管理</span><span>></span><span>角色回收站</span></div>
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="window.location='{url:/system/role_list}'"><span class="import">返回列表</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick=$('[name="role_list"]').attr("action","{url:/system/role_update}");delModel({msg:'是否进行彻底删除？'});><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick=$('[name="role_list"]').attr("action","{url:/system/role_update/recycle/rec}");delModel({msg:'是否进行恢复？'});><button class="operating_btn" type="button"><span class="recover">批量还原</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>名字</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+	<form name='role_list' method='post' action='#'>
+		<table id="list_table" class="list_table">
+			<col width="40px" />
+			<col />
+			<tbody>
+				{query: name=admin_role where=is_del eq 1}
+				<tr>
+					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
+					<td>{$item['name']}</td>
+					<td>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/system/role_update/id/$item[id]}',msg:'是否进行彻底删除？'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/system/role_update/recycle/rec/id/$item[id]}',msg:'是否进行恢复？'});"><img class="operator" src="{skin:images/admin/icon_recover.gif}" alt="恢复" title="恢复" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>

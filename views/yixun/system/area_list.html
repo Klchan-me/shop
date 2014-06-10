@@ -1,0 +1,142 @@
+{js:artTemplate}
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>地域管理</span><span>></span><span>地区列表</span></div>
+	<div class="field">
+		<table class="list_table">
+			<col width="780px" />
+			<col width="120px" />
+			<col />
+			<thead>
+				<tr>
+					<th>名称</th>
+					<th>排序</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<table class="list_table">
+		<col width="780px" />
+		<col width="120px" />
+		<col />
+		<tbody id="area_box"></tbody>
+	</table>
+</div>
+
+<!--地域模板 开始-->
+<script type='text/html' id='areaRowTemplate'>
+<tr id="area_<%=item['area_id']%>" name="parent_<%=item['parent_id']%>">
+	<td style="padding-left:<%if(last_parent_id === 0){%>40px;<%}else if(last_parent_id > 0){%>80px;<%}else{%>10px;<%}%>">
+		<a href="javascript:toggleArea(<%=item['area_id']%>,<%=item['parent_id']%>);"><img id="ctrl_<%=item['area_id']%>" src="{skin:images/admin/open.gif}" is_open="no" is_cache="no" /></a>
+		<input type="text" value="<%=item['area_name']%>" name="area_name" class="middle" style="width:150px" onblur="updateArea(<%=item['area_id']%>,this);" />
+	</td>
+	<td><input type="text" value="<%=item['sort']%>" name="area_sort" class="middle" style="width:80px" onblur="updateArea(<%=item['area_id']%>,this);" /></td>
+	<td>
+		<a href="javascript:addArea(<%=item['area_id']%>,<%=item['parent_id']%>);"><img class="operator" src="{skin:images/admin/icon_add.gif}" alt="添加" /></a>
+		<a href="javascript:delArea(<%=item['area_id']%>);"><img class="operator" src="{skin:images/admin/icon_del.gif}"  alt="删除" /></a>
+	</td>
+</tr>
+</script>
+<!--地域模板 结束-->
+
+<script type='text/javascript'>
+//DOM加载完毕后
+$(function()
+{
+	{query: name=areas order=sort asc where=parent_id eq 0 /}
+	var firstData = {echo:JSON::encode($items)};
+	for(var item in firstData)
+	{
+		$('#area_box').append(template.render('areaRowTemplate',{'item':firstData[item]}));
+	}
+});
+
+//切换地区
+function toggleArea(area_id,last_parent_id)
+{
+	var is_cache = $('#ctrl_'+area_id).attr('is_cache');
+	var is_open  = $('#ctrl_'+area_id).attr('is_open');
+
+	//缓存存在
+	if(is_cache == 'yes')
+	{
+		$('[name="parent_'+area_id+'"]').toggle();
+	}
+	else
+	{
+		$.getJSON('{url:/block/area_child}',{"aid":area_id},function(jsonData){
+			for(var item in jsonData)
+			{
+				$('#area_'+area_id).after(template.render('areaRowTemplate',{'item':jsonData[item],'last_parent_id':last_parent_id}));
+			}
+		});
+		$('#ctrl_'+area_id).attr('is_cache','yes');
+	}
+
+	//是否已经展开
+	if(is_open == 'yes')
+	{
+		$('#ctrl_'+area_id).attr('src','{skin:images/admin/open.gif}');
+		$('#ctrl_'+area_id).attr('is_open','no');
+	}
+	else
+	{
+		$('#ctrl_'+area_id).attr('src','{skin:images/admin/close.gif}');
+		$('#ctrl_'+area_id).attr('is_open','yes');
+	}
+}
+
+//添加地区
+function addArea(area_id,last_parent_id)
+{
+	art.dialog.prompt('添加新地域',function(area_name){
+		$.getJSON("{url:/system/area_update}",{"parent_id":area_id,"area_name":area_name},function(result){
+			if(result.isSuccess == true)
+			{
+				var is_open  = $('#ctrl_'+area_id).attr('is_open');
+				if(is_open == 'yes')
+				{
+					$('#area_'+area_id).after(template.render('areaRowTemplate',{'item':result.data,'last_parent_id':last_parent_id}));
+				}
+			}
+		});
+	});
+}
+
+//删除地区
+function delArea(area_id)
+{
+	art.dialog.confirm('确定要删除么？',function(){
+		$.getJSON('{url:/system/area_del}',{'id':area_id},function(result){$('#area_'+area_id).remove();})
+	});
+}
+
+//更新地域数据
+function updateArea(area_id,obj)
+{
+	if($.trim(obj.value) == '')
+	{
+		alert('地域信息不能为空');
+		return;
+	}
+
+	var sendData = {"area_id":area_id};
+	switch(obj.name)
+	{
+		case "area_sort":
+		{
+			sendData.area_sort = obj.value;
+		}
+		break;
+
+		default:
+		{
+			sendData.area_name = obj.value;
+		}
+		break;
+	}
+	$.getJSON('{url:/system/area_update}',sendData,function(result){});
+}
+</script>

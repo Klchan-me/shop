@@ -1,0 +1,39 @@
+<div class="headbar clearfix">
+	<div class="position">订单<span>></span><span>单据管理</span><span>></span><span>收款单信息</span></div>
+</div>
+
+<div class="content">
+	<table width="100%" class="border_table" style="margin:10px auto">
+		<col width="200px" />
+		<col />
+		<tbody>
+			<tr class='t_l'>
+				<th>订单号：</th><td>{$order_no}</td>
+			</tr>
+			<tr class='t_l'>
+				<th>订单时间：</th><td>{$create_time}</td>
+			</tr>
+			<tr class='t_l'>
+				<th>支付方式：</th><td>{$pname}</td>
+			</tr>
+			<tr class='t_l'>
+				<th>收款方式：</th><td>{if:$type==1}线上付款{elseif:$type=2}线下方式{else:}货到付款{/if}</td>
+			</tr>
+			<tr class='t_l'>
+				<th>付款人：</th><td>{$username}</td>
+			</tr>
+			<tr class='t_l'>
+				<th>付款时间：</th><td>{$pay_time}</td>
+			</tr>
+			<tr class='t_l'>
+				<th>金额：</th><td>{$amount}</td>
+			</tr>
+			<tr class='t_l'>
+				<th>操作员：</th><td>{if:$admin_id}{query:name=admin where=id eq $admin_id}{$item['admin_name']}{/query}{else:}无{/if}</td>
+			</tr>
+			<tr class='t_l'>
+				<th>备注：</th><td>{$note}</td>
+			</tr>
+		</tbody>
+	</table>
+</div>

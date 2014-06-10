@@ -1,0 +1,179 @@
+{js:my97date}
+<script type="text/javascript" src="{theme:javascript/event.js}"></script>
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>广告管理</span><span>></span><span>{if:isset($this->adRow['id'])}编辑{else:}添加{/if}广告</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action='{url:/tools/ad_edit_act}' method='post' name='ad' enctype='multipart/form-data'>
+			<input type='hidden' name='id' value='' />
+			<input type='hidden' name='content' value='{if:$this->adRow['type'] <= 2}{$this->adRow['content']}{/if}' />
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>名称：</th>
+					<td>
+						<input type='text' class='normal' name='name' pattern='required' alt="填写名称" />
+						<label>*广告名称（必填）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>广告展示类型：</th>
+					<td>
+						<label class='attr'><input type='radio' name='ad_type' value='1' checked=checked />图片</label>
+						<label class='attr'><input type='radio' name='ad_type' value='2' />flash</label>
+						<label class='attr'><input type='radio' name='ad_type' value='3' />文字</label>
+						<label class='attr'><input type='radio' name='ad_type' value='4' />代码</label>
+
+						<div id='ad_box'>
+							<div style='display:none'>
+								<input type="file" name="img" class="file" /><br />
+							</div>
+
+							<div style='display:none'>
+								<input type="file" name="flash" class="file" /><br />
+							</div>
+
+							<div style='display:none'>
+								<input type="text" class="normal" name="text" value="" />
+							</div>
+
+							<div style='display:none'>
+								<textarea class='textarea' name='code'>{if:$this->adRow['type'] == 4}{$this->adRow['content']}{/if}</textarea>
+							</div>
+						</div>
+
+					</td>
+				</tr>
+				<tr>
+					<th>广告位：</th>
+					<td>
+						<select name='position_id' class='normal' pattern='required' alt='广告位不能为空'>
+							<option value=''>请选择</option>
+							{query:name=ad_position}
+							<option value='{$item['id']}'>{$item['name']}</option>
+							{/query}
+						</select>
+						<label>*在选择的广告位置内进行展示（必选）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>链接地址：</th>
+					<td>
+						<input type='text' class='normal' name='link' empty pattern='url' alt='请填写正确URL地址' />
+						<label>*点击广告后页面链接的URL地址，为空则不跳转（必选）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>排序：</th>
+					<td>
+						<input type='text' class='small' name='order' pattern='^\d+$' alt='填写正确的数字' />
+						<label>数字越小，排列越靠前</label>
+					</td>
+				</tr>
+				<tr>
+					<th>宽×高：</th>
+					<td>
+						<input type='text' class='small' name='width' pattern='^\d+$' alt='填写宽度' />×
+						<input type='text' class='small' name='height' pattern='^\d+$' alt='填写高度' />
+						<label>*要展示广告所占页面的宽度和高度,如果为0则为不限制（必选）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>开始和结束时间：</th>
+					<td>
+						<input type='text' class='Wdate' onfocus='WdatePicker()' onblur="FireEvent(this,'onchange');" name='start_time' pattern='date' /> ～
+						<input type='text' class='Wdate' onfocus='WdatePicker()' onblur="FireEvent(this,'onchange');" name='end_time' pattern='date' />
+						<label>*广告展示的开始时间和结束时间（必选）</label>
+					</td>
+				</tr>
+				<tr>
+					<th>描述：</th>
+					<td><textarea class='textarea' name='description' pattern='required' alt='请填写文章内容'>{$this->adRow['description']}</textarea></td>
+				</tr>
+				<tr>
+					<th></th><td><button class='submit' type='submit'><span>确 定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	//单选按钮点击绑定
+	$('input:radio[name="ad_type"]').each(
+		function(i)
+		{
+			$(this).click
+			(
+				function(){showType(i);}
+			);
+		}
+	);
+
+	//广告type 控件的show,hide切换
+	function showType(indexVal)
+	{
+		$('#ad_box>div').hide();
+		$('#ad_box>div:eq('+indexVal+')').show();
+	}
+
+	//预定义type数据
+	function defaultShowType()
+	{
+		var checkedVal  = "{$this->adRow['type']}";
+
+		{if:$this->adRow['type'] != 4}
+			var checkedData = "{echo:IFilter::addSlash($this->adRow['content'])}";
+			var typeHTML    = '';
+
+			//如果有数据
+			if(checkedData)
+			{
+				switch(checkedVal)
+				{
+					case "1":
+					var typeHTML = '<img src="{webroot:}'+checkedData+'" width="150px" />';
+					$('#ad_box>div:eq('+(checkedVal-1)+')').html($('#ad_box>div:eq('+(checkedVal-1)+')').html()+typeHTML);
+					break;
+
+					case "2":
+					var typeHTML = '<embed src="{webroot:}'+checkedData+'" width="150px" type="application/x-shockwave-flash"></embed>';
+					$('#ad_box>div:eq('+(checkedVal-1)+')').html($('#ad_box>div:eq('+(checkedVal-1)+')').html()+typeHTML);
+					break;
+
+					case "3":
+					$('#ad_box>div:eq('+(checkedVal-1)+') input:text[name="text"]').val(checkedData);
+					break;
+				}
+				showType(checkedVal-1);
+			}
+
+			//如果无数据
+			else
+			{
+				showType(0);
+			}
+		{else:}
+			showType(checkedVal-1);
+		{/if}
+	}
+
+	//表单回显
+	defaultShowType();
+	var FromObj = new Form('ad');
+	FromObj.init
+	({
+		'id':'{$this->adRow['id']}',
+		'name':'{$this->adRow['name']}',
+		'position_id':'{$this->adRow['position_id']}',
+		'ad_type':'{$this->adRow['type']}',
+		'link':'{echo:($this->adRow['link']=="javascript:void(0);")?"":$this->adRow["link"];  }',
+		'order':'{echo:$this->adRow['order']}',
+		'width':'{$this->adRow['width']}',
+		'height':'{$this->adRow['height']}',
+		'start_time':'{$this->adRow['start_time']}',
+		'end_time':'{$this->adRow['end_time']}'
+	});
+</script>

@@ -1,0 +1,110 @@
+{js:my97date}
+<script type="text/javascript" src="{theme:javascript/event.js}"></script>
+<div class="headbar">
+	<div class="position"><span>营销</span><span>></span><span>营销活动管理</span><span>></span><span>{if:isset($this->regimentRow['id'])}编辑{else:}添加{/if}团购</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/market/regiment_edit_act}"  method="post" name='regiment_edit' enctype='multipart/form-data'>
+			<input type='hidden' name='id' />
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>团购标题：</th>
+					<td><input type='text' class='normal' name='title' pattern='required' alt='请填写团购标题' /><label>* 填写团购名称</label></td>
+				</tr>
+				<tr>
+					<th>团购时间：</th>
+					<td>
+						<input type='text' name='start_time' class='Wdate' onblur="FireEvent(this,'onchange');" pattern='datetime' onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' /> ～
+						<input type='text' name='end_time' class='Wdate' onblur="FireEvent(this,'onchange');" pattern='datetime' onFocus="WdatePicker({dateFmt:'yyyy-MM-dd HH:mm:ss'})" alt='请填写一个日期' />
+						<label>* 此团购的时间段</label>
+					</td>
+				</tr>
+				<tr>
+					<th>是否开启：</th>
+					<td>
+						<label class='attr'><input type='radio' name='is_close' value='0' />是</label>
+						<label class='attr'><input type='radio' name='is_close' value='1' checked=checked />否</label>
+					</td>
+				</tr>
+				<tr>
+					<th>设置团购商品：</th>
+					<td>
+						<table class='border_table'>
+							<col width="100px" />
+							<col />
+							<input type='hidden' name='goods_id' />
+
+							<tbody id='regiment_box'>
+							</tbody>
+
+							<tr><td colspan=2><button type='button' class='btn' onclick='searchGoods("{url:/block/search_goods/type/radio}",searchGoodsCallback);'><span>添加商品</span></button><label>* 添加要团购的商品</label></td></tr>
+						</table>
+					</td>
+				</tr>
+				<tr>
+					<th>介绍：</th>
+					<td>
+						<textarea class='textarea' name='intro'>{$this->regimentRow['intro']}</textarea>
+					</td>
+				</tr>
+				<tr><td></td><td><button class="submit" type='submit'><span>确 定</span></button></td></tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+	//输入筛选商品的条件
+	function searchGoodsCallback(goodsList)
+	{
+		goodsList.each(function()
+		{
+			var temp = $.parseJSON($(this).attr('data'));
+			var content = {
+				"data":
+				{
+					"id":temp.goods_id,
+					"name":temp.name,
+					"img":temp.img,
+					"sell_price":temp.sell_price,
+					"img":temp.img,
+					"store_nums":temp.store_nums
+				}
+			};
+			relationCallBack(content);
+		});
+	}
+
+	//关联商品回调处理函数
+	function relationCallBack(content,regimentImg)
+	{
+		if(content)
+		{
+			$('[name="goods_id"]').val(content['data']['id']);
+			regimentImg = !regimentImg ? content['data']['img'] : regimentImg;
+
+			var imgUrl = "{webroot:@url@}";
+			imgUrl     = imgUrl.replace("@url@",regimentImg);
+
+			var html = '<tr><th>商品名称：</th><td>'+content['data']['name']+'</td></tr>'
+					  +'<tr><th>展示图片：</th><td><img src="'+imgUrl+'" title="'+content['data']['name']+'" style="max-width:140px;" /><br /><input type="file" class="file" name="img" /></td></tr>'
+					  +'<tr><th>团购价格：</th><td><input type="text" class="small" name="regiment_price" pattern="float" alt="填写数字" />，  目前原价：'+content['data']['sell_price']+'<label>* 设置团购价格</label></td></tr>'
+					  +'<tr><th>团购最大销售量：</th><td><input type="text" class="small" name="store_nums" pattern="int" alt="填写数字" />，  目前库存：'+content['data']['store_nums']+'<label>* 团购出售的最大数量，设置空或0则无限制</label></td></tr>'
+					  +'<tr><th>团购最小销售量：</th><td><input type="text" class="small" name="least_count" pattern="int" alt="填写数字" />，  目前库存：'+content['data']['store_nums']+'<label>* 如果最后团购销售量小于此数值，则团购无效，设置空或者0则无限制</label></td></tr>';
+
+			$('#regiment_box').html(html);
+		}
+	}
+
+	//关联商品信息
+	{if:isset($this->regimentRow['goodsRow'])}
+	relationCallBack({$this->regimentRow['goodsRow']},"{$this->regimentRow['img']}");
+	{/if}
+
+	//表单回填
+	var formObj = new Form('regiment_edit');
+	formObj.init({echo:JSON::encode($this->regimentRow)});
+</script>

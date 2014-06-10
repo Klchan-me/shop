@@ -1,0 +1,41 @@
+{set:
+	$siteConfig = new Config("site_config");
+	$callback   = IReq::get('callback') ? urlencode(IFilter::act(IReq::get('callback'),'url')) : '';
+}
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>{echo:$siteConfig->name}</title>
+	<link type="image/x-icon" href="favicon.ico" rel="icon">
+	<link rel="stylesheet" href="{skin:css/index.css}" />
+	{js:jquery}
+	{js:validate}
+	{js:form}
+	{js:dialog}
+	<script type='text/javascript' src="{theme:javascript/common.js}"></script>
+	<script type='text/javascript' src='{theme:javascript/site.js}'></script>
+</head>
+<body class="second" >
+	<div class="brand_list container_2">
+		<div class="header">
+			<h1 class="logo"><a title="{echo:$siteConfig->name}" style="background:url({webroot:image/logo.gif});" href="{url:}">{echo:$siteConfig->name}</a></h1>
+			<ul class="shortcut">
+				<li class="first"><a href="{url:/ucenter/index}">我的账户</a></li>
+				<li><a href="{url:/ucenter/order}">我的订单</a></li>
+		   		<li class='last'><a href="{url:/site/help_list}">使用帮助</a></li>
+			</ul>
+
+			<p class="loginfo">
+			{if:$this->user}
+			{$this->user['username']}您好，欢迎您来到{echo:$siteConfig->name}购物！[<a href="{url:/simple/logout}" class="reg">安全退出</a>]
+			{else:}
+			[<a href="{url:/simple/login?callback=$callback}">登录</a><a class="reg" href="{url:/simple/reg?callback=$callback}">免费注册</a>]
+			{/if}
+			</p>
+		</div>
+	    {viewcontent}
+		{echo:IFilter::stripSlash($siteConfig->site_footer_code)}
+	</div>
+</body>
+</html>

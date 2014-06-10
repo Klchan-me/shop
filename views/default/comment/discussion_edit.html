@@ -1,0 +1,32 @@
+{set:$items=$this->discussion;}
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>咨询管理</span><span>></span><span>查看讨论信息</span></div>
+	<div class="operating">
+		<a onclick="location='{url:/comment/discussion_del/check/$items[id]}'" href="javascript:void(0);"><button class="operating_btn" type="button"><span class="delete">删除</span></button></a>
+	
+		<a href="javascript:void(0)" onclick="history.go(-1)"><button class="operating_btn" type="button"><span class="return">返回</span></button></a>
+	</div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action="{url:/comment/discussion_del/}" method="post" name="discussion_edit">
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<tr>
+					<th>讨论人：</th><td>{if:isset($items['userid'])}<a href="{url:/member/member_edit/uid/$items[userid]}">{$items['username']}</a>{/if}
+					<input type="hidden" value="{$items['id']}" name="check[]" /></td>
+				</tr>
+				<tr>
+					<th>评论时间：</th><td>{$items['time']}</td>
+				</tr>
+				<tr>
+					<th>评论商品：</th><td>{$items['goods_name']}</td>
+				</tr>
+				<tr>
+					<th>评论内容：</th><td>{$items['contents']}</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>

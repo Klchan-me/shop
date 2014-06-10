@@ -1,0 +1,10 @@
+﻿版权所有 (c) 2009
+保留所有权利。
+
+常用路径
+  安装路径: http://yoursite/install/index.php
+  前台登陆: http://yoursite
+  后台登陆: http://yoursite/index.php?controller=systemadmin&action=index
+
+其他说明
+  开启伪静态和个性化域名:  参考 《url路由配置方法.txt》

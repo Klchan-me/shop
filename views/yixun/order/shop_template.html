@@ -1,0 +1,83 @@
+<div class="container">
+	<table class="m_10" width="100%" cellspacing="0" cellpadding="0" border="0">
+		<col width="70%" />
+		<col />
+		<tr>
+			<td align="left"><img src="{webroot:image/logo.gif}" width="250" height="53" /></td>
+			<td valign="bottom" align="left"><input id="pic_print" name="pic_print" class="v_m" type="checkbox" /> <label for="pic_print">打印图片</label><p>客户：{$accept_name}<span class="ml_20">电话：{$mobile}</span></p></td>
+		</tr>
+	</table>
+	<table class="table" width="100%" cellspacing="0" cellpadding="0" border="0">
+		<col width="300px" />
+		<col width="100px" />
+		<col width="100px" />
+		<col />
+		<thead>
+			<tr class="f14"><th align="left" colspan="3"><b>订单号：{$order_no}</b></th><th align="right"><b>订购日期：{echo:date('Y-m-d',strtotime($create_time))}</b></th></tr>
+		</thead>
+		<tbody>
+			<tr class="f14"><th>商品名称</th><th>单价</th><th>数量</th><th>小计</th></tr>
+			{set:$amount = 0;}
+			{query:name=order_goods as og where=order_id eq $id}
+				{set:$price = 0;}
+			<tr>
+			{query:name=goods where=id eq $item[goods_id] item=$va}
+			<td align="left"><img src="{webroot:$va[img]}" class="pic" width="70" height="70" /><label>{$va['name']}<br />
+			{if:$item['product_id']!=0}
+			{query:name=products where=id eq $item[product_id] item=$asd}
+				{set:$spec_array=Block::show_spec($asd['spec_array']);}
+				{foreach:items=$spec_array item=$specValue key=$specName}
+					<span class="gray">{$specName}：{$specValue}<br /></span>
+				{/foreach}
+			{/query}
+			{/if}
+			</label></td>
+			<td>￥{$va['sell_price']}元</td>
+			{set:$price = $va['sell_price'];}
+			{/query}
+			<td>{$item['goods_nums']}</td>
+			<td>￥{echo:$price*$item['goods_nums']}元</td>
+			</tr>
+			{set:$amount = $amount+$price*$item['goods_nums'];}
+			{/query}
+		</tbody>
+	</table>
+	<table class="table" width="100%" cellspacing="0" cellpadding="0" border="0">
+		<col /><col width="250px" />
+		<tr>
+			<td align="left"></td><td align="left">商品总价：￥{$amount}元</td>
+		</tr>
+		<tr>
+			<td align="left">订单附言：{$postscript}</td><td align="left">配送费用：￥{$real_freight}</td>
+		</tr>
+		<tr>
+			<td></td><td align="left">保价费用：￥{$insured}</td>
+		</tr>
+		<tr>
+			<td></td><td align="left">支付手续费：￥{$pay_fee}</td>
+		</tr>
+		<tr>
+			<td></td><td align="left">订单优惠：￥{$promotions}</td>
+		</tr>
+		<tr>
+			<td></td><td align="left"><b class="f14">应付总金额：￥{$order_amount}元</b></td>
+		</tr>
+	</table>
+	<table class="table" width="100%" cellspacing="0" cellpadding="0" border="0">
+		<col /><col width="250px" />
+		<tr>
+			<td align="left">服务商：{if:isset($set['name'])}{$set['name']}{/if}</td><td align="left">电话：{if:isset($set['mobile'])}{$set['mobile']}{/if}</td>
+		</tr>
+		<tr>
+			<td align="left">邮箱：{if:isset($set['email'])}{$set['email']}{/if}</td><td align="left">网站：{if:isset($set['url'])}{$set['url']}{/if}</td>
+		</tr>
+	</table>
+	<table class="table" width="100%" cellspacing="0" cellpadding="0" border="0">
+		<tr>
+			<td align="left">您目前的总积分是<b>{query:name=member where=user_id eq $user_id}{$item['point']}{/query}</b>分，
+			累计购物
+			{query:name=order fields=count(id) as num,sum(order_amount) as total where=user_id eq $user_id and status eq 5}<b class="orange">{$item['num']}</b>次，累计购物金额<b class="orange">￥{if:$item['total']}{$item['total']}{else:}0{/if}元</b></td>{/query}
+		</tr>
+		<tfoot><tr><td><input class="btn_print noprint" type="submit" onclick="update_print_status('{$id}','shop');window.print();" value="打印" /></td></tr></tfoot>
+	</table>
+</div>

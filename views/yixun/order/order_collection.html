@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="overflow-y:auto">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>管理后台</title>
+<link rel="stylesheet" href="{skin:css/admin.css}" />
+{js:jquery}
+{js:dialog}
+{js:form}
+{js:validate}
+<script type='text/javascript' src="{theme:javascript/admin.js}"></script>
+</head>
+<body style="width:600px;min-height:400px;">
+<div class="pop_win">
+<form action="{url:/order/order_collection_doc}" method="post" id="pay_form">
+	<input type="hidden" name="id" value="{$order_id}"/>
+	<input type="hidden" name="order_no" value="{$order_no}"/>
+	<input type="hidden" name="user_id" value="{$user_id}"/>
+
+	<table width="95%" class="border_table" style="margin:10px auto">
+		<col width="100px" />
+		<col />
+		<col width="100px" />
+		<col />
+		<tbody>
+			<tr>
+				<th>订单号:</th><td align="left">{$order_no}</td>
+				<th>下单时间:</th><td align="left">{$create_time}</td>
+			</tr>
+			<tr>
+				<th>订单总金额:</th><td align="left">{$order_amount}</td>
+				<th>收款方式:</th>
+				<td align="left">
+					<select name="payment_id" pattern="required" alt="请选择支付方式" >
+					{query:name=payment where = status eq 0}
+					<option value="{$item['id']}" {if:$pay_type==$item['id']}selected{/if}>{$item['name']}</option>
+					{/query}
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th>收款金额:</th><td align="left"><input type="text" class="small" name="amount" id="amount" value="{$order_amount}" pattern="float"/></td>
+				<th>付款人:</th><td align="left">{$username}</td>
+			</tr>
+			<tr>
+				<th>是否开票:</th><td align="left">{if:$invoice==0}否{else:}是{/if}</td>
+				<th>税金:</th><td align="left">￥{$taxes}</td>
+			</tr>
+			<tr>
+				<th>发票抬头:</th><td colspan="3" align="left">{$invoice_title}</td>
+			</tr>
+			<tr>
+				<th>收款备注:</th>
+				<td colspan="3" align="left">
+					<textarea name="note" id="note" class="normal"></textarea>
+				</td>
+			</tr>
+		</tbody>
+	</table>
+</form>
+</div>
+</body>
+</html>

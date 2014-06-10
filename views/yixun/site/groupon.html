@@ -1,0 +1,164 @@
+{set:
+	$seo_data = array();
+	$site_config = new Config('site_config');
+	$seo_data['title'] = '团购_'.$site_config->name;
+	$seo_data['keywords']=$site_config->index_seo_keywords;
+	$seo_data['description']=$site_config->index_seo_description;
+	seo::set($seo_data);
+}
+<div class="position"> <span>您当前的位置：</span> <a href="{url:}"> 首页</a> » 团购 </div>
+<div class="groupon wrapper clearfix">
+	<div class="sidebar f_r">
+		<div class="box org_box m_10">
+			<div class="title">每天订阅团购信息<span></span></div>
+			<div class="cont clearfix">
+				<p>请输入您的邮箱地址</p>
+				<input type="text" name='orderinfo' class="gray_m">
+				<label class="btn_orange f_r"><input type="button" value="立即订阅" onclick="orderinfo();"></label>
+			</div>
+			<span class="l"></span><span class="r"></span><span class="b_l"></span><span class="b_r"></span>
+		</div>
+		<div class="box">
+			<div class="title">往期精彩团购<span></span></div>
+
+			<div class="cont">
+				<ul class="prolist clearfix">
+					{set:$regimentUser = new IModel('regiment_user_relation')}
+					{foreach:items=$this->ever_list}
+					{set:
+						$regUserRow=$regimentUser->getObj('is_over = 1 and regiment_id = '.$item['id'],'count(*) as sum_count');
+						$item['sum_count'] = isset($regUserRow['sum_count']) ? $regUserRow['sum_count'] : 0;
+					}
+					<li>
+						<a href="{url:/site/products/id/$item[goods_id]/}"><img width="145" alt="{$item['title']}" src="{webroot:}{$item['img']}"></a>
+						<p class="pro_title"><a href="{url:/site/products/id/$item[goods_id]/}" class="blue">{$item['title']}</a></p>
+						<p>原&nbsp;&nbsp;价：<s>￥{$item['sell_price']}</s></p>
+						<p class="orange">团购价：￥{$item['regiment_price']}</p>
+						<p class="red2">购买人数：{$item['sum_count']}人</p>
+					</li>
+					{/foreach}
+					<li class="more"><a class="blue" href="{url:/site/groupon_list}">更多团购>></a></li>
+				</ul>
+			</div>
+			<span class="l"></span><span class="r"></span><span class="b_l"></span><span class="b_r"></span>
+		</div>
+	</div>
+	<div class="main f_l t_r">
+		{set:$countNumItems = array();}
+		{foreach:items=$this->regiment_list}
+		{set:
+			$itemURL=IUrl::getHost().IUrl::creatUrl("/site/groupon/id/$item[id]");
+			$countNumItems[] = $item['id'];
+		}
+		<div class="gt_box">
+			<div class="grounpon_title box">
+				<strong>{$item['order_num']}<span>今日团购</span></strong>
+				<span class="l"></span><span class="r"></span>
+			</div>
+		</div>
+
+		<div class="shadow_box m_10 clearfix">
+			<div class="cont clearfix">
+				<h1 class="g_title"><a href="{$itemURL}">{$item['title']}</a></h1>
+				<div class="l_part">
+					<div class="g_price m_10">
+						{if:$item['valid']}
+						<div class="price_tag">
+							<p>仅售<strong>{$item['regiment_price']}</strong></p>
+							<a class="buy" href="{url:/site/products/promo/groupon/id/$item[goods_id]/active_id/$item[id]}">购买</a>
+						</div>
+						{else:}
+						<div class="price_tag disabled">
+							<p>仅售<strong>{$item['regiment_price']}</strong></p>
+							<a class="buy" href="javascript:void(0)">结束</a>
+						</div>
+						{/if}
+					</div>
+					<div class="orange_box m_10">
+						<table class="t_c">
+							<col width="85px" />
+							<col width="50px" />
+							<col width="85px" />
+							<tbody>
+								<tr><th class="normal">原价</th><th class="normal">折扣</th><th class="normal">节省</th></tr>
+								<tr class="bold">
+									<td><s>￥{$item['sell_price']}</s></td>
+									<td>{$item['discount']}</td>
+									<td>￥{echo:$item['sell_price']-$item['regiment_price'];}</td>
+								</tr>
+							</tbody>
+						</table>
+					</div>
+
+					{if:$item['valid']}
+					<div class="orange_box">
+						<p>团购倒计时：</p>
+						{set:$free_time=strtotime($item['end_time'])-ITime::getNow();}
+						<p class="t_c f14"><span id="cd_hour_{$item['id']}" class="red2 bold">{echo:floor($free_time/3600);}</span>小时<span id="cd_minute_{$item['id']}" class="red2 bold">{echo:floor( ($free_time%3600)/60 );}</span>分钟<span id="cd_second_{$item['id']}" class="red2 bold">{echo:$free_time%60}</span>秒</p>
+					</div>
+					<div class="orange_box g_num m_10">
+						<p class="t_c">已有<span class="red2 bold">{$item['user_num']}</span>人购买</p>
+					</div>
+					<div class="dot_box t_c">数量有限，请密切关注！</div>
+					{elseif:$item['store_nums']!=0 && $item['user_num']>= $item['store_nums'] }
+					<div class="orange_box">
+						<p class="t_c">本次团购的商品已售尽！</p>
+						<p class="t_c">已有<span class="red2 bold">{$item['user_num']}</span>人购买</p>
+					</div>
+					{else:}
+					<div class="orange_box">
+						<p class="t_c">本次团购活动已结束！</p>
+						<p class="t_c">已有<span class="red2 bold">{$item['user_num']}</span>人购买</p>
+					</div>
+					{/if}
+				</div>
+
+				<div class="r_part box">
+					<img class="g_pic" width="480" src="{webroot:}{$item['img']}">
+					<div class="g_digest clearfix">{$item['intro']}<a class="g_btn f_r" href="{url:/site/products/id/$item[goods_id]/}">查看商品详情</a></div>
+				</div>
+			</div>
+			<span class="l"></span><span class="r"></span><span class="b_l"></span><span class="b_r"></span>
+		</div>
+		{/foreach}
+
+		<div class="g_notice box">
+			<h3><strong>团购须知：</strong></h3>
+			<p>1、买家只有通过<b class="orange">{echo:$site_config->name}</b>的团购统一入口才能有权以团购价购买活动商品。</p>
+			<p>2、因机会有限，请在拍下宝贝后{echo:Regiment::time_limit();}分钟内付款，否则系统视为放弃团购机会，订单会自动关闭。</p>
+		</div>
+	</div>
+</div>
+
+<script language="javascript">
+$(function()
+{
+	//倒计时
+	var cd_timer = new countdown();
+	{foreach:items = $countNumItems}
+		cd_timer.add({$item});
+	{/foreach}
+});
+
+//电子邮件订阅
+function orderinfo()
+{
+	var email = $('[name="orderinfo"]').val();
+	if(email == '')
+	{
+		alert('请填写正确的email地址');
+	}
+	else
+	{
+		$.getJSON('{url:/site/email_registry}',{email:email},function(content){
+			if(content.isError == false)
+			{
+				alert('订阅成功');
+				$('[name="orderinfo"]').val('');
+			}
+			else
+				alert(content.message);
+		});
+	}
+}
+</script>

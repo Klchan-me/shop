@@ -1,0 +1,95 @@
+{set:$average_point=$this->comment_info['average_point'];}
+{set:$goods_id=$this->comment['goods_id'];}
+{set:$id=intval(IReq::get('id'));}
+{query: name=goods where=id eq $goods_id limit=1}{/query}
+
+<div class="position"> <span>您当前的位置：</span> <a href="{url:}"> 首页</a> » <a href="{url:/site/products/id/$goods_id}">{$item['name']}</a> </div>
+<div class="clearfix">
+	<div class="sidebar f_l">
+		<div class="box_2 m_10">
+			<div class="title">商品信息</div>
+			<div class="content">
+				<ul class="prolist clearfix">
+					<li>
+						<a href="{url:/site/products/id/$goods_id}"><img src="{webroot:}{$item['img']}" alt="{$item['name']}" height="212" width="167"></a>
+						<p class="pro_title">商品名称：<a class="blue" href="{url:/site/products/id/$goods_id}">{$item['name']}</a></p>
+						<p>优惠价：<b>￥{$item['sell_price']}</b></p>
+						<p>评价得分：<span class="grade"><i style="width:{echo:Common::gradeWidth($average_point)}px"></i></span>({$average_point}分)</p>
+						<p>评论数：{$this->comment_info['comment_total']}条</p>
+					</li>
+					<input type="submit" onclick="joinCart_list({$goods_id});" value="加入购物车" class="submit_join m_10">
+					<div class="msgbox" style="width:350px;display:none">
+						<div class="msg_t"><a class="close f_r" onclick="$(this).parents('.msgbox').hide();">关闭</a>请选择规格</div>
+						<div class="msg_c" id='product_box_{$goods_id}'></div>
+					</div>
+				</ul>
+			</div>
+		</div>
+	</div>
+
+	<div class="wrapper main f_r">
+		<div class="wrap_box">
+			{if:$this->can_submit===true}
+			<form method="post">
+			<table class="form_table f_l">
+				<caption><img src="{skin:images/front/comments.gif}" width="88" height="23" alt="我要评论" /></caption>
+				<col width="120px" />
+				<col />
+				<tr>
+					<th>评论等级：</th>
+					<td>
+						<label><input name="point" class="radio" type="radio" value="5" checked="checked" /><span class="grade"><i style="width:{echo:Common::gradeWidth(5)}px"></i></span></label>
+						<label><input name="point" class="radio" type="radio" value="4" /><span class="grade"><i style="width:{echo:Common::gradeWidth(4)}px"></i></span></label>
+						<label><input name="point" class="radio" type="radio" value="3" /><span class="grade"><i style="width:{echo:Common::gradeWidth(3)}px"></i></span></label>
+						<label><input name="point" class="radio" type="radio" value="2" /><span class="grade"><i style="width:{echo:Common::gradeWidth(2)}px"></i></span></label>
+						<label><input name="point" class="radio" type="radio" value="1" /><span class="grade"><i style="width:{echo:Common::gradeWidth(1)}px"></i></span></label>
+					</td>
+				</tr>
+				<tr>
+					<th>评论内容：</th><td valign="top"><textarea name="contents" id="contents"></textarea></td>
+				</tr>
+				<tr><td></td><td><label class="btn"><input type="button" onclick="comment_add();" value="我要评价" /></label></td></tr>
+			</table>
+			</form>
+			{else:}
+			<table class="form_table prompt_3 f_l">
+				<caption><img src="{skin:images/front/comments.gif}" width="88" height="23" alt="我要评论" /></caption>
+				<col width="250px" />
+				<col />
+				<tr>
+					<th valign="top"><img src="{skin:images/front/error.gif}" width="46" height="65" alt="" /></th>
+					<td>
+						<p class="mt_10"><strong class="f14 red2">您暂不能对该商品进行评价，可能有以下原因：</strong></p>
+						<p class="mt_10">1.您可能没有在{echo:$siteConfig->name}购买过该商品；</p>
+						<p>2.您已经评价过该商品。</p>
+					</td>
+				</tr>
+			</table>
+			{/if}
+		</div>
+	</div>
+</div>
+
+<script language="javascript">
+function comment_add()
+{
+	var point=$("input[name='point']:checked").val();
+	if(point==0)
+	{
+		alert("请选择评论等级");
+		return;
+	}
+
+	var contents=$("#contents").val();
+	var data={'point':point,'contents':contents,'id':{$id}};
+	$.post("{url:/site/comment_add/id/$id}",data,function(c)
+	{
+		if(c==='success')
+		{
+			location="{url:/site/comments_list/id/$goods_id}";
+		}
+		else
+			alert(c);
+	});
+}
+</script>

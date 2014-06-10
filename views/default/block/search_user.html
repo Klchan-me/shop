@@ -1,0 +1,46 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title></title>
+<link rel="stylesheet" href="{skin:css/admin.css}" />
+{js:jquery}
+{js:dialog}
+</head>
+<body>
+<div class="pop_win" style="width:520px;height:270px">
+	<form action='{url:/block/filter_user}' method='post'>
+		<table class='form_table'>
+			<col width="150px" />
+			<col />
+
+			<tbody>
+				<tr>
+					<td class="t_r">用户名：</td>
+					<td><input type='text' class='normal' name='username' /></td>
+				</tr>
+				<tr>
+					<td class="t_r">邮箱：</td>
+					<td><input type='text' class='normal' name='email' pattern='email' empty /></td>
+				</tr>
+				<tr>
+					<td class="t_r">用户组：</td>
+					<td>
+						<select class="normal" name="group_id">
+							<option value=''>请选择</option>
+							{query:name=user_group}
+							<option value="{$item['id']}">{$item['group_name']}</option>
+							{/query}
+						</select>
+					</td>
+				</tr>
+				<tr>
+					<td class="t_r">真实姓名：</td>
+					<td><input type='text' class='normal' name='true_name' /></td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<div class="headbar">
+	<div class="position"><span>系统</span><span>></span><span>权限管理</span><span>></span><span>管理员回收站</span></div>
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="window.location='{url:/system/admin_list}'"><span class="import">返回列表</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick=$('[name="admin_list"]').attr("action","{url:/system/admin_update}");delModel({msg:'是否进行彻底删除？'});><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick=$('[name="admin_list"]').attr("action","{url:/system/admin_update/recycle/rec}");delModel({msg:'是否进行恢复？'});><button class="operating_btn" type="button"><span class="recover">批量还原</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col width="100px" />
+			<col width="200px" />
+			<col />
+			<thead>
+				<tr>
+					<th>选择</th>
+					<th>用户名</th>
+					<th>角色</th>
+					<th>Email</th>
+					<th>上次登录IP</th>
+					<th>上次登录时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<div class="content">
+	<form name='admin_list' method='post' action='#'>
+		<table id="list_table" class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col width="100px" />
+			<col width="200px" />
+			<col />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=admin as a join=left join admin_role as b on a.role_id eq b.id fields=a.*,b.name as role_name where=a.is_del eq 1 page=$page pagesize=20}
+				<tr>
+					<td><input type='checkbox' name='id[]' value='{$item['id']}' /></td>
+					<td>{$item['admin_name']}</td>
+					<td>{echo:$item['role_name'] ? $item['role_name'] : '超级管理员'}</td>
+					<td>{$item['email']}</td>
+					<td>{$item['last_ip']}</td>
+					<td>{$item['last_time']}</td>
+					<td>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/system/admin_update/id/$item[id]}',msg:'是否对信息进行彻底删除？'});"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+						<a href='javascript:void(0)' onclick="delModel({link:'{url:/system/admin_update/recycle/rec/id/$item[id]}',msg:'是否对信息进行恢复？'});"><img class="operator" src="{skin:images/admin/icon_recover.gif}" alt="恢复" title="恢复" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>

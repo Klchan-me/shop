@@ -1,0 +1,40 @@
+<div class="main f_r">
+	<div class='tabs_content'>
+		<div class="node">
+			<table class="list_table m_10" width="100%" cellpadding="0" cellspacing="0">
+				<col width="160px" />
+				<col />
+				<col width="80px" />
+				<col width="60px"/>
+				<thead><tr><th>商品名称</th><th>内容</th><th>咨询时间</th><th>回复</th></tr></thead>
+				<tbody>
+					{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+					{set:$user_id = $this->user['user_id']}
+					{query: fields=time,name,question,status,answer,admin_id,go.id as gid  name=refer as r join = join goods as go on r.goods_id eq go.id  where= r.user_id eq $user_id page=$page}
+					<tr>
+						<td><a href="{url:/site/products/id/$item[gid]}" target="_black">{$item['name']}</a></td>
+						<td>{$item['question']}</td>
+						<td>{echo:substr($item['time'],0,10)}</td>
+						<td>{if:$item['status']==1}<a class="blue bold" href="javascript:void(0);" onclick="show_msg(this,'{$item['reply_time']}','{$item['answer']}')">查看</a>{else:}未回复{/if}</td>
+					</tr>
+					{/query}
+					{if:isset($item['time'])}
+					<tr id='show_msg' class="show" style="display:none">
+						<td colspan="4"><i class="close f_r" onclick='$(this).parent().parent().css("display","none")'></i> 管理员在 [<span>{echo:$item['time'];}</span>] 给您做了如下解答:<p class="gray indent mt_10" id='re_content'></p></td>
+					</tr>
+					{/if}
+				</tbody>
+				<tfoot><tr><td colspan="4" class="t_l">{$query->getPageBar()}</td></tr></tfoot>
+			</table>
+		</div>
+	</div>
+</div>
+<script type="text/javascript">
+function show_msg(obj,re_time,re_content)
+{
+    $('#show_msg').css('display','').insertAfter($(obj).parent().parent())
+    $('#show_msg #re_time').text(re_time);
+    $('#show_msg #re_content').text(re_content);
+
+}
+</script>

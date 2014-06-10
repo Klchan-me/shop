@@ -1,0 +1,130 @@
+{js:my97date}
+{js:kindeditor}
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>邮件短信设置</span><span>></span><span>邮件订阅</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="writeMail();"><button class="operating_btn" type="button"><span class="remove">发送邮件</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('id[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel({form:'notify_list',msg:'确定要删除选中的记录吗？'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+		<a href="javascript:void(0)" onclick="location.reload()"><button class="operating_btn" type="button"><span class="refresh">刷新</span></button></a>
+		<a href="javascript:void(0)" onclick="exportCSV();return false;"><button class="operating_btn" type="button"><span title="不选择则导出所有" class="download">导出为CSV</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col />
+			<thead>
+				<tr role="head">
+					<th class="t_c">选择</th>
+					<th>email</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<form action="{url:/message/registry_del}" method="post" name="notify_list" onsubmit="return checkboxCheck('id[]','尚未选中任何记录！')">
+<div class="content" style="position:relative;">
+	<table id="list_table" class="list_table">
+		<col width="40px" />
+		<col />
+		<tbody>
+			{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+			{query: name=email_registry order = id desc page=$page }
+			<tr>
+				<td class="t_c"><input class="check_ids" name="id[]" type="checkbox" value="{$item['id']}" /></td>
+				<td>{$item['email']}</td>
+			</tr>
+			{/query}
+		</tbody>
+	</table>
+</div>
+{$query->getPageBar()}
+</form>
+<script language="javascript">
+function sendMail()
+{
+	var ids = getArray('id[]','checkbox')
+	if(ids.length>0)
+	{
+		loadding('正在发送邮件，请稍候......');
+		$.getJSON('{url:/message/notify_send/}',{notifyid:ids},function(c){
+			unloadding();
+			if(c.isError == false)
+			{
+				art.dialog({
+					content: '总共发送邮件：'+c.count+'条<br />成功发送：'+c.succeed+'条<br />发送失败：'+c.failed+'条',
+					icon: 'alert',
+					lock: true,
+					ok: function(){
+						location.reload();
+						return true;
+					}
+				});
+			}
+			else
+			{
+				alert(c.message);
+			}
+		});
+	}
+	else
+	{
+		alert("您尚未选中任何记录！");
+	}
+}
+
+function exportCSV()
+{
+	var ids=$(".check_ids:checked");
+	var data=[];
+	for(var i=0;i<ids.length;i++)
+	{
+		data.push(ids[i].value);
+	}
+	ids = data.join(',');
+	window.location = "{url:/message/registry_export/ids/@ids@}".replace("@ids@",ids);
+}
+
+var js_group = {};
+var tpl_group = '<table><tr><td>会员等级：</td><td><select id="removeto">{foreach:items=$group key=$key item=$value}<option value={$key}>{$value}</option>{/foreach}</select></td></tr>'+
+				'	<tr><td>积分</td><td><input type="text" name="point" value="" /></td></tr>'+
+				'</table>';
+
+var content_filter = {};
+
+var tpl_filter =	'<div class="pop_win clearfix" style="width:100%;"><form name="form_filter" action="{url:/message/registry_message_send}" method="post"><table class="form_table" style="width:100%;"><col width="80px" /><col /><tbody><tr><td class="t_r">标题：</td><td><input class="middle" type="text" name="title" id="form_title" value="{echo:$this->tpl["title"];}" /></td></tr><tr><td valign="top" class="t_r">内容：</td><td><input type="hidden" name="ids" id="form_ids" /><textarea id="content" name="content" style="height:450px;width:100%"></textarea></td></tr></tbody>'+
+					'</table></form></div>';
+
+function writeMail()
+{
+	art.dialog({
+		id: 'registryWin',
+		lock:true,
+		width:700,
+		height:450,
+		title: '发送订阅邮件',
+		content: tpl_filter,
+		init:function()
+		{
+			KindEditor.create('#content',{uploadJson:'{url:/block/upload_img_from_editor}'});
+		},
+		ok:function()
+		{
+			KindEditor.sync("#content");
+			art.dialog({'id':'tmpTan',content:"正在发送，请稍候......" ,lock:true});
+			var title = $("#form_title").val();
+			var content = $("#content").val();
+			var ids = getArray('id[]','checkbox');
+			ids = ids.join(',');
+			$.post("{url:/message/registry_message_send/}" , {'title':title , 'content':content , 'ids':ids} , function(c){
+				alert("发送完毕！");
+				art.dialog({'id':"tmpTan"}).close();
+			});
+		},
+		cancel:function()
+		{
+			KindEditor.remove('#content');
+		}
+	});
+}
+</script>

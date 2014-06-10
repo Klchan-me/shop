@@ -1,0 +1,78 @@
+{js:my97date}
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>咨询管理</span><span>></span><span>讨论信息列表</span></div>
+	<div class="operating">
+		<div class="search f_r">
+			<form name="serachuser" action="{url:/}" method="get">
+			<input type='hidden' name='controller' value='comment' />
+			<input type='hidden' name='action' value='discussion_list' />
+			<select class="normal" name="search">
+				<option value="u.username" {if:(isset($search) && $search=='u.username')}selected{/if}>讨论人</option>
+				<option value="goods.name" {if:(isset($search) && $search=='goods.name')}selected{/if}>讨论商品</option>
+			</select>
+			<input class="small" name="keywords" type="text" value="{$keywords}" /><button class="btn" type="submit"><span class="sch">搜 索</span></button>
+			</form>
+		</div>
+		<a href="javascript:void(0)" onclick="selectAll('check[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="delModel({form:'discussion_list',msg:'确定要删除选中的记录吗？'})"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+
+	<form name="filter_form" method="get" action="{url:/}">
+		<input type='hidden' name='controller' value='comment' />
+		<input type='hidden' name='action' value='discussion_list' />
+		<div class="searchbar">
+			讨论人：<input class="small" type="text" name="username" value="{$username}" />
+			讨论商品：<input class="small" type="text" name="goodsname" value="{$goodsname}" />
+			开始时间：<input class="small" type="text" name="beginTime" onfocus="WdatePicker()" value="{$beginTime}" />
+			截止时间：<input class="small" type="text" name="endTime" onfocus="WdatePicker()" value="{$endTime}" />
+			<button class="btn" type="submit"><span class="sel">筛 选</span></button>
+		</div>
+	</form>
+
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col />
+			<col width="160px" />
+			<col width="110px" />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>讨论人</th>
+					<th>讨论商品</th>
+					<th>讨论时间</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<form action="{url:/comment/discussion_del}" method="post" name="discussion_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+	<div class="content">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="150px" />
+			<col />
+			<col width="160px" />
+			<col width="110px" />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=discussion as d join=left join goods as goods on d.goods_id eq goods.id left join user as u on d.user_id eq u.id fields=d.id,d.time,u.id as userid,u.username,goods.id as goods_id,goods.name as goods_name page=$page where=$where}
+				<tr>
+					<td class="t_c"><input name="check[]" type="checkbox" value="{$item['id']}" /></td>
+					<td><a href="{url:/member/member_edit/uid/$item[userid]}">{$item['username']}</a></td>
+					<td><a href="{url:/site/products/id/$item[goods_id]}" target="_blank">{$item['goods_name']}</a></td>
+					<td>{$item['time']}</td>
+					<td>
+						<a href="{url:/comment/discussion_edit/did/$item[id]}"><img class="operator" src="{skin:images/admin/icon_check.gif}" alt="修改" /></a>
+						<a href="javascript:void(0)" onclick="delModel({link:'{url:/comment/discussion_del/check/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</div>
+	{$query->getPageBar()}
+</form>

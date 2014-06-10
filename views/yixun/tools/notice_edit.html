@@ -1,0 +1,41 @@
+{js:kindeditor}
+<div class="headbar">
+	<div class="position"><span>工具</span><span>></span><span>公告管理</span><span>></span><span>{if:isset($this->noticeRow['id'])}编辑{else:}发布{/if}公告</span></div>
+</div>
+<div class="content_box">
+	<div class="content form_content">
+		<form action='{url:/tools/notice_edit_act}' method='post' name='article'>
+			<table class="form_table">
+				<col width="150px" />
+				<col />
+				<input type='hidden' name='id' value="" />
+				<tr>
+					<th>标题：</th>
+					<td><input type='text' name='title' class='normal' value='' pattern='required' alt='标题不能为空' /></td>
+				</tr>
+				<tr>
+					<th valign="top">内容：</th><td><textarea name='content' id='content' style='width:700px;height:350px' pattern='required' alt='内容不能为空'>{echo:htmlspecialchars($this->noticeRow['content'])}</textarea></td>
+				</tr>
+				<tr>
+					<th></th><td><button class='submit' type='submit'><span>确 定</span></button></td>
+				</tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+//DOM加载完毕
+$(function(){
+	var FromObj = new Form('article');
+	FromObj.init
+	({
+		'id':'{$this->noticeRow['id']}',
+		'title':'{$this->noticeRow['title']}'
+	});
+
+	KindEditor.ready(function(K){
+		K.create('#content');
+	});
+});
+</script>

@@ -1,0 +1,103 @@
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>商品分类管理</span><span>></span><span>分类列表</span></div>
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="window.location='{url:/goods/category_edit}'"><span class="addition">添加分类</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="100px" />
+			<col />
+			<thead>
+				<tr>
+					<th>排序</th>
+					<th>分类名称</th>
+					<th>模型</th>
+					<th>首页显示</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<form action="{url:/goods/category_sort}" method="post" name="category_list">
+<div class="content">
+	<table id="list_table" class="list_table">
+		<col width="100px" />
+		<col />
+		<tbody>
+			{foreach:items=$category item=$item}
+			<tr id="{$item['id']}" parent={$item['parent_id']}>
+				<td><input class="tiny" id="s{$item['id']}" size="2" type="text" onblur="toSort({$item['id']});" value="{$item['sort']}" /></td>
+				<td><img style='margin-left:{echo:$item['floor']*20}px' class="operator" src="{skin:images/admin/close.gif}" onclick="displayData(this);" alt="关闭" />{$item['name']}</td>
+				<td>{$models[$item['model_id']]}</td>
+				<td>{if:$item['visibility']=='1'}<span class="green">是</span>{else:}<span class="brown">否</span>{/if}</td>
+				<td>
+					<a href="{url:/goods/category_edit/cid/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" title="修改" /></a>
+					<a href="javascript:void(0)" onclick="delModel({link:'{url:/goods/category_del/cid/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" title="删除" /></a>
+				</td>
+			</tr>
+			{/foreach}
+		</tbody>
+	</table>
+</div>
+</form>
+
+<script language="javascript">
+//折叠展示
+function displayData(_self)
+{
+	if(_self.alt == "关闭")
+	{
+		jqshow($(_self).parent().parent().attr('id'), 'hide');
+		$(_self).attr("src", "{skin:images/admin/open.gif}");
+		_self.alt = '打开';
+	}
+	else
+	{
+		jqshow($(_self).parent().parent().attr('id'), 'show');
+		$(_self).attr("src", "{skin:images/admin/close.gif}");
+		_self.alt = '关闭';
+	}
+}
+
+function jqshow(id,isshow) {
+	var obj = $("#list_table tr[parent='"+id+"']");
+	if (obj.length>0)
+	{
+		obj.each(function(i) {
+			jqshow($(this).attr('id'), isshow);
+		});
+		if (isshow=='hide')
+		{
+			obj.hide();
+		}
+		else
+		{
+			obj.show();
+		}
+	}
+}
+//排序
+function toSort(id)
+{
+	if(id!='')
+	{
+		var va = $('#s'+id).val();
+		var part = /^\d+$/i;
+		if(va!='' && va!=undefined && part.test(va))
+		{
+			$.get("{url:/goods/category_sort}",{'id':id,'sort':va}, function(data)
+			{
+				if(data=='1')
+				{
+					alert('修改商品分类排序成功!');
+				}else
+				{
+					alert('修改商品分类排序错误!');
+				}
+			});
+		}
+	}
+}
+</script>

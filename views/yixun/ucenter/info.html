@@ -1,0 +1,210 @@
+{js:artTemplate}
+<script type='text/javascript' src='{theme:javascript/artTemplate/area_select.js}'></script>
+
+<div class="main f_r">
+	<div class="uc_title m_10">
+		<label class="current"><span>个人资料</span></label>
+	</div>
+
+	<div class="form_content m_10">
+		<div class="uc_title2 m_10"><strong>会员信息</strong></div>
+		<dl class="userinfo_box clearfix">
+			<dt>
+				{set:$user_ico = $this->userRow['head_ico']}
+				<a class="ico" href="javascript:void(0);"><img src="{webroot:$user_ico}" id="user_ico_img" onerror="this.src='{skin:images/front/user_ico.gif}'" width="96" height="96" alt="个人头像" /></a>
+				<a class="blue" href="javascript:select_ico();">修改头像</a>
+			</dt>
+			<dd>
+				<table class="form_table" width="100%" cellpadding="0" cellspacing="0">
+					<col width="120px" />
+					<col />
+					<tr>
+						<th>登录名：</th><td>{$this->userRow['username']}</td>
+					</tr>
+					<tr>
+						<th>邮箱：</th>
+						<td>
+							{$this->userRow['email']}
+						</td>
+					</tr>
+					<tr>
+						<th>会员等级：</th><td>{$this->userGroupRow['group_name']}</td>
+					</tr>
+				</table>
+			</dd>
+		</dl>
+	</div>
+
+	<div class="form_content m_10">
+		<div class="uc_title2 m_10"><strong>个人信息</strong></div>
+		<form action='{url:/ucenter/info_edit_act}' method='post' name='user_info'>
+			<table class="form_table" width="100%" cellpadding="0" cellspacing="0">
+				<col width="120px" />
+				<col />
+				<tr>
+					<th><span class="red">*</span> 姓名：</th><td><input class="normal" type="text" name="true_name" pattern='required' alt='请填写真实姓名' /></td>
+				</tr>
+				<tr>
+					<th><span class="red">*</span> 性别：</th>
+					<td>
+						<label class='attr'><input type='radio' name='sex' value='1' />男</label>
+						<label class='attr'><input type='radio' name='sex' value='2' checked=checked />女</label>
+					</td>
+				</tr>
+				<tr>
+					<th><span class="red">*</span>出生日期：</th>
+					<td>
+						<select name='year' pattern='required'></select>
+						<select name='month' pattern='required'></select>
+						<select name='day' pattern='required'></select>
+					</td>
+				</tr>
+				<tr>
+					<th><span class="red">*</span> 所在地区：</th>
+					<td>
+						<select name="province" child="city,area" onchange="areaChangeCallback(this);"></select>
+						<select name="city" child="area" parent="province" onchange="areaChangeCallback(this);"></select>
+						<select name="area" parent="city" pattern="required"></select>
+					</td>
+				</tr>
+				<tr>
+					<th><span class="red">*</span> 联系地址：</th>
+					<td><input type='text' class='normal' name='contact_addr' pattern='required' alt='请填写联系地址' /></td>
+				</tr>
+				<tr>
+					<th><span class="red">*</span> 手机号码：</th>
+					<td><input class="normal" type="text" name='mobile' pattern='mobi' alt='请填写正确的手机号码' /></td>
+				</tr>
+				<tr>
+					<th>邮编：</th>
+					<td><input type='text' class='normal' name='zip' pattern='zip' empty alt='请填写正确的邮政编码' /></td>
+				</tr>
+				<tr>
+					<th>固定电话：</th>
+					<td><input class="normal" type="text" name='telephone' pattern='phone' empty alt='请填写正确的固定电话' /></td>
+				</tr>
+				<tr>
+					<th>QQ：</th>
+					<td><input class="normal" type="text" name='qq' pattern='qq' empty alt='请填写正确的QQ号' /></td>
+				</tr>
+				<tr>
+					<th>MSN：</th>
+					<td><input class="normal" type="text" name='msn' pattern='email' empty alt='请填写正确的MSN号' /></td>
+				</tr>
+				<tr><th></th><td><label class="btn"><input type="submit" value="保存基本信息" /></label></td></tr>
+			</table>
+		</form>
+	</div>
+</div>
+
+<script type='text/javascript'>
+//DOM加载完毕
+$(function(){
+	//初始化地域联动
+	template.compile("areaTemplate",areaTemplate);
+
+	{if:isset($this->memberRow['area']) && $this->memberRow['area']}
+	{set:$area = explode(',',trim($this->memberRow['area'],','))}
+	createAreaSelect('province',0,{$area[0]});
+	createAreaSelect('city',{$area[0]},{$area[1]});
+	createAreaSelect('area',{$area[1]},{$area[2]});
+	{else:}
+	createAreaSelect('province',0,"");
+	{/if}
+});
+
+/**
+ * 生成地域js联动下拉框
+ * @param name
+ * @param parent_id
+ * @param select_id
+ */
+function createAreaSelect(name,parent_id,select_id)
+{
+	//生成地区
+	$.getJSON("{url:/block/area_child}",{"aid":parent_id,"random":Math.random()},function(json)
+	{
+		$('[name="'+name+'"]').html(template.render('areaTemplate',{"select_id":select_id,"data":json}));
+	});
+}
+
+//修改头像
+function select_ico()
+{
+	{set:$callback = urlencode(IUrl::creatUrl('/ucenter/user_ico_upload'))}
+	art.dialog.open('{url:/block/photo_upload?callback=$callback}',
+	{
+		'id':'user_ico',
+		'title':'设置头像',
+		'ok':function(iframeWin, topWin)
+		{
+			iframeWin.document.forms[0].submit();
+			return false;
+		}
+	});
+}
+
+//头像上传回调函数
+function callback_user_ico(content)
+{
+	var content = eval(content);
+	if(content.isError == true)
+	{
+		alert(content.message);
+	}
+	else
+	{
+		$('#user_ico_img').attr('src',content.data);
+	}
+	art.dialog({id:'user_ico'}).close();
+}
+
+//出生日期
+function dateSelectInit()
+{
+	var yearHtml = '<option value="">请选择</option>';
+	for(var year=2010;year>=1940;year--)
+	{
+		yearHtml+= '<option value="'+year+'">'+year+'</option>';
+	}
+
+	var monthHtml = '<option value="">--</option>';
+	for(var month=12;month>=1;month--)
+	{
+		if(month < 10) month = '0' + month;
+		monthHtml+= '<option value="'+month+'">'+month+'</option>';
+	}
+
+	var dayHtml = '<option value="">--</option>';
+	for(var day=31;day>=1;day--)
+	{
+		if(day < 10) day = '0' + day;
+		dayHtml+= '<option value="'+day+'">'+day+'</option>';
+	}
+
+	$('[name="year"]').html(yearHtml);
+	$('[name="month"]').html(monthHtml);
+	$('[name="day"]').html(dayHtml);
+}
+
+//初始化日期
+dateSelectInit();
+
+//表单回填
+{set:$birthday = explode('-',$this->memberRow['birthday'])}
+var formObj = new Form('user_info');
+formObj.init({
+	'id':'{$this->memberRow['id']}',
+	'true_name':'{$this->memberRow['true_name']}',
+	'telephone':'{$this->memberRow['telephone']}',
+	'mobile':'{$this->memberRow['mobile']}',
+	'contact_addr':'{$this->memberRow['contact_addr']}',
+	'qq':'{$this->memberRow['qq']}',
+	'msn':'{$this->memberRow['msn']}',
+	'sex':'{$this->memberRow['sex']}',
+	'zip':'{$this->memberRow['zip']}',
+	'year':'{$birthday[0]}',
+	'month':'{$birthday[1]}',
+	'day':'{$birthday[2]}',
+});
+</script>

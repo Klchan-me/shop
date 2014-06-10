@@ -1,0 +1,49 @@
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>规格管理</span><span>></span><span>规格图库</span></div>
+	<div class="operating">
+		<a href="javascript:void(0)" onclick="selectAll('id[]');"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="confirm('确定删除么？','formSubmit(\'specFrom\')');"><button class="operating_btn" type="button"><span class="delete">批量删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table" cellpadding="0" cellspacing="0">
+			<col width="40px" />
+			<col width="150px" />
+			<col width="75px" />
+			<col width="300px"/>
+			<col />
+			<thead>
+				<tr>
+					<th class="t_c">选择</th>
+					<th>图片名称</th>
+					<th>图片</th>
+					<th>图片路径</th>
+					<th>创建时间</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<form action='{url:/goods/spec_photo_del}' method='post' name="specFrom">
+		<table class="list_table" cellpadding="0" cellspacing="0">
+			<col width="40px" />
+			<col width="150px" />
+			<col width="75px" />
+			<col width="300px"/>
+			<col />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query:name=spec_photo page=$page pagesize=20}
+				<tr>
+					<td class="t_c"><input type="checkbox" name="id[]" value="{$item['id']}" /></td>
+					<td>{$item['name']}</td>
+					<td><img class="spec_photo" src="{webroot:$item[address]}" /></td>
+					<td>{$item['address']}</td>
+					<td>{$item['create_time']}</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</form>
+</div>
+{$query->getPageBar()}

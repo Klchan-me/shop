@@ -1,0 +1,41 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" style="overflow-y:auto">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title>管理后台</title>
+	<link rel="stylesheet" href="{skin:css/admin.css}" />
+	{js:jquery}
+	{js:dialog}
+	{js:form}
+	{js:validate}
+	<script type='text/javascript' src="{theme:javascript/admin.js}"></script>
+</head>
+<body style="width:600px;min-height:400px;">
+<div class="pop_win">
+	<form action="{url:/order/order_refundment_doc}" method="post">
+		<input type="hidden" name="id" value="{$order_id}"/>
+		<input type="hidden" name="order_no" value="{$order_no}"/>
+		<input type="hidden" name="user_id" value="{$user_id}"/>
+
+		<table width="95%" class="border_table" style="margin:10px auto">
+			<col width="100px" />
+			<col />
+			<tbody>
+				<tr>
+					<th>订单号:</th><td align="left">{$order_no}</td>
+					<th>下单时间:</th><td align="left">{$create_time}</td>
+				</tr>
+				<tr>
+					<th>订单总金额:</th><td align="left">{$order_amount}</td>
+					<th>退款金额:</th><td align="left"><input type="text" class="small" name="amount" id="amount" value="{$order_amount}" pattern="float" /></td>
+				</tr>
+				<tr>
+					<th>说明：</th>
+					<td colspan="3" align="left">点击退款后，<退款金额>将直接转入到用户的余额中</td>
+				</tr>
+			</tbody>
+		</table>
+	</form>
+</div>
+</body>
+</html>

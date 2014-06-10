@@ -1,0 +1,35 @@
+<div class="headbar">
+	<div class="position"><span>商品</span><span>></span><span>品牌管理</span><span>></span><span>分类列表</span></div>
+	<div class="operating">
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="window.location='{url:/brand/category_edit}'"><span class="addition">添加分类</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="200px" />
+			<col />
+			<thead>
+				<tr>
+					<th>分类名称</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+<div class="content">
+	<table id="list_table" class="list_table">
+		<col width="200px" />
+		<col />
+		<tbody>
+			{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+			{query: name=brand_category}
+			<tr>
+				<td>{$item['name']}</td>
+				<td><a href="{url:/brand/category_edit/cid/$item[id]}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a>
+					<a href="javascript:void(0)" onclick="delModel({link:'{url:/brand/category_del/cid/$item[id]}'})"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+				</td>
+			</tr>
+			{/query}
+		</tbody>
+	</table>
+</div>

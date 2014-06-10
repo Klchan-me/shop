@@ -1,0 +1,116 @@
+<div class="headbar">
+	<div class="position"><span>会员</span><span>></span><span>会员管理</span><span>></span><span>会员列表回收站</span></div>
+	<div class="operating">
+		<div class="search f_r">
+		<form name="serachuser" action="{url:/}" method="get">
+		<input type='hidden' name='controller' value='member' />
+		<input type='hidden' name='action' value='member_list' />
+			<select class="normal" name="search">
+				<option value="u.username" {if:$search=='u.username'}selected{/if}>用户名</option>
+				<option value="m.true_name" {if:$search=='m.true_name'}selected{/if}>姓名</option>
+				<option value="m.telephone" {if:$search=='m.telephone'}selected{/if}>电话</option>
+				<option value="m.mobile" {if:$search=='m.mobile'}selected{/if}>手机</option>
+				<option value="u.email" {if:$search=='u.email'}selected{/if}>Email</option>
+			</select><input class="small" name="keywords" type="text" value="{$keywords}" /><button class="btn" type="submit"><span class="sch">搜 索</span></button>
+		</form>
+		</div>
+		<a href="javascript:;"><button class="operating_btn" type="button" onclick="window.location='{url:/member/member_list}'"><span class="import">返回列表</span></button></a>
+		<a href="javascript:void(0)" onclick="selectAll('check[]')"><button class="operating_btn" type="button"><span class="sel_all">全选</span></button></a>
+		<a href="javascript:void(0)" onclick="member_restore()"><button class="operating_btn" type="button"><span class="recover">还原</span></button></a>
+		<a href="javascript:void(0)" onclick="member_del()"><button class="operating_btn" type="button"><span class="delete">永久删除</span></button></a>
+	</div>
+	<div class="field">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="90px" />
+			<col width="80px" />
+			<col width="70px" />
+			<col width="50px" />
+			<col width="80px" />
+			<col width="70px" />
+			<col width="90px" />
+			<col width="120px" />
+			<col width="70px" />
+			<col width="50px" />
+			<col />
+			<col width="70px" />
+			<col width="70px" />
+			<thead>
+				<tr role="head">
+					<th class="t_c">选择</th>
+					<th>用户名</th>
+					<th>会员等级</th>
+					<th>姓名</th>
+					<th>性别</th>
+					<th>Email</th>
+					<th>积分</th>
+					<th>经验值</th>
+					<th>注册日期</th>
+					<th>电话</th>
+					<th>手机</th>
+					<th>地址</th>
+					<th>邮编</th>
+					<th>操作</th>
+				</tr>
+			</thead>
+		</table>
+	</div>
+</div>
+
+<form action="" method="post" name="member_list" onsubmit="return checkboxCheck('check[]','尚未选中任何记录！')">
+	<div class="content">
+		<table class="list_table">
+			<col width="40px" />
+			<col width="90px" />
+			<col width="80px" />
+			<col width="70px" />
+			<col width="50px" />
+			<col width="80px" />
+			<col width="70px" />
+			<col width="90px" />
+			<col width="120px" />
+			<col width="70px" />
+			<col width="50px" />
+			<col />
+			<col width="70px" />
+			<col width="70px" />
+			<tbody>
+				{set:$page= (isset($_GET['page'])&&(intval($_GET['page'])>0))?intval($_GET['page']):1;}
+				{query: name=member as m join=left join user as u on m.user_id eq u.id left join user_group as gp on m.group_id eq gp.id fields=m.*,u.username,u.email,gp.group_name where=m.status eq 2 and $where page=$page pagesize=20}
+				<tr>
+					<td class="t_c"><input name="check[]" type="checkbox" value="{$item['user_id']}" /></td>
+					<td>{$item['username']}</td>
+					<td>{$group[$item['group_id']]}</td>
+					<td>{$item['true_name']}</td>
+					<td>{if:$item['sex']=='1'}男{elseif:$item['sex']=='2'}女{else:}保密{/if}</td>
+					<td>{$item['email']}</td>
+					<td>{$item['point']}</td>
+					<td>{$item['exp']}</td>
+					<td>{$item['time']}</td>
+					<td>{$item['telephone']}</td>
+					<td>{$item['mobile']}</td>
+					<td>{$item['contact_addr']}</td>
+					<td>{$item['zip']}</td>
+					<td><a href="member_edit/uid/{$item['user_id']}"><img class="operator" src="{skin:images/admin/icon_edit.gif}" alt="修改" /></a>
+						<a href="member_del/check/{$item['user_id']}"><img class="operator" src="{skin:images/admin/icon_del.gif}" alt="删除" /></a>
+					</td>
+				</tr>
+				{/query}
+			</tbody>
+		</table>
+	</div>
+	{$query->getPageBar('/member/member_list/')}
+</form>
+
+<script language="javascript">
+function member_del()
+{
+	$("form[name='member_list']").attr('action','{url:/member/member_del}');
+	confirm('确定要删除所选中的会员吗？<br />删除的会员不可以找回。','formSubmit(\'member_list\')');
+}
+function member_restore()
+{
+	$("form[name='member_list']").attr('action','{url:/member/member_restore}');
+	confirm('确定要还原所选中的会员吗？','formSubmit(\'member_list\')');
+}
+</script>
